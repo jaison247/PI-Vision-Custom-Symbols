@@ -271,21 +271,7 @@ In this sectinom, you will be creating a simple value symbol, much like the curr
     };
     ```
 
-1. We also need to let the symbol know that it can configure its multistate, via a context menu. This is done by updating the `configOptions` of the symbol.
-
-    ```javascript
-    configOptions: function () {
-        return [{
-            title: 'Format Symbol',
-            mode: 'format'
-        }, {
-            title: 'Configure Multistate',
-            mode: 'multistate'
-        }];
-    },
-    ```
-
-1. Now by launching [PI Coresight][1], you will see when right click on the symbol, you get a context menu with the option to configure the multistate. After selecting this option, the multistate configuration pane will open and you can drag a data item to set as the multistate. 
+1. Now by launching [PI Coresight][1], you will see when right click on the symbol, you get a context menu with the option to add the multistate. After selecting this option, the multistate configuration pane will open and the symbol will be use it's configured data point as it's multistate data point as well. 
 1. Now it is time to make the multistate affect the symbol. We will have the multistate control the color of the text displayed. To do this, we will edit the symbol's template HTML, `sym-simplevalue-template.html`. The name used in the `StateVariables` section of the symbol definition needs to be used in the symbol template, but does not need to be `MultistateColor`. Here we are telling the binding system that that color used for the symbol should be `MultistateColor` if it is defined, i.e. this symbol was configured with a multistate, or use the configured TextColor if `MultistateColor` is not defined.
 
 	```html

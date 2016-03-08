@@ -18,9 +18,6 @@
 	        return [{
 	            title: 'Format Symbol',
 	            mode: 'format'
-	        }, {
-	            title: 'Configure Multistate',
-	            mode: 'multistate'
 	        }];
 	    },
 	    init: init
