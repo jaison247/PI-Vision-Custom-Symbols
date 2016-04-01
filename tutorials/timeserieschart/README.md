@@ -126,8 +126,7 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
                 var t = {};
                 t.name = item.Label;
                 t.data = item.Values.map(function(obj) {
-                    var date = new Date(0);
-                    date.setUTCSeconds(obj.Time);
+                    var date = new Date(obj.Time);
                     return [Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(),  date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()), Number(obj.Value)];
                 });
                 series.push(t);
@@ -270,8 +269,7 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
                     var t = {};
                     t.name = item.Label;
                     t.data = item.Values.map(function(obj) {
-                        var date = new Date(0);
-                        date.setUTCSeconds(obj.Time);
+                        var date = new Date(obj.Time);
                         return [Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(),  date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()), Number(obj.Value)];
                     });
                     series.push(t);
