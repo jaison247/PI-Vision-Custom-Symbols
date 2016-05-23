@@ -1,6 +1,6 @@
 # Time Series Chart / Highcharts
 
-The following example is used to create a PI Coresight symbol that uses [Highcharts](http://www.highcharts.com/). These instructions build off the [Simple Value Symbol Instructions](/tutorials/simplevalue/README.md), so please review those first.
+The following example is used to create a PI Coresight symbol that uses [Highcharts](http://www.highcharts.com/). These instructions build off the [Simple Value Symbol Instructions](/tutorials/simplevalue/), so please review those first.
 
 1. Create a new file called sym-timeserieschart.js in your PI Coresight installation folder, `INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext`. If the `ext` folder does not exist, create it.
 1. Below is the basic skeleton of a new PI Coresight symbol for the time series chart. It sets up the `typeName`, `datasourceBehavior`, and `getDefaultConfig` definition options and registers them with the PI Coresight application. For the `DataShape`, we are using a TimeSeries shape, which will provide us with raw time series data that the chart will use. We are also specifying the `DataQueryMode` to be `ModePlotValues`. This will return data suitable for plotting over a specified number of intervals.

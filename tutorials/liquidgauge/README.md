@@ -1,6 +1,6 @@
 # Liquid Gauge / d3
 
-The following example is used to create a PI Coresight symbol that uses [d3.js](http://d3js.org/). The actual implementation of the gauge comes from [D3 Liquid Fill Gauge](http://bl.ocks.org/brattonc/5e5ce9beee483220e2f6). These instructions build off the [Simple Value Symbol Instructions](/tutorials/simplevalue/README.md), so please review those first.
+The following example is used to create a PI Coresight symbol that uses [d3.js](http://d3js.org/). The actual implementation of the gauge comes from [D3 Liquid Fill Gauge](http://bl.ocks.org/brattonc/5e5ce9beee483220e2f6). These instructions build off the [Simple Value Symbol Instructions](/tutorials/simplevalue/), so please review those first.
 
 1. Create a new file called `sym-liquidgauge.js` in your PI Coresight installation folder, `INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext`. If the `ext` folder does not exist, create it.
 1. Below is the basic skeleton of a new PI Coresight symbol for a liquid gauge. It sets up the `typeName`, `datasourceBehavior`, and `getDefaultConfig` definition options and registers them with the PI Coresight application. For the `DataShape`, we are using a gauge shape, which will provide us with some additional, gauge specific, properties that value symbol does not have, mainly Indicator.

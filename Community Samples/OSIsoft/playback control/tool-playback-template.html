@@ -14,8 +14,10 @@
 	limitations under the License.
 -->
 
-<div ng-style="{background: config.BackgroundColor, color: MultistateColor || config.TextColor}">
-    <div ng-show="config.ShowLabel">{{label}}</div>
-    <div>{{value}}</div>
-    <div ng-show="config.ShowTime">{{time}}</div>
-</div>
+<div class="c-pane-header t-pane-header-color t-content-font-large t-font-color-white flex-none">Playback</div>  
+Number of increments: <input type="text" ng-model="options.numberOfIncrements" ng-disabled="isRunning"></input>  
+Time to jump: <input type="text" ng-model="options.increaseIncrementTime" ng-disabled="isRunning"></input>  
+Playback speed: <input type="text" ng-model="options.incrementTimer" ng-disabled="isRunning"></input>  
+<button ng-click="start()" ng-disabled="isRunning">Go</button>   
+<button ng-click="stop()" ng-disabled="!isRunning">Stop</button>
+
