@@ -22,7 +22,7 @@ This repository is broken down into two separate sections, **tutorials** and **c
 
 Contributions we expect in this repository are focused on the Community Samples, you may open an issue if you see something wrong about the Tutorials and we will review it.
 
-We do welcome everyone to share their PI Coresight Extensibility samples and be certain all contributions will be considered. Please keep in mind that integrating your contribution may require some adjustments in your code, if this is the case this will be discussed in the Pull Request you open.
+We do welcome everyone to share their PI Coresight Extensibility samples and be certain all contributions will be considered. Please make sure that you read our general [contribution guidelines][7] and agree with it; it also contains a lot if useful information. Please keep in mind that integrating your contribution may require some adjustments in your code, if this is the case this will be discussed in the Pull Request you open.
 
 Assuming you already forked and cloned the repository, here is the format we expect for community samples:
 
