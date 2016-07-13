@@ -4,3 +4,4 @@ This section contains samples provided by [OSIsoft](http://www.osisoft.com/) for
 
 ## Samples
 * [Playback Control](/Community Samples/OSIsoft/playback control)
+* [RSS Symbol](/Community Samples/OSIsoft/rss symbol)
