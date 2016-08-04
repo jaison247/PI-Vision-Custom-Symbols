@@ -67,7 +67,7 @@ The following example is used to create a PI Coresight symbol that uses [d3.js](
 	    CS.symbolCatalog.register(defintion);
 	})(window.Coresight);
     ```
-1. Next we must include the d3.js library so that our symbol can use it. This code comes from [d3.js](https://github.com/mbostock/d3). Copy d3.js from this GitHub repository and place it into INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext\libraries. This will make d3 available to PI Coresight symbols.
+1. Next we must include the d3.js library so that our symbol can use it. This code comes from [d3.js](https://github.com/d3/d3/tree/v3.5.17). Copy d3.js from this GitHub repository and place it into INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext\libraries. This will make d3 available to PI Coresight symbols.
 
 1. Next we must include the d3 code for creating the liquid gauge. This code comes unchanged from [D3 Liquid Fill Gauge](http://bl.ocks.org/brattonc/5e5ce9beee483220e2f6) and should be pasted below the `CS.symbolCatalog.register(defintion);` call. It is included below for ease of use, but will be omitted in the following steps.
 
