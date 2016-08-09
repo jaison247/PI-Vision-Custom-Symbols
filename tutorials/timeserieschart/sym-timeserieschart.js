@@ -17,25 +17,15 @@
 (function (CS) {
     'use strict';
 
-    var def = {
-        typeName: 'timeserieschart',
-        model: CS.MultiSourceSymbol,
-        datasourceBehavior: CS.DatasourceBehaviors.Multiple,
-        getDefaultConfig: function () {
-            return {
-                DataShape: 'TimeSeries',
-                DataQueryMode: CS.DataQueryMode.ModePlotValues,
-                Interval: 400,
-                Height: 200,
-                Width: 400
-            };
-        },        
-        init: init
-    };
+    function symbolVis() { }
+    CS.deriveVisualizationFromBase(symbolVis);
 
-    function init(scope, elem) {
+    symbolVis.prototype.init = function(scope, elem) {
+        this.onDataUpdate = dataUpdate;
+        this.onResize = resize;
+
         var container = elem.find('#container')[0];
-        var id = "timeseries_" + Math.random().toString(36).substr(2, 16);
+        var id = 'timeseries_' + Math.random().toString(36).substr(2, 16);
         container.id = id;
 
         function convertToChartData(data) {
@@ -51,13 +41,12 @@
                 series.push(t);
             });
 
-            return series;
+            return series;            
         }
 
         var chart;
         function dataUpdate(data) {
             if(data) {
-
                 var series = convertToChartData(data);
                 if(!chart) {
                     chart = new Highcharts.Chart({
@@ -94,21 +83,32 @@
                         } else {
                             chart.addSeries(item);
                         }
-                    });                    
+                    });
                 }
-
             }
         }
-
+        
         function resize(width, height) {
             if(chart) {
                 chart.setSize(width, height);
             }
         }
 
-        return { dataUpdate: dataUpdate, resize: resize };
-    }    
-
-    CS.symbolCatalog.register(def);
-
-}(window.Coresight));
+    };
+    
+    var defintion = {
+        typeName: 'timeserieschart',
+        datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Multiple,
+        visObjectType: symbolVis,
+        getDefaultConfig: function() {
+            return {
+                DataShape: 'TimeSeries',
+                DataQueryMode:  CS.Extensibility.Enums.DataQueryMode.ModePlotValues,
+                Interval: 400,
+                Height: 200,
+                Width: 400
+            };
+        }
+    };
+    CS.symbolCatalog.register(defintion);
+})(window.Coresight);
