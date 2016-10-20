@@ -17,54 +17,60 @@
 (function (CS) {
     'use strict';
 
-    var defintion = {
-    	typeName: 'liquidgauge',
-    	datasourceBehavior: CS.DatasourceBehaviors.Single,
-    	getDefaultConfig: function() {
-    		return {
-    		    DataShape: 'Gauge',
-    		    Height: 150,
-    		    Width: 150
-    		};
-    	},
-    	init: init
-    };
+    function symbolVis() { }
+    CS.deriveVisualizationFromBase(symbolVis);
+    symbolVis.prototype.init = function(scope, elem) {
+        this.onDataUpdate = dataUpdate;
+        this.onResize = resize;
 
-   function init(scope, elem) {
+        scope.scale = 1;
 
-   	scope.scale = 1;
+        var config = liquidFillGaugeDefaultSettings();
 
-    	var config = liquidFillGaugeDefaultSettings();
-
-    	var svg = elem.find('svg')[0];
+        var svg = elem.find('svg')[0];
         var id = 'liquid_' + Math.random().toString(36).substr(2, 16);
         svg.id = id;
-        var gauge = loadLiquidFillGauge(id, 0, config);
+        var gauge = loadLiquidFillGauge(id, 0, config)
 
-    	function dataUpdate(data) {
-    	    if (data) {
+        var cachedIndicator = 0;
+        function dataUpdate(data) {
+            if (data) {
                 gauge.update(data.Indicator);
+                cachedIndicator = data.Indicator;
             }
-    	}
+        }
 
-    	function resize(width, height) {
-    	    scope.scale = Math.min(width / 150, height / 150);
+        function resize(width, height) {
+            scope.scale = Math.min(width / 150, height / 150);
             d3.select('#' + id).selectAll('*').remove();
-            gauge = loadLiquidFillGauge(id, 0, config);
-    	}
+            gauge = loadLiquidFillGauge(id, cachedIndicator, config);
+        }
+    };
 
-    	return { dataUpdate: dataUpdate, resize: resize }; 
-    }
+    var defintion = {
+        typeName: 'liquidgauge',
+        datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+        visObjectType: symbolVis,
+        getDefaultConfig: function() {
+            return {
+                DataShape: 'Gauge',
+                Height: 150,
+                Width: 150
+            };
+        }
+    };
 
     CS.symbolCatalog.register(defintion);
 
-/*!
- * @license Open source under BSD 2-clause (http://choosealicense.com/licenses/bsd-2-clause/)
- * Copyright (c) 2015, Curtis Bratton
- * All rights reserved.
- *
- * Liquid Fill Gauge v1.1
- */
+
+
+    /*!
+     * @license Open source under BSD 2-clause (http://choosealicense.com/licenses/bsd-2-clause/)
+     * Copyright (c) 2015, Curtis Bratton
+     * All rights reserved.
+     *
+     * Liquid Fill Gauge v1.1
+     */
     function liquidFillGaugeDefaultSettings() {
         return {
             minValue: 0, // The gauge minimum value.

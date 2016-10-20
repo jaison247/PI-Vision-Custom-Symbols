@@ -10,13 +10,30 @@ In this section, you will be creating a simple value symbol, much like the curre
     (function (CS) {
     })(window.Coresight);
     ```
-    
-1. Begin by creating the symbol definition [Object](https://developer.mozilla.org/en-US/docs/Glossary/Object) that will be used to register the symbol with PI Coresight. Here we use the PI Coresight object passed in to gain access to the symbol catalog. The symbol catalog is the object we use for registering and holding all Coresight symbols. We are creating an empty object and passing that into the register function. Since this is in an IIFE, as soon as the browser executes it, it will run the registration code.
+
+1. The first step is to create our visualization object which will be built on later. In this step, you are creating a function as a container for your symbol. The function will be extended via PI Coresight helper functions to add some default behaviors.
 
     ```javascript
     (function (CS) {
-        var definition = {};
+
+        function symbolVis() { }
+        CS.deriveVisualizationFromBase(symbolVis);
+
+    })(window.Coresight);
+    ```
+    
+1. Next by creating the symbol definition [Object](https://developer.mozilla.org/en-US/docs/Glossary/Object) that will be used to register the symbol with PI Coresight. Here we use the PI Coresight object passed in to gain access to the symbol catalog. We are starting with passing in the visualization object type, `visObjectType`, which is the function acting as the container object for the symbol. The symbol catalog is the object we use for registering and holding all Coresight symbols. We are creating an empty object and passing that into the register function. Since this is in an IIFE, as soon as the browser executes it, it will run the registration code.
+
+    ```javascript
+    (function (CS) {
+        function symbolVis() { }
+        CS.deriveVisualizationFromBase(symbolVis);
+
+        var definition = {
+            visObjectType: symbolVis
+        };
         CS.symbolCatalog.register(definition);
+
     })(window.Coresight);
     ```
 
@@ -24,27 +41,64 @@ In this section, you will be creating a simple value symbol, much like the curre
 
     ```javascript
     (function (CS) {
+        function symbolVis() { }
+        CS.deriveVisualizationFromBase(symbolVis);
+
         var definition = {
             typeName: 'simplevalue',
-            datasourceBehavior: CS.DatasourceBehaviors.Single
+            datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+            visObjectType: symbolVis
         };
         CS.symbolCatalog.register(definition);
     })(window.Coresight);
     ```
 
-1. Next, let's begin filling in some details about the type of data will be using. Here we have added the `getDefaultConfig` property to the definition object. The `getDefaultConfig` function is used to specify the collection of parameters that should be serialized to the backend database, it returns a JavaScript object. Here we are adding the `DataShape` property to the object returned by `getDefaultConfig`. This property is used to tell the application server the information that this symbol needs to represent the data. In this case, we will be creating a value symbol.
+1. Next, let's begin filling in some details about the type of data will be using. Here we have added the `getDefaultConfig` property to the definition object. The `getDefaultConfig` function is used to specify the collection of parameters that should be serialized to the backend database, it returns a JavaScript object. Here we are adding the `DataShape` property to the object returned by `getDefaultConfig`. This property is used to tell the application server the information that this symbol needs to represent the data. In this case, we will be creating a value symbol. We also add the default `Height` and `Width` properties.
 
     ```javascript
     (function (CS) {
+        function symbolVis() { }
+        CS.deriveVisualizationFromBase(symbolVis);
+
         var definition = {
             typeName: 'simplevalue',
-            datasourceBehavior: CS.DatasourceBehaviors.Single,
+            datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+            visObjectType: symbolVis,
             getDefaultConfig: function() {
                 return {
-                    DataShape: 'Value'
+                    DataShape: 'Value',
+                    Height: 150,
+                    Width: 150
                 };
             }
         };
+        CS.symbolCatalog.register(definition);
+    })(window.Coresight);
+    ```
+
+1. Next, let's set up the symbol initialization code. This is done on the [prototype](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype) of the function being used as the symbol container, e.g. `symbolVis`. 
+
+    ```javascript
+    (function (CS) {
+        function symbolVis() { }
+        CS.deriveVisualizationFromBase(symbolVis);
+
+        symbolVis.prototype.init = function () {
+        };
+
+        var definition = {
+            typeName: 'simplevalue',
+            datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+            visObjectType: symbolVis,
+            getDefaultConfig: function() {
+                return {
+                    DataShape: 'Value',
+                    Height: 150,
+                    Width: 150
+                };
+            }
+        };
+
         CS.symbolCatalog.register(definition);
     })(window.Coresight);
     ```
@@ -58,49 +112,28 @@ In this section, you will be creating a simple value symbol, much like the curre
     ```
 
 1. At this point, in order for the new symbol to be served up by the PI Coresight web server, you must perform an IIS reset.
-1. Launch [PI Coresight][1] and this time perform a search for a data item, such as sinusoid
-1. Select the simplevalue symbol icon from the symbol selector menu and drag the data item to the display. You will notice after dropping the symbol it is not really possible to select it. This is due to the symbol not having an `init` function as well as no default size.
-1. To fix the sizing issue, update the `getDefaultConfig` function's return value to return both `Height` and `Width`. Also, we need to add an initialization function to the definition object. The `init` function is a function that will be called when the symbol is added to a display.
+1. Launch [PI Coresight][1] and this time perform a search for a data item, such as sinusoid.
+1. Select the simplevalue symbol icon from the symbol selector menu and drag the data item to the display. The symbol can now be selected, moved, and is completely integrated into undo stack.
+1. Now that the infrastructure is in place, it is time to have the symbol do something. For this we will have to expand out the `init` function. We will add a parameter to the function, `scope`. [Scope](https://docs.angularjs.org/guide/scope) is an object borrowed from [AngularJS 1](https://angularjs.org) that allows the implementation and the presentation to communicate with each other. The `init` funciton will also have a function inside it to handle when the symbol receives new data and that function will be added onto the prototype as `this.onDataUpdate`, to let the PI Coresight infrastructure know how to communicate with the symbol.
 
     ```javascript
-    (function (CS) {
-        var definition = {
-            typeName: 'simplevalue',
-            datasourceBehavior: CS.DatasourceBehaviors.Single,
-            getDefaultConfig: function() {
-    		    return {
-    		        DataShape: 'Value',
-    		        Height: 150,
-                    Width: 150
-                };
-    	    },
-    	    init: init
-        };
-        
-        function init() {
+    symbolVis.prototype.init = function (scope) {
+        this.onDataUpdate = dataUpdate;
+
+        function dataUpdate(data) {
+
         }
-        
-        CS.symbolCatalog.register(definition);
-    })(window.Coresight);
+    };
     ```
 
-1. Retry again in [PI Coresight][1] by adding the new symbol. The symbol can now be selected, moved, and is completely integrated into undo stack.
-1. Now that the infrastructure is in place, it is time to have the symbol do something. For this we will have to expand out the `init` function. We will add a parameter to the function, `scope`. [Scope](https://docs.angularjs.org/guide/scope) is an object borrowed from [AngularJS 1](https://angularjs.org) that allows the implementation and the presentation to communicate with each other. The `init` funciton will also have a function inside it to handle when the symbol receives new data. Last we will add a return to the `init` function, to let the PI Coresight infrastructure know how to communicate with the symbol.
-
-    ```javascript
-    function init(scope) {
-        function onUpdate(data) {
-        }
-        return { dataUpdate: onUpdate };
-    }
-    ```
-
-1. The code above tells the PI Coresight infrastructure to call the `onUpdate` function every time a data update occurs. We now need to do something with the data provided to our `onUpdate` function.
+1. The code above tells the PI Coresight infrastructure to call the `dataUpdate` function every time a data update occurs. We now need to do something with the data provided to our `dataUpdate` function.
 1. Using the code below, we add some variables to our scope, `value`, `time`, and `label`. Adding these variables to the scope will make them available in the presentation HTML. For completeness, we are verifying that the data passed into `onUpdate` is defined as well as checking that the `Label` is defined. Some properties of a data item change infrequently, such as the data item name or its unit of measure. To reduce the response size and improve performance, these metadata fields are returned on the first request and only periodically afterward.
 
     ```javascript
-    function init(scope) {
-        function onUpdate(data) {
+    symbolVis.prototype.init = function (scope) {
+        this.onDataUpdate = dataUpdate;
+
+        function dataUpdate(data) {
             if(data) {
                 scope.value = data.Value;
                 scope.time = data.Time;
@@ -109,8 +142,7 @@ In this section, you will be creating a simple value symbol, much like the curre
                 }
             }
         }
-        return { dataUpdate: onUpdate };
-    }
+    };
     ```
 
 1. Now to update the presentation HTML file to show these values. In the HTML, we are using AngularJS style binding notation, `{{}}`, to link fields in the HTML that should be updated based on properties added to the scope. We are also adding a bit of color to the `div` for the background and text color.
@@ -124,12 +156,13 @@ In this section, you will be creating a simple value symbol, much like the curre
     ```
 
 1. Retry again in [PI Coresight][1] by adding the new symbol. 
-1. While this is very nice, it would be much better if the user of the symbol could configure the colors shown here. To do this, we need to add symbol configuration options to the symbol definition. First we will add the context menu options to the symbol. This is done by adding a `configOptions` property to the symbol definition object. `configOptions` is a function controlling what configuration options are available for this symbol. It returns an [array](https://developer.mozilla.org/en-US/docs/Glossary/array) of objects controlling configuration. In this instance, we are returning a single object in the array. This object is used to create a context menu for the symbol that will have an entry titled 'Format Symbol'. The mode used here is used to set the type of the configuration, so it can be shared with similar symbol configurations, i.e. formatting with formatting, multistates with multistates. Selecting this entry from the context menu will open the PI Coresight configuration pane.
+1. While this is very nice, it would be much better if the user of the symbol could configure the colors shown here. To do this, we need to add symbol configuration to the symbol definition. To do this, we will add a `configTitle` to the definition object. This is used to create a context menu for the symbol that will have an entry titled 'Format Symbol'. 
 
     ```javascript
     var definition = {
         typeName: 'simplevalue',
-        datasourceBehavior: CS.DatasourceBehaviors.Single,
+        datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+        visObjectType: symbolVis,
         getDefaultConfig: function() {
     	    return {
     	        DataShape: 'Value',
@@ -137,13 +170,7 @@ In this section, you will be creating a simple value symbol, much like the curre
                 Width: 150
             };
         },
-        configOptions: function () {
-            return [{
-                title: 'Format Symbol',
-                mode: 'format'
-            }];
-        },
-        init: init
+        configTitle: 'Format Symbol'
     };
     ```
 
@@ -152,7 +179,8 @@ In this section, you will be creating a simple value symbol, much like the curre
     ```javascript
     var definition = {
         typeName: 'simplevalue',
-        datasourceBehavior: CS.DatasourceBehaviors.Single,
+        datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+        visObjectType: symbolVis,
         getDefaultConfig: function() {
     	    return {
     	        DataShape: 'Value',
@@ -162,13 +190,7 @@ In this section, you will be creating a simple value symbol, much like the curre
                 TextColor: 'rgb(0,255,0)'
             };
         },
-        configOptions: function () {
-            return [{
-                title: 'Format Symbol',
-                mode: 'format'
-            }];
-        },
-        init: init
+        configTitle: 'Format Symbol'
     };
     ```
 
@@ -250,24 +272,21 @@ In this section, you will be creating a simple value symbol, much like the curre
     ```javascript
     var definition = {
         typeName: 'simplevalue',
-        datasourceBehavior: CS.DatasourceBehaviors.Single,
+        datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+        visObjectType: symbolVis,
         getDefaultConfig: function() {
     	    return {
     	        DataShape: 'Value',
     	        Height: 150,
                 Width: 150,
                 BackgroundColor: 'rgb(255,0,0)',
-                TextColor: 'rgb(0,255,0)'
+                TextColor: 'rgb(0,255,0)',
+                ShowLabel: true,
+                ShowTime: false
             };
         },
-        StateVariables: [ 'MultistateColor' ],
-        configOptions: function () {
-            return [{
-                title: 'Format Symbol',
-                mode: 'format'
-            }];
-        },
-        init: init
+        configTitle: 'Format Symbol',
+        StateVariables: [ 'MultistateColor' ]
     };
     ```
 

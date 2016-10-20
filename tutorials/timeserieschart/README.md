@@ -9,20 +9,24 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
     (function (CS) {
         'use strict';
 
-	    var defintion = {
-	    	typeName: 'timeserieschart',
-	    	datasourceBehavior: CS.DatasourceBehaviors.Multiple,
-	    	getDefaultConfig: function() {
-	    		return {
-	    		    DataShape: 'TimeSeries',
-                	DataQueryMode: CS.DataQueryMode.ModePlotValues,
-                	Interval: 400,
-	                Height: 200,
-	                Width: 400
-	            };
-	    	}
-	    };
-	    CS.symbolCatalog.register(defintion);
+        function symbolVis() { }
+        CS.deriveVisualizationFromBase(symbolVis);
+
+        var defintion = {
+            typeName: 'timeserieschart',
+            datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Multiple,
+            visObjectType: symbolVis,
+            getDefaultConfig: function() {
+                return {
+                    DataShape: 'TimeSeries',
+                    DataQueryMode: CS.Extensibility.Enums.DataQueryMode.ModePlotValues,
+                    Interval: 400,
+                    Height: 200,
+                    Width: 400
+                };
+            }
+        };
+        CS.symbolCatalog.register(defintion);
     })(window.Coresight);
     ```
 
@@ -32,41 +36,42 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
     <div id="container" style="width:100%;height:100%"></div>
     ```
 
-1. Now we need to initialize the symbol. We will add an `init` to the definition object and define the `init` function. The `init` function will have stubs for data updates and resizing events. The resize function is called by the PI Coresight infrastructure anytime the symbol is resized. The resize function is passed the new width and height of the symbol.
+1. Now we need to initialize the symbol. We will add an `init` to the symbol's prototype and define the `init` function. The `init` function will have stubs for data updates and resizing events. The resize function is called by the PI Coresight infrastructure anytime the symbol is resized. The resize function is passed the new width and height of the symbol.
 
     ```javascript
     (function (CS) {
         'use strict';
 
-	    var defintion = {
-	    	typeName: 'timeserieschart',
-	    	datasourceBehavior: CS.DatasourceBehaviors.Multiple,
-	    	getDefaultConfig: function() {
-	    		return {
-	    		    DataShape: 'TimeSeries',
-                	DataQueryMode: CS.DataQueryMode.ModePlotValues,
-                	Interval: 400,
-	                Height: 200,
-	                Width: 400
-	            };
-	    	},
-	    	init: init
-	    };
+        function symbolVis() { }
+        CS.deriveVisualizationFromBase(symbolVis);
 
-	    function init(scope, elem) {
+        symbolVis.prototype.init = function(scope, elem) {
+            this.onDataUpdate = dataUpdate;
+            this.onResize = resize;
 
-	    	function dataUpdate(data) {
+            function dataUpdate(data) {
+            }
+            
+            function resize(width, height) {
+            }
 
-	    	}
+        };
 
-	    	function resize(width, height) {
-
-	    	}
-
-	    	return { dataUpdate: dataUpdate, resize: resize }; 
-	    }
-
-	    CS.symbolCatalog.register(defintion);
+        var defintion = {
+            typeName: 'timeserieschart',
+            datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Multiple,
+            visObjectType: symbolVis,
+            getDefaultConfig: function() {
+                return {
+                    DataShape: 'TimeSeries',
+                    DataQueryMode: CS.Extensibility.Enums.DataQueryMode.ModePlotValues,
+                    Interval: 400,
+                    Height: 200,
+                    Width: 400
+                };
+            }
+        };
+        CS.symbolCatalog.register(defintion);
     })(window.Coresight);
     ```
 
@@ -75,22 +80,21 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
 1. In the `init` function, we can now begin to define the chart. Highcharts expects to be passed an HTML selector to create the chart. We need to give the `div` element a unique id and then create the chart. Below we are using JavaScript to create a unique id for the `div` element.
 
     ```javascript
-    function init(scope, elem) {
+    symbolVis.prototype.init = function(scope, elem) {
+        this.onDataUpdate = dataUpdate;
+        this.onResize = resize;
 
         var container = elem.find('#container')[0];
         var id = 'timeseries_' + Math.random().toString(36).substr(2, 16);
         container.id = id;
 
         function dataUpdate(data) {
+        }
+        
+        function resize(width, height) {
+        }
 
-    	}
-
-    	function resize(width, height) {
-
-    	}
-
-    	return { dataUpdate: dataUpdate, resize: resize }; 
-    }
+    };
     ```
 
 1. Next we want take the data that is passed to the PI Coresight dataUpdate function and convert this to a format that the chart is expected. 
@@ -116,7 +120,10 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
 1. Now we want to use this convert function in the dataUpdate. We add this function to `init` and we create the cache `chart` variable for creating the chart. On the first update, `chart` will not be defined, so we must create the chart.
 
     ```javascript
-    function init(scope, elem) {
+    symbolVis.prototype.init = function(scope, elem) {
+        this.onDataUpdate = dataUpdate;
+        this.onResize = resize;
+
         var container = elem.find('#container')[0];
         var id = 'timeseries_' + Math.random().toString(36).substr(2, 16);
         container.id = id;
@@ -171,14 +178,12 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
                     });
                 }
             }
-    	}
+        }
+        
+        function resize(width, height) {
+        }
 
-    	function resize(width, height) {
-
-    	}
-
-    	return { dataUpdate: dataUpdate, resize: resize }; 
-    }
+    };
     ```
 
 1. Now we have the initial creation of the chart, we must handle subsequent updates. This will happen in data update, when the `chart` variable is already defined. For this, we need to add an else condition to `if(!chart)`. Here we will loop through each entry in the series and update the data if it exist, or add it if it does not.
@@ -243,28 +248,18 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
     ```javascript
     (function (CS) {
         'use strict';
-    
-        var def = {
-            typeName: 'timeserieschart',
-            model: CS.MultiSourceSymbol,
-            datasourceBehavior: CS.DatasourceBehaviors.Multiple,
-            getDefaultConfig: function () {
-                return {
-                    DataShape: 'TimeSeries',
-                    DataQueryMode: CS.DataQueryMode.ModePlotValues,
-                    Interval: 400,
-                    Height: 200,
-                    Width: 400
-                };
-            },        
-            init: init
-        };
-    
-        function init(scope, elem) {
+
+        function symbolVis() { }
+        CS.deriveVisualizationFromBase(symbolVis);
+
+        symbolVis.prototype.init = function(scope, elem) {
+            this.onDataUpdate = dataUpdate;
+            this.onResize = resize;
+
             var container = elem.find('#container')[0];
             var id = 'timeseries_' + Math.random().toString(36).substr(2, 16);
             container.id = id;
-    
+
             function convertToChartData(data) {
                 var series = [];
                 data.Data.forEach(function(item) {
@@ -278,14 +273,13 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
                     series.push(t);
                 });
 
-                return series;
+                return series;            
             }
-    
+
             var chart;
             function dataUpdate(data) {
                 if(data) {
-    
-                    var series = convertToChartData(data);    
+                    var series = convertToChartData(data);
                     if(!chart) {
                         chart = new Highcharts.Chart({
                             chart: {
@@ -321,22 +315,33 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
                             } else {
                                 chart.addSeries(item);
                             }
-                        });                    
+                        });
                     }
-    
                 }
             }
-    
+            
             function resize(width, height) {
                 if(chart) {
                     chart.setSize(width, height);
                 }
             }
-    
-            return { dataUpdate: dataUpdate, resize: resize };
-        }    
-    
-        CS.symbolCatalog.register(def);
-    
-    }(window.Coresight));
+
+        };
+        
+        var defintion = {
+            typeName: 'timeserieschart',
+            datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Multiple,
+            visObjectType: symbolVis,
+            getDefaultConfig: function() {
+                return {
+                    DataShape: 'TimeSeries',
+                    DataQueryMode:  CS.Extensibility.Enums.DataQueryMode.ModePlotValues,
+                    Interval: 400,
+                    Height: 200,
+                    Width: 400
+                };
+            }
+        };
+        CS.symbolCatalog.register(defintion);
+    })(window.Coresight);
     ```

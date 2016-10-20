@@ -1,7 +1,7 @@
-# PI Coresight 3 Extensibility Samples and Tutorials
+# PI Coresight Extensibility Samples and Tutorials
 
 ## About
-[PI Coresight][1] is a web-client vizualization tool for the [OSIsoft PI System][2]. PI Coresight 3.0 supports extensibility through the creation of a combination of html and javascript files. This repository is set up to help you learn how to extend PI Coresight in different ways such as a custom symbol or tool pane.
+[PI Coresight][1] is a web-client vizualization tool for the [OSIsoft PI System][2]. PI Coresight 3.0 and beyond supports extensibility through the creation of a combination of html and javascript files. This repository is set up to help you learn how to extend PI Coresight in different ways such as a custom symbol or tool pane.
 
 ## Repository Sections
 This repository is broken down into two separate sections, **tutorials** and **community samples**.
@@ -15,7 +15,7 @@ This repository is broken down into two separate sections, **tutorials** and **c
     Contains sample symbols and panes submitted by OSIsoft and the community to showcase what they have done with PI Coresight's extensibilty model.
 
 ## Resources
-* [PI Coresight 2016 Extensibility Documentation][5]
+* [PI Coresight Extensibility Documentation][5] **todo**
 * [PI Square][6]
 
 ## Contributing

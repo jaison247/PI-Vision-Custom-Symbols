@@ -9,9 +9,13 @@ The following example is used to create a PI Coresight symbol that uses [d3.js](
     (function (CS) {
         'use strict';
 
+        function symbolVis() { }
+        CS.deriveVisualizationFromBase(symbolVis);
+
 	    var defintion = {
 	    	typeName: 'liquidgauge',
-	    	datasourceBehavior: CS.DatasourceBehaviors.Single,
+	    	datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+            visObjectType: symbolVis,
 	    	getDefaultConfig: function() {
 	    		return {
 	    		    DataShape: 'Gauge',
@@ -38,31 +42,33 @@ The following example is used to create a PI Coresight symbol that uses [d3.js](
 	(function (CS) {
 	    'use strict';
 
+        function symbolVis() { }
+        CS.deriveVisualizationFromBase(symbolVis);
+        symbolVis.prototype.init = function(scope, elem) {
+            this.onDataUpdate = dataUpdate;
+            this.onResize = resize;
+
+            function dataUpdate(data) {
+
+            }
+
+            function resize(width, height) {
+
+            }
+        };
+
 	    var defintion = {
 	    	typeName: 'liquidgauge',
-	    	datasourceBehavior: CS.DatasourceBehaviors.Single,
+	    	datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+            visObjectType: symbolVis,
 	    	getDefaultConfig: function() {
 	    		return {
 	    		    DataShape: 'Gauge',
 	                Height: 150,
 	                Width: 150
 	            };
-	    	},
-	    	init: init
+	    	}
 	    };
-
-	    function init(scope, elem) {
-
-	    	function dataUpdate(data) {
-
-	    	}
-
-	    	function resize(width, height) {
-
-	    	}
-
-	    	return { dataUpdate: dataUpdate, resize: resize }; 
-	    }
 
 	    CS.symbolCatalog.register(defintion);
 	})(window.Coresight);
@@ -346,51 +352,51 @@ The following example is used to create a PI Coresight symbol that uses [d3.js](
 1. In the `init` function, we can now begin to define the gauge. The liquid gauge implementation listed above created a gauge based on a HTML id, a default value, and a gauge configuration. To begin with, we will just use the default gauge configuration, `liquidFillGaugeDefaultSettings`. After that, we need to give the `svg` element a unique id and then create the gauge using `loadLiquidFillGauge`. Below we are using JavaScript to create a unique id for the `svg` element and passing that into the `loadLiquidFillGauge` function.
 
 	```javascript
-    function init(scope, elem) {
+    symbolVis.prototype.init = function(scope, elem) {
+        this.onDataUpdate = dataUpdate;
+        this.onResize = resize;
 
-    	var config = liquidFillGaugeDefaultSettings();
+        var config = liquidFillGaugeDefaultSettings();
 
-    	var svg = elem.find('svg')[0];
+        var svg = elem.find('svg')[0];
         var id = 'liquid_' + Math.random().toString(36).substr(2, 16);
         svg.id = id;
-        var gauge = loadLiquidFillGauge(id, 0, config);
+        var gauge = loadLiquidFillGauge(id, 0, config)
 
-    	function dataUpdate(data) {
+        function dataUpdate(data) {
 
-    	}
+        }
 
-    	function resize(width, height) {
+        function resize(width, height) {
 
-    	}
-
-    	return { dataUpdate: dataUpdate, resize: resize }; 
-    }
+        }
+    };
     ```
 
 1. The next step is to hook the data updates to the gauge symbols `update` method. Here we are using the `Indicator` property on the data that is passed into the `dataUpdate` function. The Indicator property represents the current value as a percentage of Max - Min, between 0 and 100.
 
 	```javascript
-    function init(scope, elem) {
+    symbolVis.prototype.init = function(scope, elem) {
+        this.onDataUpdate = dataUpdate;
+        this.onResize = resize;
 
-    	var config = liquidFillGaugeDefaultSettings();
+        var config = liquidFillGaugeDefaultSettings();
 
-    	var svg = elem.find('svg')[0];
+        var svg = elem.find('svg')[0];
         var id = 'liquid_' + Math.random().toString(36).substr(2, 16);
         svg.id = id;
-        var gauge = loadLiquidFillGauge(id, 0, config);
+        var gauge = loadLiquidFillGauge(id, 0, config)
 
-    	function dataUpdate(data) {
-			if (data) {
+        function dataUpdate(data) {
+            if (data) {
                 gauge.update(data.Indicator);
             }
-    	}
+        }
 
-    	function resize(width, height) {
+        function resize(width, height) {
 
-    	}
-
-    	return { dataUpdate: dataUpdate, resize: resize }; 
-    }
+        }
+    };
     ```
 
 1. We now have a working gauge, but it does not resize properly. To do this, we will fill in the `resize` function and scale the `svg` element to fit the new area.
@@ -405,46 +411,48 @@ The following example is used to create a PI Coresight symbol that uses [d3.js](
 1. The implementation for the scale will be in init function to set the initial scale and then the resize function to update the scale as the size of the symbol changes. In `init`, we will default to a scale of 1. On every resize, we will recompute the scale, delete the symbol, and they re-add it.
 
 	```javascript
-    function init(scope, elem) {
+    symbolVis.prototype.init = function(scope, elem) {
+        this.onDataUpdate = dataUpdate;
+        this.onResize = resize;
 
-    	scope.scale = 1;
-
-    	var config = liquidFillGaugeDefaultSettings();
-
-    	var svg = elem.find('svg')[0];
-        var id = 'liquid_' + Math.random().toString(36).substr(2, 16);
-        svg.id = id;
-        var gauge = loadLiquidFillGauge(id, 0, config);
-
-    	function dataUpdate(data) {
-			if (data) {
-                gauge.update(data.Indicator);
-            }
-    	}
-
-    	function resize(width, height) {
-			scope.scale = Math.min(width / 150, height / 150);
-            d3.select('#' + id).selectAll('*').remove();
-            gauge = loadLiquidFillGauge(id, 0, config);
-    	}
-
-    	return { dataUpdate: dataUpdate, resize: resize }; 
-    }
-    ```
-
-1. One thing to notice at this point is, while resizing is working, it will only fill in the data at the next update. This is because when we recreate the gauge, we are initilaizing it with 0 for a value. To fix this, we can cache the last value of the indicator and use that during the resizing process.
-
-    ```javascript
-    function init(scope, elem) {
-        
         scope.scale = 1;
-        
+
         var config = liquidFillGaugeDefaultSettings();
 
         var svg = elem.find('svg')[0];
         var id = 'liquid_' + Math.random().toString(36).substr(2, 16);
         svg.id = id;
-        var gauge = loadLiquidFillGauge(id, 0, config);
+        var gauge = loadLiquidFillGauge(id, 0, config)
+
+        function dataUpdate(data) {
+            if (data) {
+                gauge.update(data.Indicator);
+            }
+        }
+
+        function resize(width, height) {
+            scope.scale = Math.min(width / 150, height / 150);
+            d3.select('#' + id).selectAll('*').remove();
+            gauge = loadLiquidFillGauge(id, 0, config);
+        }
+    };
+    ```
+
+1. One thing to notice at this point is, while resizing is working, it will only fill in the data at the next update. This is because when we recreate the gauge, we are initilaizing it with 0 for a value. To fix this, we can cache the last value of the indicator and use that during the resizing process.
+
+    ```javascript
+    symbolVis.prototype.init = function(scope, elem) {
+        this.onDataUpdate = dataUpdate;
+        this.onResize = resize;
+
+        scope.scale = 1;
+
+        var config = liquidFillGaugeDefaultSettings();
+
+        var svg = elem.find('svg')[0];
+        var id = 'liquid_' + Math.random().toString(36).substr(2, 16);
+        svg.id = id;
+        var gauge = loadLiquidFillGauge(id, 0, config)
 
         var cachedIndicator = 0;
         function dataUpdate(data) {
@@ -459,7 +467,5 @@ The following example is used to create a PI Coresight symbol that uses [d3.js](
             d3.select('#' + id).selectAll('*').remove();
             gauge = loadLiquidFillGauge(id, cachedIndicator, config);
         }
-
-        return { dataUpdate: dataUpdate, resize: resize }; 
-    }
+    };
     ```
