@@ -1,0 +1,41 @@
+<!--
+	Copyright 2016 OSIsoft, LLC.
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+		http://www.apache.org/licenses/LICENSE-2.0
+			
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<div class="c-config-content-vertical">
+	<span style="margin-left:10px">Data Item Column</span>
+	<format-color-picker id="dataItemColumnColor" property="dataItemColumnColor" config="config"></format-color-picker>
+	<span style="margin-left:10px">Timestamp Column</span>
+	<format-color-picker id="timestampColumnColor" property="timestampColumnColor" config="config"></format-color-picker>
+	<span style="margin-left:10px">Value Column</span>
+	<format-color-picker id="valueColumnColor" property="valueColumnColor" config="config"></format-color-picker>
+    <label style="margin-top: 8px">(Column colors will be applied<br/>after the next data update.)
+	</label>
+	<br />
+	<label style="margin-top: 8px">
+        <input type="checkbox" class="c-config-checkbox"
+               ng-model="config.showDataItemNameCheckboxValue">Show Data Item Column<br />
+    </label>
+    <label style="margin-top:8px">
+        <input type="checkbox" class="c-config-checkbox"
+               ng-model="config.showTimestampCheckboxValue">Show Timestamp Column<br />
+    </label>
+	<label style="margin-top:8px">
+        <input type="number" class=""
+               ng-model="config.numberOfDecimalPlaces">   Value Column Decimal Places<br />
+    </label>
+	<br />
+</div>
+
+
+
+

@@ -1,0 +1,65 @@
+<!--
+	Copyright 2016 OSIsoft, LLC.
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+		http://www.apache.org/licenses/LICENSE-2.0
+			
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<div class="c-config-content-vertical" style="margin-left:10px">
+    <label>Text</label>
+	<format-color-picker id="textColor" property="textColor" config="config"></format-color-picker>
+    <br />  
+    <label>Background</label>
+	<format-color-picker id="backgroundColor" property="backgroundColor" config="config"></format-color-picker>
+    <br />
+    <label>Plot Area</label>
+	<format-color-picker id="plotAreaFillColor" property="plotAreaFillColor" config="config"></format-color-picker>
+    <br />    
+    <label>Series</label>
+	<format-color-picker id="seriesColor" property="seriesColor" config="config"></format-color-picker>
+    <br /> 
+    <label>
+        <input type="checkbox" class="c-config-checkbox"
+               ng-model="config.showChartScrollBar">Show Chart Scroll Bar<br />
+    </label>
+    <label>
+        <input type="checkbox" class="c-config-checkbox"
+               ng-model="config.showTitle">Show Title<br />
+    </label>	
+    <label>
+        <input type="checkbox" class="c-config-checkbox"
+               ng-model="config.useColumns">Use Columns<br />
+    </label>	
+    <label>
+        <input type="checkbox" class="c-config-checkbox"
+               ng-model="config.useCustomYAxisRange">Use Custom Y Axis Range<br />
+    </label>  
+	<label>
+        <input type="number"
+               ng-model="config.minimumYValue">   Minimum Value<br />
+    </label>
+	<label>
+        <input type="number"
+               ng-model="config.maximumYValue">   Maximum Value<br />
+    </label>
+	<br />
+	<label>
+        <input type="number"
+               ng-model="config.fontSize">   Custom Text Size<br />
+    </label> 	
+	<br />
+    <label>
+        <input type="checkbox" class="c-config-checkbox"
+               ng-model="config.exportData">Export Data<br />
+    </label>	
+    <label>
+        <input type="checkbox" class="c-config-checkbox"
+               ng-model="config.exportDataItemPaths">Export Data Item Paths<br />
+    </label>		
+</div>
