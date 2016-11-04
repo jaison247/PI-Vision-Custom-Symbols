@@ -11,31 +11,38 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<div class="c-config-content-vertical">
-	<span style="margin-left:10px">Data Item Column</span>
-	<format-color-picker id="dataItemColumnColor" property="dataItemColumnColor" config="config"></format-color-picker>
-	<span style="margin-left:10px">Timestamp Column</span>
-	<format-color-picker id="timestampColumnColor" property="timestampColumnColor" config="config"></format-color-picker>
-	<span style="margin-left:10px">Value Column</span>
-	<format-color-picker id="valueColumnColor" property="valueColumnColor" config="config"></format-color-picker>
-    <label style="margin-top: 8px">(Column colors will be applied<br/>after the next data update.)
-	</label>
-	<br />
-	<label style="margin-top: 8px">
-        <input type="checkbox" class="c-config-checkbox"
-               ng-model="config.showDataItemNameCheckboxValue">Show Data Item Column<br />
-    </label>
-    <label style="margin-top:8px">
-        <input type="checkbox" class="c-config-checkbox"
-               ng-model="config.showTimestampCheckboxValue">Show Timestamp Column<br />
-    </label>
-	<label style="margin-top:8px">
-        <input type="number" class=""
-               ng-model="config.numberOfDecimalPlaces">   Value Column Decimal Places<br />
-    </label>
-	<br />
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Data Item Column</span>
 </div>
+<div class="config-option-format">
+	<cs-color-picker id="dataItemColumnColor" ng-model="config.dataItemColumnColor" config="config">
+</cs-color-picker></div>	
+<label class="flex-align-center" style="margin-top: 8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showDataItemNameCheckboxValue">Show Data Item Column<br />
+</label>
+<br>
 
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Timestamp Column</span>
+</div>
+<div class="config-option-format">
+	<cs-color-picker id="timestampColumnColor" ng-model="config.timestampColumnColor" config="config">
+</cs-color-picker></div>	
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showTimestampCheckboxValue">Show Timestamp Column<br />
+</label>
+<br>
 
-
-
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Value Column</span>
+</div>
+<div class="config-option-format">
+	<cs-color-picker id="valueColumnColor" ng-model="config.valueColumnColor" config="config">
+</cs-color-picker></div>
+<label style="margin-top:8px; margin-left: 8px;">
+	<input type="number" class=""
+		   ng-model="config.numberOfDecimalPlaces">   Value Column Decimal Places<br />
+</label>
+<br>

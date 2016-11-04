@@ -11,29 +11,36 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<div class="c-config-content-vertical">
-	<label>Path<br />
-        <input type="text" 
-               ng-model="config.videoSourcePath"><br />
-    </label>
-    <br />
-    <label>
-        <input type="checkbox" 
-               ng-model="config.showControls"> Show Controls<br />
-    </label>
-    <br />
-    <label>
-        <input type="checkbox" 
-               ng-model="config.enableAutoplay"> Enable Autoplay<br />
-    </label>
-    <br />
-    <label>
-        <input type="checkbox" 
-               ng-model="config.enableRefresh"> Enable Refresh<br />
-    </label>
-    <br />
-	<label>Refresh Interval (seconds)<br />
-        <input type="number" 
-               ng-model="config.refreshIntervalSeconds"><br />
-    </label>
+<div style="padding:15px;font-size:14px">
+	<div>Path:
+        <input style="margin-left:5px;vertical-align:middle;margin-bottom:2px"
+               type="text"
+               ng-model="config.videoSourcePath"
+               ng-model-options="{ debounce: 1000 }">
+    </div>
+    <br/>
+    <div>Show Controls:
+        <input style="margin-left:5px;vertical-align:middle;margin-bottom:2px"
+               type="checkbox"
+               ng-model="config.showControls">
+    </div>
+    <br/>
+    <div>Enable Autoplay:
+        <input style="margin-left:5px;vertical-align:middle;margin-bottom:2px"
+               type="checkbox"
+               ng-model="config.enableAutoplay">
+    </div>
+    <br/>
+    <div>Enable Refresh:
+        <input style="margin-left:5px;vertical-align:middle;margin-bottom:2px"
+               type="checkbox"
+               ng-model="config.enableRefresh">
+    </div>
+    <br/>
+	<div>Refresh Interval (seconds):
+        <input style="margin-left:5px;vertical-align:middle;margin-bottom:2px"
+               type="number"
+               ng-model="config.refreshIntervalSeconds"
+               ng-model-options="{ debounce: 1000 }">
+    </div>
 </div>

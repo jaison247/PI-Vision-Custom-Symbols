@@ -1,19 +1,16 @@
-
-/**
-# ***********************************************************************
-# * DISCLAIMER:
-# *
-# * All sample code is provided by OSIsoft for illustrative purposes only.
-# * These examples have not been thoroughly tested under all conditions.
-# * OSIsoft provides no guarantee nor implies any reliability,
-# * serviceability, or function of these programs.
-# * ALL PROGRAMS CONTAINED HEREIN ARE PROVIDED TO YOU "AS IS"
-# * WITHOUT ANY WARRANTIES OF ANY KIND. ALL WARRANTIES INCLUDING
-# * THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY
-# * AND FITNESS FOR A PARTICULAR PURPOSE ARE EXPRESSLY DISCLAIMED.
-# ************************************************************************
+/***************************************************************************
+   Copyright 2016 OSIsoft, LLC.
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ ***************************************************************************
 #
-# Updated by dlopez@osisoft.com
 # Visualizations provided by amCharts: https://www.amcharts.com/
 #
 **/
@@ -29,18 +26,17 @@
 		// look for HTML template and config template files called sym-<typeName>-template.html and sym-<typeName>-config.html
 		typeName: 'amcharts-histogram',
 		// Specify the user-friendly name of the symbol that will appear in PI Coresight
-		displayName: 'amCharts Histogram',
+		displayName: 'Histogram',
 		// Specify the number of data sources for this symbol; just a single data source or multiple
-		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+		datasourceBehavior: CS.DatasourceBehaviors.Single,
 		// Specify the location of an image file to use as the icon for this symbol
 		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/amcharts-histogram.png',
-		visObjectType: symbolVis,
 		// Specify default configuration for this symbol
 		getDefaultConfig: function () {
 			return {
-				//
+				// Specify the data shape type (for symbols that update with new data)
 				DataShape: 'TimeSeries',
-				DataQueryMode: CS.Extensibility.Enums.DataQueryMode.ModeEvents,
+				DataQueryMode: CS.DataQueryMode.ModeEvents,
 				// Specify the default height and width of this symbol
 				Height: 300,
 				Width: 600,
@@ -69,20 +65,13 @@
             }];
         },
         // Specify the name of the function that will be called to initialize the symbol
-		//init: myCustomSymbolInitFunction
+		init: myCustomSymbolInitFunction
 	};
 	
 	//************************************
 	// Function called to initialize the symbol
 	//************************************
-	//function myCustomSymbolInitFunction(scope, elem) {
-	function symbolVis() { }
-    CS.deriveVisualizationFromBase(symbolVis);
-	symbolVis.prototype.init = function(scope, elem) {	
-		// Specify which function to call when a data update or configuration change occurs 
-		this.onDataUpdate = myCustomDataUpdateFunction;
-		this.onConfigChange = myCustomConfigurationChangeFunction;
-		
+	function myCustomSymbolInitFunction(scope, elem) {
 		// Locate the html div that will contain the symbol, using its id, which is "container" by default
 		var symbolContainerDiv = elem.find('#container')[0];
         // Use random functions to generate a new unique id for this symbol, to make it unique among all other custom symbols
@@ -112,7 +101,7 @@
 				// If the custom visualization hasn't been made yet... create the custom visualization!
 				// Custom code begins here:
 				// -----------------------------------------------------------------------------------------
-				//console.log("Now creating custom visualization...");
+				console.log("Now creating custom visualization...");
 				// Get the data item name and units
 				if (data.Data[0].Label) {
 					scope.config.Label = data.Data[0].Label;
@@ -390,10 +379,12 @@
                 }
 				// Commit updates to the chart
 				customVisualizationObject.validateNow();
+				console.log("Configuration updated.");
 			}
 		}
+
 		// Specify which function to call when a data update or configuration change occurs 
-		//return { dataUpdate: myCustomDataUpdateFunction, configChange:myCustomConfigurationChangeFunction };
+		return { dataUpdate: myCustomDataUpdateFunction, configChange:myCustomConfigurationChangeFunction };
 	}
 	// Register this custom symbol definition with PI Coresight
 	CS.symbolCatalog.register(myCustomSymbolDefinition);

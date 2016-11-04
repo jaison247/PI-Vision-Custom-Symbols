@@ -11,55 +11,71 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<div class="c-config-content-vertical" style="margin-left:10px">
-    <label>Text</label>
-	<format-color-picker id="textColor" property="textColor" config="config"></format-color-picker>
-    <br />  
-    <label>Background</label>
-	<format-color-picker id="backgroundColor" property="backgroundColor" config="config"></format-color-picker>
-    <br />
-    <label>Plot Area</label>
-	<format-color-picker id="plotAreaFillColor" property="plotAreaFillColor" config="config"></format-color-picker>
-    <br />    
-    <label>Series</label>
-	<format-color-picker id="seriesColor" property="seriesColor" config="config"></format-color-picker>
-    <br /> 
-    <label>
-        <input type="checkbox" class="c-config-checkbox"
-               ng-model="config.showChartScrollBar">Show Chart Scroll Bar<br />
-    </label>
-    <label>
-        <input type="checkbox" class="c-config-checkbox"
-               ng-model="config.showTitle">Show Title<br />
-    </label>	
-    <label>
-        <input type="checkbox" class="c-config-checkbox"
-               ng-model="config.useColumns">Use Columns<br />
-    </label>	
-    <label>
-        <input type="checkbox" class="c-config-checkbox"
-               ng-model="config.useCustomYAxisRange">Use Custom Y Axis Range<br />
-    </label>  
-	<label>
-        <input type="number"
-               ng-model="config.minimumYValue">   Minimum Value<br />
-    </label>
-	<label>
-        <input type="number"
-               ng-model="config.maximumYValue">   Maximum Value<br />
-    </label>
-	<br />
-	<label>
-        <input type="number"
-               ng-model="config.fontSize">   Custom Text Size<br />
-    </label> 	
-	<br />
-    <label>
-        <input type="checkbox" class="c-config-checkbox"
-               ng-model="config.exportData">Export Data<br />
-    </label>	
-    <label>
-        <input type="checkbox" class="c-config-checkbox"
-               ng-model="config.exportDataItemPaths">Export Data Item Paths<br />
-    </label>		
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Text</span>
 </div>
+<div class="config-option-format">
+	<cs-color-picker id="textColor" ng-model="config.textColor" config="config">
+</cs-color-picker></div>	
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showTitle">Show Title<br />
+</label> 
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="number"
+		   ng-model="config.fontSize">   Text Size<br />
+</label> 	 
+<br />  
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Background</span>
+</div>
+<div class="config-option-format">
+<cs-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config">
+</cs-color-picker></div>	
+<br />
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Plot Area</span>
+</div>
+<div class="config-option-format">
+<cs-color-picker id="plotAreaFillColor" ng-model="config.plotAreaFillColor" config="config">
+</cs-color-picker></div>	
+
+<br />    
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Series</span>
+</div>
+<div class="config-option-format">
+<cs-color-picker id="seriesColor" ng-model="config.seriesColor" config="config">
+</cs-color-picker></div>
+
+<br>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showChartScrollBar">Show Chart Scroll Bar<br />
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.useColumns">Use Columns<br />
+</label>	
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.useCustomYAxisRange">Use Custom Y Axis Range<br />
+</label>  
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="number"
+		   ng-model="config.minimumYValue">   Minimum Value<br />
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="number"
+		   ng-model="config.maximumYValue">   Maximum Value<br />
+</label>
+<br />
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.exportData">Export Data<br />
+</label>	
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.exportDataItemPaths">Export Data Item Paths<br />
+</label>		
+<br />

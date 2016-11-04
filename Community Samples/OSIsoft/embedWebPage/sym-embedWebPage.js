@@ -1,16 +1,19 @@
-/***************************************************************************
-   Copyright 2016 OSIsoft, LLC.
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-       http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
- ***************************************************************************
+
+/**
+# ***********************************************************************
+# * DISCLAIMER:
+# *
+# * All sample code is provided by OSIsoft for illustrative purposes only.
+# * These examples have not been thoroughly tested under all conditions.
+# * OSIsoft provides no guarantee nor implies any reliability,
+# * serviceability, or function of these programs.
+# * ALL PROGRAMS CONTAINED HEREIN ARE PROVIDED TO YOU "AS IS"
+# * WITHOUT ANY WARRANTIES OF ANY KIND. ALL WARRANTIES INCLUDING
+# * THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY
+# * AND FITNESS FOR A PARTICULAR PURPOSE ARE EXPRESSLY DISCLAIMED.
+# ************************************************************************
 #
+# Updated by dlopez@osisoft.com
 # Visualizations provided by amCharts: https://www.amcharts.com/
 #
 **/
@@ -28,9 +31,10 @@
 		// Specify the user-friendly name of the symbol that will appear in PI Coresight
 		displayName: 'Embed Web Page',
 		// Specify the number of data sources for this symbol
-		datasourceBehavior: CS.DatasourceBehaviors.Single,
+		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
 		// Specify the location of an image file to use as the icon for this symbol
 		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/embedWebPage.png',
+		visObjectType: symbolVis,
 		// Specify default configuration for this symbol
 		getDefaultConfig: function () {
 			return {
@@ -54,14 +58,30 @@
                 mode: 'format'
             }];
         },
+		// Include variables that will be used in the custom configuration pane.
+		// Define a keyword and the value of that keyword for each variable.
+		// You'll specify the value for these in the getDefaultConfig section
+		// by referencing these variables by the value of their keyword
+		configure: {
+			targetURLKeyword: 'targetURL',
+			refreshOnScheduleKeyword: 'refreshOnSchedule',
+			refreshIntervalSecondsKeyword: 'refreshIntervalSeconds'
+		},
 		// Specify the name of the function that will be called to initialize the symbol
-		init: myCustomSymbolInitFunction
+		//init: myCustomSymbolInitFunction
 	};
 	
 	//************************************
 	// Function called to initialize the symbol
 	//************************************
-	function myCustomSymbolInitFunction(scope, elem) {
+	//function myCustomSymbolInitFunction(scope, elem) {
+	function symbolVis() { }
+    CS.deriveVisualizationFromBase(symbolVis);
+	symbolVis.prototype.init = function(scope, elem) {
+		// Specify which function to call when a data update or configuration change occurs 
+		//this.onDataUpdate = myCustomDataUpdateFunction;
+		this.onConfigChange = myCustomConfigurationChangeFunction;
+		
 		// Locate the html div that will contain the symbol, using its id, which is "container" by default
 		var symbolContainerElement = elem.find('#container')[0];
         // Use random functions to generate a new unique id for this symbol, to make it unique among all other custom symbols
@@ -110,7 +130,7 @@
 		}
 		
 		// Specify which function to call when a data update or configuration change occurs 
-		return { configChange:myCustomConfigurationChangeFunction };
+		//return { configChange:myCustomConfigurationChangeFunction };
 	}
 	// Register this custom symbol definition with PI Coresight
 	CS.symbolCatalog.register(myCustomSymbolDefinition);

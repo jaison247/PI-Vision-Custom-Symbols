@@ -11,17 +11,24 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<div class="c-config-content-vertical">
-	<label style="margin-top:8px">URL<br />
-        <input type="text" class="" style="margin-top:4px"
-               ng-model="config.targetURL"><br />
-    </label>
-    <label style="margin-top:8px">
-        <input type="checkbox" class="c-config-checkbox"
-               ng-model="config.refreshOnSchedule">Enable Refresh<br />
-    </label>
-	<label style="margin-top:8px">Refresh Interval (seconds)<br />
-        <input type="number" class="" style="margin-top:4px"
-               ng-model="config.refreshIntervalSeconds"><br />
-    </label>
+<div style="padding:15px;font-size:14px">
+	<div>URL:
+        <input style="margin-left:5px;vertical-align:middle;margin-bottom:2px"
+               type="text"
+               ng-model="config.targetURL"
+               ng-model-options="{ debounce: 1000 }">
+    </div>
+    <br/>
+    <div>Enable Refresh:
+        <input style="margin-left:5px;vertical-align:middle;margin-bottom:2px"
+               type="checkbox"
+               ng-model="config.enableRefresh">
+    </div>
+    <br/>
+	<div>Refresh Interval (seconds):
+        <input style="margin-left:5px;vertical-align:middle;margin-bottom:2px"
+               type="number"
+               ng-model="config.refreshIntervalSeconds"
+               ng-model-options="{ debounce: 1000 }">
+    </div>
 </div>

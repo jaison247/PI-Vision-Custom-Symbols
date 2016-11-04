@@ -1,16 +1,19 @@
-/***************************************************************************
-   Copyright 2016 OSIsoft, LLC.
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-       http://www.apache.org/licenses/LICENSE-2.0
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
- ***************************************************************************
+
+/**
+# ***********************************************************************
+# * DISCLAIMER:
+# *
+# * All sample code is provided by OSIsoft for illustrative purposes only.
+# * These examples have not been thoroughly tested under all conditions.
+# * OSIsoft provides no guarantee nor implies any reliability,
+# * serviceability, or function of these programs.
+# * ALL PROGRAMS CONTAINED HEREIN ARE PROVIDED TO YOU "AS IS"
+# * WITHOUT ANY WARRANTIES OF ANY KIND. ALL WARRANTIES INCLUDING
+# * THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY
+# * AND FITNESS FOR A PARTICULAR PURPOSE ARE EXPRESSLY DISCLAIMED.
+# ************************************************************************
 #
+# Updated by dlopez@osisoft.com
 #
 #
 **/
@@ -28,15 +31,16 @@
 		// Specify the user-friendly name of the symbol that will appear in PI Coresight
 		displayName: 'Time Series Data Table',
 		// Specify the number of data sources for this symbol; just a single data source or multiple
-		datasourceBehavior: CS.DatasourceBehaviors.Single,
+		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
 		// Specify the location of an image file to use as the icon for this symbol
 		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/timeSeriesDataTable.png',
+		visObjectType: symbolVis,
 		// Specify default configuration for this symbol
 		getDefaultConfig: function () {
 			return {
-				// Specify the data shape type (for symbols that update with new data)
+				//
 				DataShape: 'TimeSeries',
-				//DataQueryMode: CS.DataQueryMode.ModePlotValues,
+				//DataQueryMode:  CS.Extensibility.Enums.DataQueryMode.ModeEvents,
 				// Specify the default height and width of this symbol
 				Height: 300,
 				Width: 400,
@@ -50,34 +54,29 @@
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
-		 configOptions: function () {
+		configOptions: function () {
             return [{
 				// Add a title that will appear when the user right-clicks a symbol
 				title: 'Format Symbol',
 				// Supply a unique name for this cofiguration setting, so it can be reused, if needed
                 mode: 'format'
             }];
-        },
-		// Include variables that will be used in the custom configuration pane.
-		// Define a keyword and the value of that keyword for each variable.
-		// You'll specify the value for these in the getDefaultConfig section
-		// by referencing these variables by the value of their keyword
-		configure: {
-			showDataItemNameCheckboxValueKeyword: 'showDataItemNameCheckboxValue',
-			showTimestampCheckboxValueKeyword: 'showTimestampCheckboxValue',
-			numberOfDecimalPlacesKeyword: 'numberOfDecimalPlaces',
-			dataItemColumnColorKeyword: 'dataItemColumnColor',
-			timestampColumnColorKeyword: 'timestampColumnColor',
-			valueColumnColorKeyword: 'valueColumnColor'
-		},
+        }
 		// Specify the name of the function that will be called to initialize the symbol
-		init: myCustomSymbolInitFunction
+		//init: myCustomSymbolInitFunction
 	};
 	
 	//************************************
 	// Function called to initialize the symbol
 	//************************************
-	function myCustomSymbolInitFunction(scope, elem) {
+	//function myCustomSymbolInitFunction(scope, elem) {
+	function symbolVis() { }
+    CS.deriveVisualizationFromBase(symbolVis);
+	symbolVis.prototype.init = function(scope, elem) {
+		// Specify which function to call when a data update or configuration change occurs 
+		this.onDataUpdate = myCustomDataUpdateFunction;
+		this.onConfigChange = myCustomConfigurationChangeFunction;
+		
 		// Locate the html div that will contain the symbol, using its id, which is "container" by default
 		var symbolContainerDiv = elem.find('#container')[0];
         // Use random functions to generate a new unique id for this symbol, to make it unique among all other custom symbols
@@ -155,7 +154,7 @@
 				if (scope.config.showDataItemNameCheckboxValue) {
 					var dataItemHeaderCell = headersRow.insertCell(-1);
 					dataItemHeaderCell.innerHTML = "Data Item";
-					dataItemHeaderCell.style = "padding-right:10px;padding-right:10px;font-weight:bold";
+					dataItemHeaderCell.style = "padding-left:10px;padding-right:10px;padding-right:10px;font-weight:bold";
 				}
 				// If the "show timestamp" checkbox is checked, then add a cell to the row to contain this
 				if (scope.config.showTimestampCheckboxValue) {
@@ -211,9 +210,8 @@
 			// All configuration changes for this symbol are set up to take effect
 			// automatically every data update, so there's no need for specific config change code here
 		}
-		
 		// Specify which function to call when a data update or configuration change occurs 
-		return { dataUpdate: myCustomDataUpdateFunction, configChange:myCustomConfigurationChangeFunction };
+		//return { dataUpdate: myCustomDataUpdateFunction, configChange:myCustomConfigurationChangeFunction };		
 	}
 	// Register this custom symbol definition with PI Coresight
 	CS.symbolCatalog.register(myCustomSymbolDefinition);
