@@ -15,7 +15,7 @@ This repository is broken down into two separate sections, **tutorials** and **c
     Contains sample symbols and panes submitted by OSIsoft and the community to showcase what they have done with PI Coresight's extensibilty model.
 
 ## Resources
-* [PI Coresight Extensibility Documentation][5] **todo**
+* [PI Coresight Extensibility Documentation][5]
 * [PI Square][6]
 
 ## Contributing
@@ -52,7 +52,7 @@ Please see the file named [LICENSE](LICENSE).
 [2]:http://www.osisoft.com/pi-system/
 [3]:/tutorials/
 [4]:/Community%20Samples/
-[5]:https://techsupport.osisoft.com/Viewer/File/392201e9-c634-4e66-b161-fb4ce000db00
+[5]:https://techsupport.osisoft.com/Viewer/File/798956c4-98a8-466f-9ee6-f4e880a75950
 [6]:https://pisquare.osisoft.com/community/developers-club/pi-visualization-development
 [7]:https://github.com/osisoft/contributing
 
