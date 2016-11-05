@@ -1,0 +1,140 @@
+
+/**
+# ***********************************************************************
+# * DISCLAIMER:
+# *
+# * All sample code is provided by OSIsoft for illustrative purposes only.
+# * These examples have not been thoroughly tested under all conditions.
+# * OSIsoft provides no guarantee nor implies any reliability,
+# * serviceability, or function of these programs.
+# * ALL PROGRAMS CONTAINED HEREIN ARE PROVIDED TO YOU "AS IS"
+# * WITHOUT ANY WARRANTIES OF ANY KIND. ALL WARRANTIES INCLUDING
+# * THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY
+# * AND FITNESS FOR A PARTICULAR PURPOSE ARE EXPRESSLY DISCLAIMED.
+# ************************************************************************
+#
+# Updated by dlopez@osisoft.com
+# Visualizations provided by amCharts: https://www.amcharts.com/
+#
+**/
+
+//************************************
+// Begin defining a new symbol
+//************************************
+(function (CS) {
+	'use strict';
+	// Specify the symbol definition	
+	var myCustomSymbolDefinition = {
+		// Specify the unique name for this symbol; this instructs PI Coresight to also
+		// look for HTML template and config template files called sym-<typeName>-template.html and sym-<typeName>-config.html
+		typeName: 'HTML5video',
+		// Specify the user-friendly name of the symbol that will appear in PI Coresight
+		displayName: 'HTML5 video',
+		// Specify the number of data sources for this symbol
+		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+		// Specify the location of an image file to use as the icon for this symbol
+		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/HTML5video.png',
+		visObjectType: symbolVis,
+		// Specify default configuration for this symbol
+		getDefaultConfig: function () {
+			return {
+				// Specify the data shape type (for symbols that update with new data)
+				DataShape: 'Value',
+				// Specify the default height and width of this symbol
+				Height: 300,
+				Width: 600,
+				// Specify the value of custom configuration options; see the "configure" section below
+				videoSourcePath: "",
+				showControls: true,
+                enableAutoplay: false,
+                enableRefresh: false,
+				refreshIntervalSeconds: 60
+			};
+		},
+		// By including this, you're specifying that you want to allow configuration options for this symbol
+        configOptions: function () {
+            return [{
+				// Add a title that will appear when the user right-clicks a symbol
+				title: 'Format Symbol',
+				// Supply a unique name for this cofiguration setting, so it can be reused, if needed
+                mode: 'format'
+            }];
+        },
+		// Specify the name of the function that will be called to initialize the symbol
+		//init: myCustomSymbolInitFunction
+	};
+	
+	//************************************
+	// Function called to initialize the symbol
+	//************************************
+	//function myCustomSymbolInitFunction(scope, elem) {
+	function symbolVis() { }
+    CS.deriveVisualizationFromBase(symbolVis);
+	symbolVis.prototype.init = function(scope, elem) {
+		// Specify which function to call when a data update or configuration change occurs 
+		//this.onDataUpdate = myCustomDataUpdateFunction;
+		this.onConfigChange = myCustomConfigurationChangeFunction;
+		
+		// Locate the html div that will contain the symbol, using its id, which is "container" by default
+		var symbolContainerElement = elem.find('#container')[0];
+        // Use random functions to generate a new unique id for this symbol, to make it unique among all other custom symbols
+		var newUniqueIDString = "myCustomSymbol_" + Math.random().toString(36).substr(2, 16);
+		// Write that new unique ID back to overwrite the old id
+        symbolContainerElement.id = newUniqueIDString;
+		// Create a timer variable to be used for refreshes
+		var myTimer;
+
+		//************************************
+		// Function that is called when custom configuration changes are made
+		//************************************
+        // Initialize a variable to hold the timer interval
+        var OLDrefreshIntervalSeconds = scope.config.refreshIntervalSeconds;
+		function myCustomConfigurationChangeFunction() {
+            // If a change is detected, update the path, controls setting, and autoplay setting
+            if (symbolContainerElement.src !== scope.config.videoSourcePath) {
+                symbolContainerElement.src = scope.config.videoSourcePath;
+            }
+            if (symbolContainerElement.controls !== scope.config.showControls) {
+                symbolContainerElement.controls = scope.config.showControls;
+            }
+            if (symbolContainerElement.autoplay !== scope.config.enableAutoplay) {
+                symbolContainerElement.autoplay = scope.config.enableAutoplay;
+            }
+            // If the "enable refresh checkbox 
+            if (!scope.config.enableRefresh) {
+                window.clearTimeout(myTimer);
+            } else {
+                // In this case, the timer is enabled!
+                // If a change is detected, update the refresh interval
+                if (OLDrefreshIntervalSeconds !== scope.config.refreshIntervalSeconds) {
+                    OLDrefreshIntervalSeconds = scope.config.refreshIntervalSeconds;
+                    // Since the interval has changed, stop the timer
+                    window.clearTimeout(myTimer);
+                    // Start a new timer, using the new interval (only allow an interval over 0 seconds)
+                    if (scope.config.enableRefresh && scope.config.refreshIntervalSeconds > 0) {
+                        myTimer = setTimeout(refreshVideoSource, scope.config.refreshIntervalSeconds * 1000);
+                    }
+                }
+            }
+		}
+		
+        //************************************
+        // Function called by the timer to refresh the video feed
+        //************************************
+        function refreshVideoSource() {
+            // Refresh the video source when the timer elapses
+            symbolContainerElement.src = "";
+            symbolContainerElement.src = scope.config.videoSourcePath;
+            // If enabled, start a new timer, using the specified  timer interval (only allow an interval over 0 seconds)
+            if (scope.config.enableRefresh && scope.config.refreshIntervalSeconds > 0) {
+                myTimer = setTimeout(refreshVideoSource, scope.config.refreshIntervalSeconds * 1000);
+            }
+        }
+        
+		// Specify which function to call when a data update or configuration change occurs 
+		//return { configChange: myCustomConfigurationChangeFunction };
+	}
+	// Register this custom symbol definition with PI Coresight
+	CS.symbolCatalog.register(myCustomSymbolDefinition);
+	
+})(window.Coresight);
