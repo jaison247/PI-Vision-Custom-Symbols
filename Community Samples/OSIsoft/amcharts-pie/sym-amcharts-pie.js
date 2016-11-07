@@ -47,9 +47,11 @@
 				// Specify the value of custom configuration options; see the "configure" section below
 				textColor: "black",
 				backgroundColor: "white",
+				outlineColor: "white",
 				showTitle: true,
 				showLabels: true,
-				showLegend: true
+				showLegend: true,
+				donut: false
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -137,6 +139,10 @@
 						"labelsEnabled": scope.config.showLabels,
 						"creditsPosition": "bottom-right",
 						"color": scope.config.textColor,
+						"outlineColor": scope.config.outlineColor,
+						"outlineAlpha": 1,
+						"outlineThickness": 1,
+						"innerRadius": 0,
 						"legend": {
 							"enabled": scope.config.showLegend,
 							"color": scope.config.textColor,
@@ -193,14 +199,23 @@
                 if (customVisualizationObject.backgroundColor !== scope.config.backgroundColor) {
                     customVisualizationObject.backgroundColor = scope.config.backgroundColor;
                 }
+				if (customVisualizationObject.outlineColor !== scope.config.outlineColor) {
+                    customVisualizationObject.outlineColor = scope.config.outlineColor;
+                }
 				// Update the title and labels and legend
 				if (scope.config.showTitle) {
 					customVisualizationObject.titles = createArrayOfChartTitles();
 				} else {
 					customVisualizationObject.titles = null;
-				}				
+				}
 				customVisualizationObject.labelsEnabled = scope.config.showLabels;
 				customVisualizationObject.legend.enabled = scope.config.showLegend;
+				// Update donut
+				if (scope.config.donut) {
+					customVisualizationObject.innerRadius = "60%";
+				} else {
+					customVisualizationObject.innerRadius = 0;
+				}
 				// Commit updates to the chart
 				customVisualizationObject.validateNow();
 			}
