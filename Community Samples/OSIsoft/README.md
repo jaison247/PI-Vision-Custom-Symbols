@@ -15,4 +15,3 @@ This section contains samples provided by [OSIsoft](http://www.osisoft.com/) for
 * [RSS Symbol](/Community Samples/OSIsoft/rss symbol)
 * [snapshotDataTable](/Community Samples/OSIsoft/snapshotDataTable)
 * [timeSeriesDataTable](/Community Samples/OSIsoft/timeSeriesDataTable)
-* [writeValue](/Community Samples/OSIsoft/writeValue)
