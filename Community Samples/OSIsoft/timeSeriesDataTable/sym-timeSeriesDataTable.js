@@ -48,9 +48,9 @@
 				showDataItemNameCheckboxValue: true,
 				showTimestampCheckboxValue: true,
 				numberOfDecimalPlaces: 2,
-				dataItemColumnColor: "#cc4748",
-				timestampColumnColor: "#fdd400",
-				valueColumnColor: "#C0C0C0"
+				dataItemColumnColor: "cyan",
+				timestampColumnColor: "lightgray",
+				valueColumnColor: "lightgreen"
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -109,13 +109,15 @@
 				data.Data[0].Values.forEach(function(pieceOfData) {
 					// Create a new row for the table
 					var newRow = symbolContainerDiv.insertRow(0);
-					newRow.style = "width:100%";
+					newRow.style.width = "100%";
 					// If the "show data item" checkbox is checked, then add a cell to the row to contain this
 					if (scope.config.showDataItemNameCheckboxValue) {
 						var dataItemCell = newRow.insertCell(-1);
 						dataItemCell.innerHTML = dataItemLabel;
 						// Apply padding and the specified color for this column
-						dataItemCell.style="padding-left:10px;padding-right:10px;color:" + scope.config.dataItemColumnColor;
+						dataItemCell.style.color = scope.config.dataItemColumnColor;
+						dataItemCell.style.paddingLeft = "10px";
+						dataItemCell.style.paddingRight = "10px";
 					}
 					// If the "show timestamp" checkbox is checked, then add a cell to the row to contain this
 					if (scope.config.showTimestampCheckboxValue) {
@@ -128,7 +130,8 @@
 							timeStampCell.innerHTML = myFormatTimestampFunction(pieceOfData.Time);
 						}
 						// Apply padding and the specified color for this column
-						timeStampCell.style="padding-right:10px;padding-right:10px;color:" + scope.config.timestampColumnColor;
+						timeStampCell.style.color = scope.config.timestampColumnColor;
+						timeStampCell.style.paddingRight = "10px";
 					}
 					// Add a cell to the row to contain the value
 					var valueCell = newRow.insertCell(-1);
@@ -146,7 +149,8 @@
 					}
 					valueCell.innerHTML = newInnerHTMLString;
 					// Apply padding and the specified color for this column
-					valueCell.style="padding-right:10px;padding-right:10px;color:" + scope.config.valueColumnColor;
+					valueCell.style.color = scope.config.valueColumnColor;
+					valueCell.style.paddingRight = "10px";
 				});
 				// Add a row of headers
 				var headersRow = symbolContainerDiv.insertRow(0);
@@ -154,18 +158,22 @@
 				if (scope.config.showDataItemNameCheckboxValue) {
 					var dataItemHeaderCell = headersRow.insertCell(-1);
 					dataItemHeaderCell.innerHTML = "Data Item";
-					dataItemHeaderCell.style = "padding-left:10px;padding-right:10px;padding-right:10px;font-weight:bold";
+					dataItemHeaderCell.style.fontWeight = "bold";
+					dataItemHeaderCell.style.paddingLeft = "10px";
+					dataItemHeaderCell.style.paddingRight = "10px";
 				}
 				// If the "show timestamp" checkbox is checked, then add a cell to the row to contain this
 				if (scope.config.showTimestampCheckboxValue) {
 					var timeStampHeaderCell = headersRow.insertCell(-1);
 					timeStampHeaderCell.innerHTML = "Timestamp";
-					timeStampHeaderCell.style = "padding-right:10px;padding-right:10px;font-weight:bold";
+					timeStampHeaderCell.style.fontWeight = "bold";
+					timeStampHeaderCell.style.paddingRight = "10px";
 				}
 				// Add a cell to the row to contain the value
 				var valueHeaderCell = headersRow.insertCell(-1);
 				valueHeaderCell.innerHTML = "Value";
-				valueHeaderCell.style = "padding-right:10px;padding-right:10px;font-weight:bold";
+				valueHeaderCell.style.fontWeight = "bold";
+				valueHeaderCell.style.paddingRight = "10px";
 			}
 		}
 		//************************************
