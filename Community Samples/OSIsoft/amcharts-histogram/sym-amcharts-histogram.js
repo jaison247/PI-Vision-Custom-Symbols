@@ -134,9 +134,16 @@
 				// For each piece of data in the data item, assign it to the appropriate bin
 				totalNumberOfEvents = data.Data[0].Values.length;
 				for (var i = 0; i < data.Data[0].Values.length; i++) {
-					// Determine the correct bin for this event; remember, the first bin is for underflow
-					var binIndex = 1 + Math.floor( 
-                        (data.Data[0].Values[i].Value - scope.config.minimumValue) / scope.config.binSize );
+					// Check the value is not system digital value
+					if (isNaN(data.Data[0].Values[i].Value)) {
+						// Not a number
+						continue;
+					}
+					else
+					{
+						// Determine the correct bin for this event; remember, the first bin is for underflow
+						var binIndex = 1 + Math.floor( (data.Data[0].Values[i].Value - scope.config.minimumValue) / scope.config.binSize );					
+					}
 					// Check for underflow (if the value is under the min, add it to the "underflow" bin)
 					if (data.Data[0].Values[i].Value < scope.config.minimumValue) {
 						// If so, place in the underflow bin, which is the first bin in the array
