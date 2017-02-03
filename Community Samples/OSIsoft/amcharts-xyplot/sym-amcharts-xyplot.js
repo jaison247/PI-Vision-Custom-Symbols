@@ -53,7 +53,8 @@
 				bulletOpacity: 0.9,
 				showTrendLines: true,
 				trendLineColor: "orange",
-				showTitle: true
+				showTitle: true,
+				forceXYTimestampSync: true
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -119,8 +120,7 @@
 				// If the custom visualization hasn't been made yet... create the custom visualization!
 				// Custom code begins here:
 				// --------------------------------------------------------------------------------------------------
-				console.log("Now creating custom visualization...");
-				//console.log(data);
+				//console.log("New raw data received: ", data);
 				// Get the data item name(s)
 				if (data.Data[0].Label){
 					dataItemLabel_XAxis = data.Data[0].Label; 
@@ -152,21 +152,36 @@
 						if (parseFloat(data.Data[1].Values[yIndex].Value) > yMax_autoscale) { yMax_autoscale = parseFloat(data.Data[1].Values[yIndex].Value) };
 						if (parseFloat(data.Data[1].Values[yIndex].Value) < yMin_autoscale) { yMin_autoscale = parseFloat(data.Data[1].Values[yIndex].Value) };
 						// Test for matching timestamps between the temp xy entry and this current y-axis timestamp
-						if (data.Data[0].Values[xIndex].Time == data.Data[1].Values[yIndex].Time) {
+						if (!scope.config.forceXYTimestampSync || (data.Data[0].Values[xIndex].Time == data.Data[1].Values[yIndex].Time)) {
 							xyDataArray.push({
 								Time: data.Data[0].Values[xIndex].Time, 
 								x: parseFloat(data.Data[0].Values[xIndex].Value), 
-								y: parseFloat(data.Data[1].Values[yIndex].Value)
+								y: parseFloat(data.Data[1].Values[yIndex].Value),
+								trendLine1X: null,
+								trendLine1Y: null
 							});
 						}
 					}
 				}
-				//console.log("X-Y array: ");
-				//console.log(xyDataArray);
+				//console.log("X-Y array: ", xyDataArray);
 				// Add trend lines!
 				if (data.Data[2]) {
 					// Extract the JSON string from the third data item
 					var trendLineJSONString = data.Data[2].Values[0].Value;
+					var trendLineJSONStringArray = trendLineJSONString.split(";");
+					// Example:
+					// 65,50;68,54;74,53;82,54;84,56
+					for (var i = 0; i < trendLineJSONStringArray.length; i++) {
+						xyDataArray.push({
+							Time: null, 
+							x: null, 
+							y: null,
+							trendLine1X: trendLineJSONStringArray[i].split(",")[0],
+							trendLine1Y: trendLineJSONStringArray[i].split(",")[1]
+						});
+					}
+					
+					/*
 					// Remove case sensitivity
 					trendLineJSONString = trendLineJSONString.toLowerCase();
 					// Parse the JSON string into an object that we can easily query
@@ -176,11 +191,17 @@
 					trendLine1_initialValue = trendLineJSON.initialvalue;
 					trendLine1_finalXValue = trendLineJSON.finalxvalue;
 					trendLine1_finalValue = trendLineJSON.finalvalue;
-					//console.log("Trend line: " + trendLine1_initialXValue + "," + trendLine1_initialValue + "," + trendLine1_finalXValue + "," + trendLine1_finalValue);
+					console.log("Trend line: " + trendLine1_initialXValue + "," + trendLine1_initialValue + "," + trendLine1_finalXValue + "," + trendLine1_finalValue);
+					*/
+					
+					
+					
+					
 				} else {
 					//console.log("No trend lines added yet.");
 				}
 				// Create the custom visualization
+				//console.log("Now creating custom visualization...");
 				if (!customVisualizationObject) {
 					customVisualizationObject = AmCharts.makeChart(symbolContainerDiv.id, {
 						"type": "xy",
@@ -204,6 +225,17 @@
 								"xField": "x",
 								"yField": "y",
 								"balloonText": "[[Time]]<br />" + extractDataItemNameOnly(dataItemLabel_XAxis) + ": [[x]] (" + dataItemUnits_XAxis + ")<br /> " + extractDataItemNameOnly(dataItemLabel_YAxis) + ": [[y]] (" + dataItemUnits_YAxis + ")",
+							},
+							{
+								"bullet": scope.config.bulletType,
+								"bulletSize": scope.config.bulletSize,
+								"bulletAlpha": scope.config.bulletOpacity,
+								"lineColor": "blue",
+								"fillAlphas": 0,
+								"lineAlpha": 1,
+								"xField": "trendLine1X",
+								"yField": "trendLine1Y",
+								"balloonText": "Trend Line 1<br />" + extractDataItemNameOnly(dataItemLabel_XAxis) + ": [[x]] (" + dataItemUnits_XAxis + ")<br /> " + extractDataItemNameOnly(dataItemLabel_YAxis) + ": [[y]] (" + dataItemUnits_YAxis + ")",
 							}
 						],
 						"valueAxes": [ {

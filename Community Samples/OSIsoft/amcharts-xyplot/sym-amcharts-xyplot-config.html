@@ -59,9 +59,14 @@
 <br />
 <label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
 	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.forceXYTimestampSync">Only Include Matching Timestamps<br />
+</label>
+<br />
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.showTrendLines">Show Trend Line<br />
 </label>
-<div style="margin-top:8px;font-style:italic">Note: to add a Trend Line, drag onto the chart a static string Attribute whose value is in the form {"initialXValue":1,"initialValue":0,"finalXValue":90,"finalValue":88}</div>
+<div style="margin-top:8px;font-style:italic">Note: to add a Trend Line, drag onto the chart a static string Attribute whose value is in the form x1,y1;x2,y2;x3,y3</div>
 
 <br />
 <label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
