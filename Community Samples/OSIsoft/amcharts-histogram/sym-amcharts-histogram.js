@@ -1,22 +1,18 @@
+/***************************************************************************
+   Copyright 2016 OSIsoft, LLC.
 
-/**
-# ***********************************************************************
-# * DISCLAIMER:
-# *
-# * All sample code is provided by OSIsoft for illustrative purposes only.
-# * These examples have not been thoroughly tested under all conditions.
-# * OSIsoft provides no guarantee nor implies any reliability,
-# * serviceability, or function of these programs.
-# * ALL PROGRAMS CONTAINED HEREIN ARE PROVIDED TO YOU "AS IS"
-# * WITHOUT ANY WARRANTIES OF ANY KIND. ALL WARRANTIES INCLUDING
-# * THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY
-# * AND FITNESS FOR A PARTICULAR PURPOSE ARE EXPRESSLY DISCLAIMED.
-# ************************************************************************
-#
-# Updated by dlopez@osisoft.com
-# Visualizations provided by amCharts: https://www.amcharts.com/
-#
-**/
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ ***************************************************************************/
 
 //************************************
 // Begin defining a new symbol
@@ -138,9 +134,16 @@
 				// For each piece of data in the data item, assign it to the appropriate bin
 				totalNumberOfEvents = data.Data[0].Values.length;
 				for (var i = 0; i < data.Data[0].Values.length; i++) {
-					// Determine the correct bin for this event; remember, the first bin is for underflow
-					var binIndex = 1 + Math.floor( 
-                        (data.Data[0].Values[i].Value - scope.config.minimumValue) / scope.config.binSize );
+					// Check the value is not system digital value
+					if (isNaN(data.Data[0].Values[i].Value)) {
+						// Not a number
+						continue;
+					}
+					else
+					{
+						// Determine the correct bin for this event; remember, the first bin is for underflow
+						var binIndex = 1 + Math.floor( (data.Data[0].Values[i].Value - scope.config.minimumValue) / scope.config.binSize );					
+					}
 					// Check for underflow (if the value is under the min, add it to the "underflow" bin)
 					if (data.Data[0].Values[i].Value < scope.config.minimumValue) {
 						// If so, place in the underflow bin, which is the first bin in the array
