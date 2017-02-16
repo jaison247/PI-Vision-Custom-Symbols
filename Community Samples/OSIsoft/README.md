@@ -4,6 +4,7 @@ This section contains samples provided by [OSIsoft](http://www.osisoft.com/) for
 
 ## Samples
 * [HTML5 Video](/Community Samples/OSIsoft/HTML5video)
+* [amcharts-gauge](/Community Samples/OSIsoft/amcharts-gauge)
 * [amcharts-histogram](/Community Samples/OSIsoft/amcharts-histogram)
 * [amcharts-pie](/Community Samples/OSIsoft/amcharts-pie)
 * [amcharts-radar](/Community Samples/OSIsoft/amcharts-radar)
