@@ -1,10 +1,8 @@
 <!--
 	Copyright 2016 OSIsoft, LLC.
-
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
-
 		http://www.apache.org/licenses/LICENSE-2.0
 			
 	Unless required by applicable law or agreed to in writing, software
@@ -43,8 +41,57 @@
 <div class="config-option-format">
 	<cs-color-picker id="valueColumnColor" ng-model="config.valueColumnColor" config="config">
 </cs-color-picker></div>
+<br/>
 <label style="margin-top:8px; margin-left: 8px;">
-	<input type="number" class=""
-		   ng-model="config.numberOfDecimalPlaces">   Value Column Decimal Places<br />
+	<input type="number" class="" style="text-align:center;margin-left:10px;margin-right:15px;"
+		   ng-model="config.numberOfDecimalPlaces">Value Decimal Places<br />
 </label>
 <br>
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Mouse-Over</span>
+</div>
+<div class="config-option-format">
+	<cs-color-picker id="hoverColor" ng-model="config.hoverColor" config="config">
+</cs-color-picker></div>
+<br/>
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Even Rows</span>
+</div>
+<div class="config-option-format">
+	<cs-color-picker id="evenRowColor" ng-model="config.evenRowColor" config="config">
+</cs-color-picker></div>
+<br/>
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Odd Rows</span>
+</div>
+<div class="config-option-format">
+	<cs-color-picker id="oddRowColor" ng-model="config.oddRowColor" config="config">
+</cs-color-picker></div>
+<br/>
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Outside Border</span>
+</div>
+<div class="config-option-format">
+	<cs-color-picker id="outsideBorderColor" ng-model="config.outsideBorderColor" config="config">
+</cs-color-picker></div>
+<br/>
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Header Text</span>
+</div>
+<div class="config-option-format">
+	<cs-color-picker id="headerTextColor" ng-model="config.headerTextColor" config="config">
+</cs-color-picker></div>
+<br/>
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Header Background</span>
+</div>
+<div class="config-option-format">
+	<cs-color-picker id="headerBackgroundColor" ng-model="config.headerBackgroundColor" config="config">
+</cs-color-picker></div>
+<br/>

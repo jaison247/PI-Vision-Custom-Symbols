@@ -1,0 +1,26 @@
+Follow these simple instructions to install this custom symbol; the overall process should only take a few minutes.
+
+First, download the custom symbols ZIP file from here:
+
+	https://github.com/osisoft/PI-Coresight-Custom-Symbols
+
+On that web page, click the "Clone or download" link, and download the .ZIP file containing custom symbols.  Extract that .ZIP file that you downloaded, and within the extracted folder, navigate to the "Community Samples\OSIsoft\" sub-folder.  In here, look for the specific sub-folder for this particular custom symbol, which in this case is named "advancedDataTable".
+
+To install this custom symbol you'll need access to your PI Coresight server.  On that PI Coresight server:
+
+1. In Windows Explorer, navigate to the "PIPC\Coresight" installation folder on your PI Coresight server; typically, it's located in "C:\Program Files\PIPC\Coresight"
+
+2. This is a symbol that uses the free Datatables javascript library.  From the files for this custom symbol, copy the Datatables.zip file extract it into the "PIPC\Coresight" folder; there should now be a new folder named "Datatables" within "PIPC\Coresight", and inside the "Datatables" folder you should see several sub-folders, .css, and .js files.
+
+3. Next, from within the folder named "Coresight", navigate to the "\Scripts\app\editor\symbols" sub-folder.  
+
+4. Within the folder named "symbols", if there is not already a folder called "ext", create a folder called "ext".  
+
+5. Now that the "ext" folder exists, or already exits, open it, and paste into the "ext" folder these four files:
+
+	sym-advancedTimeSeriesDataTable.js
+	advancedTimeSeriesDataTable.png
+	sym-advancedTimeSeriesDataTable-config.html
+	sym-advancedTimeSeriesDataTable-template.html files
+
+The next time you open a web browser and navigate to PI Coresight and create a new PI Coresight display, you will see this new symbol appear as a new icon (using the .png image that was provided) in the top-left-hand corner of the PI Coresight display editor.
