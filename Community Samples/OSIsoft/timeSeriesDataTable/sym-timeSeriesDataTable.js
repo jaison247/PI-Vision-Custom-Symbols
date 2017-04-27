@@ -44,6 +44,7 @@
 				// Specify the default height and width of this symbol
 				Height: 300,
 				Width: 400,
+				Intervals: 1000,				
 				// Specify the value of custom configuration options; see the "configure" section below
 				showDataItemNameCheckboxValue: true,
 				showTimestampCheckboxValue: true,
