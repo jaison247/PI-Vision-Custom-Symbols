@@ -1,4 +1,4 @@
-Follow these simple instructions to install this custom symbol; the overall process should only take a minutes.
+Follow these simple instructions to install this custom symbol; the overall process should only take a few minutes.
 
 First, download the custom symbols ZIP file from here:
 
