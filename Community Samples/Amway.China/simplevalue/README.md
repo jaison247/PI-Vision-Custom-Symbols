@@ -6,12 +6,10 @@ Follow these simple instructions to install this custom symbol; the overall proc
 
 3. Within the folder named "symbols", if there is not already a folder called "ext", create a folder called "ext".  
 
-4. paste into the "ext" folder "sym-statuslight.js", "sym-statuslight-config.html", "sym-statuslight-template" which are contained in the "statuslight" folder.
+4. paste into the "ext" folder the "sym-simplevalue", "sym-simplevalue-config.html" , "sym-simplevalue-template.html". 
 
-5. paste into the "ext" folder two sub folders, 
-first sub folder "icons" contains "green.png" which is the icon of statuslight; 
-second folder "imgs" contains "green.png", "red.png", "white.png", "yellow.png".
+5. paste into the "ext" folder sub folder "icons" to include "simplevalue.png" which is the icon of simplevalue.
 
-6. create an Elements Attribute "LineState", give the value "10" as the data source in PI System Explorer.
+6. create an Element Attribute "LineCount" , give value "16" as the DataSource in PI System Explorer.
 
 The next time you open a web browser and navigate to PI Vision and create a new PI Vision display, you will see this new symbol appear in the top-left-hand corner of the PI Vision display editor.

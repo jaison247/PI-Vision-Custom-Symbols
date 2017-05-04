@@ -6,8 +6,10 @@ Follow these simple instructions to install this custom symbol; the overall proc
 
 3. Within the folder named "symbols", if there is not already a folder called "ext", create a folder called "ext".  
 
-4. If this a symbol that uses the hightcharts library (if so, the symbol will contain "hightcharts" in the name), download the hightcharts JavaScript Charts library zip file from https://www.highcharts.com/download.  Now that the "ext" folder exists, or already exits, extract the contents of the .ZIP file that you just downloaded into the "ext" folder.  The "ext" folder should now contain folders for "api", "examples", "gfx", "graphics", and "js", and you should have just pasted in the following .js files: highcharts.js or use hightcharts.js in "linechart" folder directly, the hightchart version is 4.2.3.
+4. The Symbol will use hightchart, you pasted "hightcharts.js" into "ext" folder directly,  you will find the hightcharts.js in svn "linechart" folder, the hightchart version is 4.2.3.
 
-5. Now that the "ext" folder exists, or already exits, open it, and paste into the "ext" folder the two .js and one .html files contained in the "linechart" folder.
+5. Paste into the "ext" folder the "sym-linechart.js" and "sym-linechart-template.html".
+
+6. In PI System Explorer, Create Element Attribute, Value Type: String, Value [{name: '短暂停机123',data: [20]}, {name: '包装瑕疵材料',data: [12]}, {name: '生产前准备',data: [7]}]
 
 The next time you open a web browser and navigate to PI Vision and create a new PI Vision display, you will see this new symbol appear in the top-left-hand corner of the PI Vision display editor.

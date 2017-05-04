@@ -28,7 +28,7 @@ window.Coresight.ClientSettings = window.Coresight.ClientSettings || {};
         container.id = id;
 
         function convertToChartData(data) {
-			console.log(data.Value);
+			//console.log(data.Value);
 			return eval(data.Value);
 		}		
 		var chart;

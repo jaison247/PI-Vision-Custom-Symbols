@@ -6,12 +6,10 @@ Follow these simple instructions to install this custom symbol; the overall proc
 
 3. Within the folder named "symbols", if there is not already a folder called "ext", create a folder called "ext".  
 
-4. paste into the "ext" folder "sym-statuslight.js", "sym-statuslight-config.html", "sym-statuslight-template" which are contained in the "statuslight" folder.
+4. paste into the "ext" folder the "sym-namevaluetable.js" and "sym-namevaluetable-template".
 
-5. paste into the "ext" folder two sub folders, 
-first sub folder "icons" contains "green.png" which is the icon of statuslight; 
-second folder "imgs" contains "green.png", "red.png", "white.png", "yellow.png".
+5. paste into the "ext" folder , sub folder "icons" "namevaluetable.png".
 
-6. create an Elements Attribute "LineState", give the value "10" as the data source in PI System Explorer.
+6. new event frame which have name and value, click the "namevaluetable" and drap the event frame attributes into draw area in coresight.
 
 The next time you open a web browser and navigate to PI Vision and create a new PI Vision display, you will see this new symbol appear in the top-left-hand corner of the PI Vision display editor.

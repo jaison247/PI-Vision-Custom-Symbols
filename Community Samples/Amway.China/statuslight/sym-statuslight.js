@@ -19,10 +19,8 @@ window.Coresight.ClientSettings = window.Coresight.ClientSettings || {};
     function symbolVis() { }
     CS.deriveVisualizationFromBase(symbolVis);
 
-	symbolVis.prototype.init = function (scope, elem) {
+	symbolVis.prototype.init = function (scope, elem) {	
         this.onDataUpdate = dataUpdate;
-		//this.onConfigChange = configChange;
-        this.onResize = resize;
         var container = elem.find('#container')[0];
         var id = 'statuslight_' + Math.random().toString(36).substr(2, 16);
         container.id = id;
@@ -31,54 +29,53 @@ window.Coresight.ClientSettings = window.Coresight.ClientSettings || {};
 			return eval(data.Value);
 		}		
 		var chart;
-		var redMin = parseInt(scope.config.RedMin);
-		var redMax = parseInt(scope.config.RedMax); 
-		var yellowMin = parseInt(scope.config.YellowMin); 
-		var yellowMax = parseInt(scope.config.YellowMax); 
-		var greenMin = parseInt(scope.config.GreenMin);
-		var greenMax = parseInt(scope.config.GreenMax); 
-		var whiteMin = parseInt(scope.config.WhiteMin); 
-		var whiteMax = parseInt(scope.config.WhiteMax);
+		var redMin = scope.config.RedMin == undefined ? 10 : parseInt(scope.config.RedMin);
+		var redMax = scope.config.RedMin == undefined ? 30 : parseInt(scope.config.RedMax); 
+		var yellowMin = scope.config.RedMin == undefined ? 5 : parseInt(scope.config.YellowMin); 
+		var yellowMax = scope.config.RedMin == undefined ? 10 : parseInt(scope.config.YellowMax); 
+		var greenMin = scope.config.RedMin == undefined ? -1 : parseInt(scope.config.GreenMin);
+		var greenMax = scope.config.RedMin == undefined ? 5 : parseInt(scope.config.GreenMax); 
+		var whiteMin = scope.config.RedMin == undefined ? -2 : parseInt(scope.config.WhiteMin); 
+		var whiteMax = scope.config.RedMin == undefined ? -1 : parseInt(scope.config.WhiteMax);
 		var selectlight;
 		var dataValue;
 		var olddata=9999;
-        function dataUpdate(data) {
+		var splintlightid = 'splintlight_' + Math.random().toString(36).substr(2, 16);
+		var $splintlights = $("img[id^='splintlight_']");	
+		$splintlights.stop(true,true);	
+        function dataUpdate(data) {			
+			//console.log(data);
             if(data) {
 				dataValue = parseInt(data.Value);
-				console.log(dataValue);
+				//console.log(dataValue);
                 if(olddata!=dataValue) {
+					selectlight = "<img id='"+splintlightid+"' src='../Coresight/Scripts/app/editor/symbols/ext/imgs/white.png' alt='white' style='width:40px;height:40px' />";
 					if(dataValue > redMax)
-						selectlight = "<img id='splintlight' src='../Coresight/Scripts/app/editor/symbols/ext/imgs/white.png' alt='white' style='width:40px;height:40px' />";					
+						selectlight = "<img id='"+splintlightid+"' src='../Coresight/Scripts/app/editor/symbols/ext/imgs/white.png' alt='white' style='width:40px;height:40px' />";					
 					if(dataValue > redMin && dataValue <= redMax)
-						selectlight = "<img id='splintlight' src='../Coresight/Scripts/app/editor/symbols/ext/imgs/red.png' alt='red' style='width:40px;height:40px' />";
+						selectlight = "<img id='"+splintlightid+"' src='../Coresight/Scripts/app/editor/symbols/ext/imgs/red.png' alt='red' style='width:40px;height:40px' />";
 					if(dataValue > yellowMin && dataValue <=yellowMax)
-						selectlight = "<img id='splintlight' src='../Coresight/Scripts/app/editor/symbols/ext/imgs/yellow.png' alt='yellow' style='width:40px;height:40px' />";;
+						selectlight = "<img id='"+splintlightid+"' src='../Coresight/Scripts/app/editor/symbols/ext/imgs/yellow.png' alt='yellow' style='width:40px;height:40px' />";;
 					if(dataValue > greenMin && dataValue <=greenMax)
-						selectlight = "<img id='splintlight' src='../Coresight/Scripts/app/editor/symbols/ext/imgs/green.png' alt='green' style='width:40px;height:40px' />";
+						selectlight = "<img id='"+splintlightid+"' src='../Coresight/Scripts/app/editor/symbols/ext/imgs/green.png' alt='green' style='width:40px;height:40px' />";
 					if(dataValue <= whiteMax)
-						selectlight = "<img id='splintlight' src='../Coresight/Scripts/app/editor/symbols/ext/imgs/white.png' alt='white' style='width:40px;height:40px' />";
-					//console.log($(container));
+						selectlight = "<img id='"+splintlightid+"' src='../Coresight/Scripts/app/editor/symbols/ext/imgs/white.png' alt='white' style='width:40px;height:40px' />";
 					$(container).children().remove();
 					$(container).append(selectlight);
 					olddata = dataValue;
-					function splint() {
-						var $splintlight = $("#splintlight");
+					function splint() {	
+						var $splintlight = $("#"+splintlightid+"");						
 						if (!$splintlight.is(":animated")) {
 							if ($splintlight[0].width <= 10) $splintlight.animate({ width: "40px", height: "40px" }, 5000, function () { splint(); });
 							else $splintlight.animate({ width: "10px", height: "10px" }, 5000, function () { splint(); });
 						}
 					}
+					var $splintlights1 = $("img[id^='splintlight_']");	
+					$splintlights1.stop(true,true);	
 					splint();					
 				}
             }
-        }
-        function resize(width, height) {
-            if(chart) {
-                //chart.setSize(width, height);
-				console.log(width);
-				console.log(height);
-            }
-        }		
+        }	
     };
 
     var definition = {
@@ -89,7 +86,7 @@ window.Coresight.ClientSettings = window.Coresight.ClientSettings || {};
         visObjectType: symbolVis,
         getDefaultConfig: function() {
     	    return {
-    	        DataShape: 'statuslight',
+    	        DataShape: 'Value',
     	        Height: 150,
                 Width: 150
             };
