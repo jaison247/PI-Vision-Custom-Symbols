@@ -100,7 +100,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 // Background color
                 tableMenuBarColor: "rgb(31,112,68)",
                 // Descend results or not
-                defaultOrder:"ascending"
+                defaultOrder:"ascending",
+                // Array for remembering column filter settings
+                dataTableFooterFilterStringsArray:["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -189,6 +191,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     //bInfo: true,
                     select: true,
                     //destroy: true,
+                    // Remember the state of the table (which columns are visible, for example)
+                    stateSave: true,
                     // Show processing label if needed
                     "processing": true,
                     // Frozen header settings
@@ -499,7 +503,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 // Insert a new cell into the footer
                 var cell = footerRow.insertCell(0);
                 // Add some text in the new footer cell:
-                cell.innerHTML = ( '<input type="text" placeholder="Search '+ dataTableHeaderStringsArray[i] + '" />' );
+                // If there is a search term already entered for this item, write it to the input
+                if (scope.config.dataTableFooterFilterStringsArray[i] == "") {
+                    // There's no search term entered yet
+                    cell.innerHTML = ( '<input type="text" placeholder="Search '+ dataTableHeaderStringsArray[i] + '" ' + '/>' );
+                } else {
+                    // In this case, a search term was entered! So add one in!
+                    cell.innerHTML = ( '<input type="text" placeholder="Search '+ dataTableHeaderStringsArray[i] + '" ' + 'value="' + scope.config.dataTableFooterFilterStringsArray[i] + '" ' + '/>' );
+                }
             }
         }
         
@@ -524,13 +535,21 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         function addSearchFunctionsToCellsInFooterRow() {
             // Add search functions to allow the footer column cells to filter their whole column
             myDataTableObject.columns().every( function () {
+                // For each column...
                 var that = this;
+                // Add a function that fires on change and keyup
                 $( 'input', this.footer() ).on( 'keyup change', function () {
                     if (that.search() !== this.value) {
                         that
                             .search( this.value )
                             .draw();
                     }
+                    // After searching, save the filter string
+                    myDataTableObject.columns().every( function (columnIndex) {
+                        //console.log(this.search());
+                        scope.config.dataTableFooterFilterStringsArray[columnIndex] = this.search();
+                        //console.log("Footer search array:", scope.config.dataTableFooterFilterStringsArray);
+                    });
                 });
             });
         }
