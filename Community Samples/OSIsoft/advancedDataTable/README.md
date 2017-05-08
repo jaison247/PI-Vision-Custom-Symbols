@@ -10,7 +10,7 @@ To install this custom symbol you'll need access to your PI Coresight server.  O
 
 1. In Windows Explorer, navigate to the "PIPC\Coresight" installation folder on your PI Coresight server; typically, it's located in "C:\Program Files\PIPC\Coresight"
 
-2. This is a symbol that uses the free Datatables javascript library.  From the files for this custom symbol, copy the Datatables.zip file extract it into the "PIPC\Coresight" folder; there should now be a new folder named "Datatables" within "PIPC\Coresight", and inside the "Datatables" folder you should see several sub-folders, .css, and .js files.
+2. Inside the "Coresight" folder, create a new folder called "Datatables".  From the files for this custom symbol, take the Datatables.zip file extract it into the "PIPC\Coresight\Datatables" folder that you just created; when the extraction is complete, inside the "Datatables" folder you should see several sub-folders, .css, and .js files (this will allow you to properly reference the free Datatables library that will be used to power this custom symbol).
 
 3. Next, from within the folder named "Coresight", navigate to the "\Scripts\app\editor\symbols" sub-folder.  
 
