@@ -1,3 +1,3 @@
 # Community Samples
 Listing of community samples:
-* [OSIsoft](/Community Samples/OSIsoft/)
+* [OSIsoft](/Community%20Samples/OSIsoft/)
