@@ -11,6 +11,7 @@ This section contains samples provided by [OSIsoft](http://www.osisoft.com/) for
 * [amcharts-trend](/Community Samples/OSIsoft/amcharts-trend)
 * [amcharts-xyplot](/Community Samples/OSIsoft/amcharts-xyplot)
 * [embedWebPage](/Community Samples/OSIsoft/embedWebPage)
+* [Screenshot URL Symbol](/Community Samples/OSIsoft/imageUrl)
 * [Playback Control](/Community Samples/OSIsoft/playback control)
 * [plotly-3dsurface](/Community Samples/OSIsoft/plotly-3dsurface)
 * [RSS Symbol](/Community Samples/OSIsoft/rss symbol)
