@@ -338,7 +338,7 @@
 				if (scope.config.exportData) {
 					// Reset the button back to unchecked, when complete
 					scope.config.exportData = false;
-					downloadCSV('ExportFromPIPIPC\PIVision.csv', createCSVFileContents());
+					downloadCSV('ExportFromPIVision.csv', createCSVFileContents());
 				}
 				// Check whether you should prepare the paths for export
 				if (scope.config.exportDataItemPaths) {
