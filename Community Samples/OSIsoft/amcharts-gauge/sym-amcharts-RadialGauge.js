@@ -112,7 +112,7 @@
 					// Use the amCharts Javascript library to create this visualization; download it from here:
 					// https://www.amcharts.com/download/ (download the file for "JavaScript CHARTS")
 					// Inside the downloaded ZIP file there is a folder called "amcharts"; copy all of the contents
-					// And paste them into the same directory as this file (C:\Program Files\PIPC\PIPC\PIVision\Scripts\app\editor\symbols\ext)
+					// And paste them into the same directory as this file (C:\Program Files\PIPC\PIVision\Scripts\app\editor\symbols\ext)
 					customVisualizationObject = AmCharts.makeChart(newUniqueIDString, {
 						// Position the watermark
 						"creditsPosition": "bottom-right",

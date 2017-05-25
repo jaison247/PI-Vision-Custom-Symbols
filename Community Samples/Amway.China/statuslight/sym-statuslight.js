@@ -49,17 +49,17 @@ window.PIVisualization.ClientSettings = window.PIVisualization.ClientSettings ||
 				dataValue = parseInt(data.Value);
 				//console.log(dataValue);
                 if(olddata!=dataValue) {
-					selectlight = "<img id='"+splintlightid+"' src='../PIPC\PIVision/Scripts/app/editor/symbols/ext/imgs/white.png' alt='white' style='width:40px;height:40px' />";
+					selectlight = "<img id='"+splintlightid+"' src='../PIVision/Scripts/app/editor/symbols/ext/imgs/white.png' alt='white' style='width:40px;height:40px' />";
 					if(dataValue > redMax)
-						selectlight = "<img id='"+splintlightid+"' src='../PIPC\PIVision/Scripts/app/editor/symbols/ext/imgs/white.png' alt='white' style='width:40px;height:40px' />";					
+						selectlight = "<img id='"+splintlightid+"' src='../PIVision/Scripts/app/editor/symbols/ext/imgs/white.png' alt='white' style='width:40px;height:40px' />";					
 					if(dataValue > redMin && dataValue <= redMax)
-						selectlight = "<img id='"+splintlightid+"' src='../PIPC\PIVision/Scripts/app/editor/symbols/ext/imgs/red.png' alt='red' style='width:40px;height:40px' />";
+						selectlight = "<img id='"+splintlightid+"' src='../PIVision/Scripts/app/editor/symbols/ext/imgs/red.png' alt='red' style='width:40px;height:40px' />";
 					if(dataValue > yellowMin && dataValue <=yellowMax)
-						selectlight = "<img id='"+splintlightid+"' src='../PIPC\PIVision/Scripts/app/editor/symbols/ext/imgs/yellow.png' alt='yellow' style='width:40px;height:40px' />";;
+						selectlight = "<img id='"+splintlightid+"' src='../PIVision/Scripts/app/editor/symbols/ext/imgs/yellow.png' alt='yellow' style='width:40px;height:40px' />";;
 					if(dataValue > greenMin && dataValue <=greenMax)
-						selectlight = "<img id='"+splintlightid+"' src='../PIPC\PIVision/Scripts/app/editor/symbols/ext/imgs/green.png' alt='green' style='width:40px;height:40px' />";
+						selectlight = "<img id='"+splintlightid+"' src='../PIVision/Scripts/app/editor/symbols/ext/imgs/green.png' alt='green' style='width:40px;height:40px' />";
 					if(dataValue <= whiteMax)
-						selectlight = "<img id='"+splintlightid+"' src='../PIPC\PIVision/Scripts/app/editor/symbols/ext/imgs/white.png' alt='white' style='width:40px;height:40px' />";
+						selectlight = "<img id='"+splintlightid+"' src='../PIVision/Scripts/app/editor/symbols/ext/imgs/white.png' alt='white' style='width:40px;height:40px' />";
 					$(container).children().remove();
 					$(container).append(selectlight);
 					olddata = dataValue;

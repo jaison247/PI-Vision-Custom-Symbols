@@ -55,7 +55,7 @@ window.PIVisualization.ClientSettings = window.PIVisualization.ClientSettings ||
             if(data) {
                 var series = convertToChartData(data);
                 if(!chart && series.length>0) {
-					$("<link>").attr({rel:"stylesheet",type:"text/css",href:"../PIPC\PIVision/Scripts/app/editor/symbols/ext/css/extend.css"}).appendTo("head");				
+					$("<link>").attr({rel:"stylesheet",type:"text/css",href:"../PIVision/Scripts/app/editor/symbols/ext/css/extend.css"}).appendTo("head");				
 					chart = "<table>";
 					var line;
 					var lines = "";
