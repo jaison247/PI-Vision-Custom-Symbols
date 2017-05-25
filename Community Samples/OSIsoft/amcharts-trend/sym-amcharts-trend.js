@@ -344,7 +344,7 @@
 				if (scope.config.exportDataItemPaths) {
 					// Reset the button back to unchecked, when complete
 					scope.config.exportDataItemPaths = false;
-					downloadCSV('ExportFromPIPIPC\PIVision_DataItemPaths.csv', dataItemPaths.toString());
+					downloadCSV('ExportFromPIPIVision_DataItemPaths.csv', dataItemPaths.toString());
 				}
                 // Update the scroll bar
                 if (customVisualizationObject.chartScrollbar.enabled != scope.config.showChartScrollBar) {

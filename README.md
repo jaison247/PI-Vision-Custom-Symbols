@@ -48,7 +48,7 @@ Copyright 2016-2017 OSIsoft, LLC.
 
 Please see the file named [LICENSE](LICENSE).
 
-[1]:https://techsupport.osisoft.com/Products/PI-Visualization/PI-PIPC\PIVision/Overview
+[1]:https://techsupport.osisoft.com/Products/PI-Visualization/PI-Vision/Overview
 [2]:http://www.osisoft.com/pi-system/
 [3]:/tutorials/
 [4]:/Community%20Samples/

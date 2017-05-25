@@ -309,4 +309,4 @@ In this section, you will be creating a simple value symbol, much like the curre
 	</div>
 	```
 
-[1]:http://pisrv01/PIPC\PIVision/#/Displays/New/
+[1]:http://pisrv01/PIVision/#/Displays/New/
