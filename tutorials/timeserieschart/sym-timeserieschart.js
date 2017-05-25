@@ -111,4 +111,4 @@
         }
     };
     CS.symbolCatalog.register(defintion);
-})(window.Coresight);
+})(window.PIVisualization);

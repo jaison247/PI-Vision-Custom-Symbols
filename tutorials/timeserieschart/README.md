@@ -1,9 +1,9 @@
 # Time Series Chart / Highcharts
 
-The following example is used to create a PI Coresight symbol that uses [Highcharts](http://www.highcharts.com/). These instructions build off the [Simple Value Symbol Instructions](/tutorials/simplevalue/), so please review those first.
+The following example is used to create a PI Vision symbol that uses [Highcharts](http://www.highcharts.com/). These instructions build off the [Simple Value Symbol Instructions](/tutorials/simplevalue/), so please review those first.
 
-1. Create a new file called sym-timeserieschart.js in your PI Coresight installation folder, `INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext`. If the `ext` folder does not exist, create it.
-1. Below is the basic skeleton of a new PI Coresight symbol for the time series chart. It sets up the `typeName`, `datasourceBehavior`, and `getDefaultConfig` definition options and registers them with the PI Coresight application. For the `DataShape`, we are using a TimeSeries shape, which will provide us with raw time series data that the chart will use. We are also specifying the `DataQueryMode` to be `ModePlotValues`. This will return data suitable for plotting over a specified number of intervals.
+1. Create a new file called sym-timeserieschart.js in your PI Vision installation folder, `INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext`. If the `ext` folder does not exist, create it.
+1. Below is the basic skeleton of a new PI Vision symbol for the time series chart. It sets up the `typeName`, `datasourceBehavior`, and `getDefaultConfig` definition options and registers them with the PI Vision application. For the `DataShape`, we are using a TimeSeries shape, which will provide us with raw time series data that the chart will use. We are also specifying the `DataQueryMode` to be `ModePlotValues`. This will return data suitable for plotting over a specified number of intervals.
 
     ```javascript
     (function (CS) {
@@ -27,7 +27,7 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
             }
         };
         CS.symbolCatalog.register(defintion);
-    })(window.Coresight);
+    })(window.PIVisualization);
     ```
 
 1. The next step is to create the HTML template for this symbol. The chart that we will be using only needs a `div` tag to attach to. So we will create a HTML file in the same directory as our JavaScript file and name it `sym-timeserieschart-template.html`. We are setting the height and width of this `div` to take up the full space available.
@@ -36,7 +36,7 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
     <div id="container" style="width:100%;height:100%"></div>
     ```
 
-1. Now we need to initialize the symbol. We will add an `init` to the symbol's prototype and define the `init` function. The `init` function will have stubs for data updates and resizing events. The resize function is called by the PI Coresight infrastructure anytime the symbol is resized. The resize function is passed the new width and height of the symbol.
+1. Now we need to initialize the symbol. We will add an `init` to the symbol's prototype and define the `init` function. The `init` function will have stubs for data updates and resizing events. The resize function is called by the PI Vision infrastructure anytime the symbol is resized. The resize function is passed the new width and height of the symbol.
 
     ```javascript
     (function (CS) {
@@ -72,10 +72,10 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
             }
         };
         CS.symbolCatalog.register(defintion);
-    })(window.Coresight);
+    })(window.PIVisualization);
     ```
 
-1. Next we must include the HighCharts library so that our symbol can use it. This code comes from [Highcharts 4.2.3](http://code.highcharts.com/zips/Highcharts-4.2.3.zip). Extract the files from the zip and place highcharts.js into `INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext\libraries`. This will make Highcharts available to PI Coresight symbols.
+1. Next we must include the HighCharts library so that our symbol can use it. This code comes from [Highcharts 4.2.3](http://code.highcharts.com/zips/Highcharts-4.2.3.zip). Extract the files from the zip and place highcharts.js into `INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext\libraries`. This will make Highcharts available to PI Vision symbols.
 
 1. In the `init` function, we can now begin to define the chart. Highcharts expects to be passed an HTML selector to create the chart. We need to give the `div` element a unique id and then create the chart. Below we are using JavaScript to create a unique id for the `div` element.
 
@@ -97,7 +97,7 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
     };
     ```
 
-1. Next we want take the data that is passed to the PI Coresight dataUpdate function and convert this to a format that the chart is expected. 
+1. Next we want take the data that is passed to the PI Vision dataUpdate function and convert this to a format that the chart is expected. 
 
     ```javascript
     function convertToChartData(data) {
@@ -343,5 +343,5 @@ The following example is used to create a PI Coresight symbol that uses [Highcha
             }
         };
         CS.symbolCatalog.register(defintion);
-    })(window.Coresight);
+    })(window.PIVisualization);
     ```

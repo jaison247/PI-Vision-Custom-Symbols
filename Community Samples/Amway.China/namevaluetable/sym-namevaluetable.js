@@ -13,8 +13,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  ***************************************************************************/
-window.Coresight = window.Coresight || {};
-window.Coresight.ClientSettings = window.Coresight.ClientSettings || {};
+window.PIVisualization = window.PIVisualization || {};
+window.PIVisualization.ClientSettings = window.PIVisualization.ClientSettings || {};
 (function (CS) {
     function symbolVis() { }
     CS.deriveVisualizationFromBase(symbolVis);
@@ -55,7 +55,7 @@ window.Coresight.ClientSettings = window.Coresight.ClientSettings || {};
             if(data) {
                 var series = convertToChartData(data);
                 if(!chart && series.length>0) {
-					$("<link>").attr({rel:"stylesheet",type:"text/css",href:"../Coresight/Scripts/app/editor/symbols/ext/css/extend.css"}).appendTo("head");				
+					$("<link>").attr({rel:"stylesheet",type:"text/css",href:"../PIPC\PIVision/Scripts/app/editor/symbols/ext/css/extend.css"}).appendTo("head");				
 					chart = "<table>";
 					var line;
 					var lines = "";
@@ -93,4 +93,4 @@ window.Coresight.ClientSettings = window.Coresight.ClientSettings || {};
     };
 
     CS.symbolCatalog.register(definition);
-})(window.Coresight);
+})(window.PIVisualization);

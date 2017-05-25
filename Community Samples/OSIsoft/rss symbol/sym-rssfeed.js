@@ -87,4 +87,4 @@
   
      CS.symbolCatalog.register(def);  
   
-})(window.Coresight); 
+})(window.PIVisualization); 

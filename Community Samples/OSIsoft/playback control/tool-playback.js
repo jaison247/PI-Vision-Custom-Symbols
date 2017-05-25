@@ -64,4 +64,4 @@
   
    CS.toolCatalog.register(def);    
     
-})(window.Coresight);   
+})(window.PIVisualization);   

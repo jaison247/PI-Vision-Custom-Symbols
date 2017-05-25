@@ -52,4 +52,4 @@
     };
 
     CS.symbolCatalog.register(definition);
-})(window.Coresight);
+})(window.PIVisualization);

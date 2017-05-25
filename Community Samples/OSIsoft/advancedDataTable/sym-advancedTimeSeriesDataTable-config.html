@@ -95,11 +95,11 @@
             <input type="text" class="" style="width:30px;margin-left:8px;margin-right: 8px;padding:2px;" ng-model="config.dataItemThresholdsArray2[i]" ng-show="config.conditionalOperatorsArray2[i] != 'notused'">
         </label> 
         <div class="config-option-format" ng-show="config.applyConditionalFormatting">
-            <cs-color-picker id="evenRowColor" ng-model="config.testTrueColors[i]" config="config" colorkeyword="Color if true">
-        </cs-color-picker></div>
+            <pv-color-picker id="evenRowColor" ng-model="config.testTrueColors[i]" config="config" colorkeyword="Color if true">
+        </pv-color-picker></div>
         <div class="config-option-format" ng-show="config.applyConditionalFormatting">
-            <cs-color-picker id="evenRowColor" ng-model="config.testFalseColors[i]" config="config" colorkeyword="Color if false">
-        </cs-color-picker></div>
+            <pv-color-picker id="evenRowColor" ng-model="config.testFalseColors[i]" config="config" colorkeyword="Color if false">
+        </pv-color-picker></div>
         <br />
     </div>
 </div>
@@ -109,28 +109,28 @@
 	<span style="color:#fff; margin-left:10px;">Row Colors</span>
 </div>
 <div class="config-option-format">
-	<cs-color-picker id="evenRowColor" ng-model="config.evenRowColor" config="config" colorkeyword="Even Rows">
-</cs-color-picker></div>
+	<pv-color-picker id="evenRowColor" ng-model="config.evenRowColor" config="config" colorkeyword="Even Rows">
+</pv-color-picker></div>
 <div class="config-option-format">
-	<cs-color-picker id="oddRowColor" ng-model="config.oddRowColor" config="config" colorkeyword="Odd Rows">
-</cs-color-picker></div>
+	<pv-color-picker id="oddRowColor" ng-model="config.oddRowColor" config="config" colorkeyword="Odd Rows">
+</pv-color-picker></div>
 <div class="config-option-format">
-	<cs-color-picker id="hoverColor" ng-model="config.hoverColor" config="config" colorkeyword="Mouse-Over">
-</cs-color-picker></div>
+	<pv-color-picker id="hoverColor" ng-model="config.hoverColor" config="config" colorkeyword="Mouse-Over">
+</pv-color-picker></div>
 <br/>
 
 <div class="c-side-pane t-toolbar">
 	<span style="color:#fff; margin-left:10px;">Overall Settings</span>
 </div>
 <div class="config-option-format">
-	<cs-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background">
-</cs-color-picker></div>
+	<pv-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background">
+</pv-color-picker></div>
 <div class="config-option-format">
-	<cs-color-picker id="textColor" ng-model="config.textColor" config="config" colorkeyword="Text">
-</cs-color-picker></div>
+	<pv-color-picker id="textColor" ng-model="config.textColor" config="config" colorkeyword="Text">
+</pv-color-picker></div>
 <div class="config-option-format">
-	<cs-color-picker id="tableMenuBarColor" ng-model="config.tableMenuBarColor" config="config" colorkeyword="Menu Bar">
-</cs-color-picker></div>
+	<pv-color-picker id="tableMenuBarColor" ng-model="config.tableMenuBarColor" config="config" colorkeyword="Menu Bar">
+</pv-color-picker></div>
 <div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;">
     <div class="config-option-ie11-overflow-fix">
         <div class="config-label">Text Size: {{config.textSize}}px</div>

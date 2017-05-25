@@ -334,4 +334,4 @@
         return new GaugeUpdater();
     }
 
-})(window.Coresight);
+})(window.PIVisualization);
