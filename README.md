@@ -32,7 +32,7 @@ Assuming you already forked and cloned the repository, here is the format we exp
 1. In the subfolder, add a README.md describing how your symbol works as well as your JS and HTML files needed to use your sample.
 
 ## Licensing
-Copyright 2016 OSIsoft, LLC.
+Copyright 2016-2017 OSIsoft, LLC.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
