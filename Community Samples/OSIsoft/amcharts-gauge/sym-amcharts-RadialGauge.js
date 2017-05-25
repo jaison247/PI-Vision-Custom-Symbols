@@ -25,10 +25,10 @@
 	'use strict';
 	// Specify the symbol definition	
 	var myCustomSymbolDefinition = {
-		// Specify the unique name for this symbol; this instructs PI Coresight to also
+		// Specify the unique name for this symbol; this instructs PI Vision to also
 		// look for HTML template and config template files called sym-<typeName>-template.html and sym-<typeName>-config.html
 		typeName: 'amCharts-RadialGauge',
-		// Specify the user-friendly name of the symbol that will appear in PI Coresight
+		// Specify the user-friendly name of the symbol that will appear in PI Vision
 		displayName: 'amCharts Radial Gauge',
 		// Specify the number of data sources for this symbol; for a gauge, it'll be just a single data source
 		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
@@ -112,7 +112,7 @@
 					// Use the amCharts Javascript library to create this visualization; download it from here:
 					// https://www.amcharts.com/download/ (download the file for "JavaScript CHARTS")
 					// Inside the downloaded ZIP file there is a folder called "amcharts"; copy all of the contents
-					// And paste them into the same directory as this file (C:\Program Files\PIPC\Coresight\Scripts\app\editor\symbols\ext)
+					// And paste them into the same directory as this file (C:\Program Files\PIPC\PIVision\Scripts\app\editor\symbols\ext)
 					customVisualizationObject = AmCharts.makeChart(newUniqueIDString, {
 						// Position the watermark
 						"creditsPosition": "bottom-right",
@@ -254,7 +254,7 @@
 		// Specify which function to call when a data update or configuration change occurs 
 		//return { dataUpdate: myCustomDataUpdateFunction, configChange:myCustomConfigurationChangeFunction };
 	}
-	// Register this custom symbol definition with PI Coresight
+	// Register this custom symbol definition with PI Vision
 	CS.symbolCatalog.register(myCustomSymbolDefinition);
 	
-})(window.Coresight);
+})(window.PIVisualization);

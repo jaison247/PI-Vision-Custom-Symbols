@@ -13,8 +13,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  ***************************************************************************/
-window.Coresight = window.Coresight || {};
-window.Coresight.ClientSettings = window.Coresight.ClientSettings || {};
+window.PIVisualization = window.PIVisualization || {};
+window.PIVisualization.ClientSettings = window.PIVisualization.ClientSettings || {};
 (function (CS) {
     function symbolVis() { }
     CS.deriveVisualizationFromBase(symbolVis);
@@ -47,4 +47,4 @@ window.Coresight.ClientSettings = window.Coresight.ClientSettings || {};
     };
 
     CS.symbolCatalog.register(definition);
-})(window.Coresight);
+})(window.PIVisualization);

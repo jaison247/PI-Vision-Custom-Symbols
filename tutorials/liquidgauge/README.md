@@ -1,9 +1,9 @@
 # Liquid Gauge / d3
 
-The following example is used to create a PI Coresight symbol that uses [d3.js](http://d3js.org/). The actual implementation of the gauge comes from [D3 Liquid Fill Gauge](http://bl.ocks.org/brattonc/5e5ce9beee483220e2f6). These instructions build off the [Simple Value Symbol Instructions](/tutorials/simplevalue/), so please review those first.
+The following example is used to create a PI Vision symbol that uses [d3.js](http://d3js.org/). The actual implementation of the gauge comes from [D3 Liquid Fill Gauge](http://bl.ocks.org/brattonc/5e5ce9beee483220e2f6). These instructions build off the [Simple Value Symbol Instructions](/tutorials/simplevalue/), so please review those first.
 
-1. Create a new file called `sym-liquidgauge.js` in your PI Coresight installation folder, `INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext`. If the `ext` folder does not exist, create it.
-1. Below is the basic skeleton of a new PI Coresight symbol for a liquid gauge. It sets up the `typeName`, `datasourceBehavior`, and `getDefaultConfig` definition options and registers them with the PI Coresight application. For the `DataShape`, we are using a gauge shape, which will provide us with some additional, gauge specific, properties that value symbol does not have, mainly Indicator.
+1. Create a new file called `sym-liquidgauge.js` in your PI Vision installation folder, `INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext`. If the `ext` folder does not exist, create it.
+1. Below is the basic skeleton of a new PI Vision symbol for a liquid gauge. It sets up the `typeName`, `datasourceBehavior`, and `getDefaultConfig` definition options and registers them with the PI Vision application. For the `DataShape`, we are using a gauge shape, which will provide us with some additional, gauge specific, properties that value symbol does not have, mainly Indicator.
 
     ```javascript
     (function (CS) {
@@ -25,7 +25,7 @@ The following example is used to create a PI Coresight symbol that uses [d3.js](
 	    	}
 	    };
 	    CS.symbolCatalog.register(defintion);
-    })(window.Coresight);
+    })(window.PIVisualization);
     ```
 
 1. The next step is to create the HTML template for this symbol. The liquid gauge that we will be using requires a `svg` tag to attach to. So we will create a HTML file in the same directory as our Javascript file and name it `sym-liquidgauge-template.html`. 
@@ -36,7 +36,7 @@ The following example is used to create a PI Coresight symbol that uses [d3.js](
 	</div>
     ```
 
-1. Now we need to initialize the gauge symbol. We will add an `init` to the definition object and define the `init` function. The `init` function will have stubs for data updates and resizing events. The resize function is called by the PI Coresight infrastructure anytime the symbol is resized. The resize function is passed the new width and height of the symbol.
+1. Now we need to initialize the gauge symbol. We will add an `init` to the definition object and define the `init` function. The `init` function will have stubs for data updates and resizing events. The resize function is called by the PI Vision infrastructure anytime the symbol is resized. The resize function is passed the new width and height of the symbol.
 
     ```javascript
 	(function (CS) {
@@ -71,9 +71,9 @@ The following example is used to create a PI Coresight symbol that uses [d3.js](
 	    };
 
 	    CS.symbolCatalog.register(defintion);
-	})(window.Coresight);
+	})(window.PIVisualization);
     ```
-1. Next we must include the d3.js library so that our symbol can use it. This code comes from [d3.js](https://github.com/d3/d3/tree/v3.5.17). Copy d3.js from this GitHub repository and place it into INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext\libraries. This will make d3 available to PI Coresight symbols.
+1. Next we must include the d3.js library so that our symbol can use it. This code comes from [d3.js](https://github.com/d3/d3/tree/v3.5.17). Copy d3.js from this GitHub repository and place it into INSTALLATION_FOLDER\Scripts\app\editor\symbols\ext\libraries. This will make d3 available to PI Vision symbols.
 
 1. Next we must include the d3 code for creating the liquid gauge. This code comes unchanged from [D3 Liquid Fill Gauge](http://bl.ocks.org/brattonc/5e5ce9beee483220e2f6) and should be pasted below the `CS.symbolCatalog.register(defintion);` call. It is included below for ease of use, but will be omitted in the following steps.
 
