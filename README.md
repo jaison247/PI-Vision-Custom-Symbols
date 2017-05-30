@@ -52,7 +52,7 @@ Please see the file named [LICENSE](LICENSE).
 [2]:http://www.osisoft.com/pi-system/
 [3]:/tutorials/
 [4]:/Community%20Samples/
-[5]:https://techsupport.osisoft.com/Viewer/File/798956c4-98a8-466f-9ee6-f4e880a75950
+[5]:https://techsupport.osisoft.com/Downloads/File/98bc271d-9fb6-4317-aa45-30f5c0077558
 [6]:https://pisquare.osisoft.com/community/developers-club/pi-visualization-development
 [7]:https://github.com/osisoft/contributing
 
