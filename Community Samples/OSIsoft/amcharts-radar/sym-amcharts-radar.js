@@ -29,7 +29,7 @@
 		// Specify the number of data sources for this symbol; just a single data source or multiple
 		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
 		// Specify the location of an image file to use as the icon for this symbol
-		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/amcharts-radar.png',
+		iconUrl: '/Scripts/app/editor/symbols/ext/sym-amcharts-radar.png',
 		visObjectType: symbolVis,
 		// Specify default configuration for this symbol
 		getDefaultConfig: function () {
@@ -45,11 +45,11 @@
 				maximumYValue: 100,
 				useCustomYAxisRange: false,
 				showTitle: true,
-                textColor: "black",
-                backgroundColor: "white",
+                textColor: "white",
+                backgroundColor: "#303030",
                 gridColor: "gray",
-                fontSize: 14,
-                seriesColor: "red",
+                fontSize: 12,
+                seriesColor: "#3e98d3",
                 showChartScrollBar: true,
                 fillAlphas: 0.1
             };
@@ -63,14 +63,11 @@
                 mode: 'format'
             }];
         },
-        // Specify the name of the function that will be called to initialize the symbol
-		//init: myCustomSymbolInitFunction
 	};
 	
 	//************************************
 	// Function called to initialize the symbol
 	//************************************
-	//function myCustomSymbolInitFunction(scope, elem) {
 	function symbolVis() { }
     CS.deriveVisualizationFromBase(symbolVis);
 	symbolVis.prototype.init = function(scope, elem) {
@@ -90,13 +87,15 @@
 		var dataArray = [];
 		// Create variables to hold the old axis specifications
 		var minimumYValue_old, maximumYValue_old;
+		// Also remember the snapshot value!
+		var snapshotValue;
         
 		//************************************
 		// When a data update occurs...
 		//************************************
 		function myCustomDataUpdateFunction(data) {
 			// If there is indeed new data in the update
-            //console.log("New data received: ", data);
+            console.log("New data received: ", data.Data);
 			if (data !== null && data.Data) {
 				dataArray = [];
 				// Check for an error
@@ -119,14 +118,17 @@
 					scope.config.Units = data.Data[0].Units;
                 }
 				// Format the data as a new array that can be easily plotted
-				for (var i = 0; i < data.Data[0].Values.length; i++) {
+				var i = 0;
+				for (i = 0; i < data.Data[0].Values.length; i++) {
                     // Create a new event object
 					var newDataObject = {
-						"timestampString": AmCharts.formatDate(new Date(data.Data[0].Values[i].Time),"YYYY-MM-DD JJ:NN:SS"),
-                        "timestampLabel": AmCharts.formatDate(new Date(data.Data[0].Values[i].Time),"M/D/YY JJ:NN:SS"),
+						"timestampString": (new Date(data.Data[0].Values[i].Time)).toISOString(),
+                        "timestampLabel":  (new Date(data.Data[0].Values[i].Time)).toLocaleString().replace(",",""),
 						"value": parseFloat(data.Data[0].Values[i].Value),
                         "indexNumber": i
 					};
+					// Store the snapshot value for use in the title!
+					snapshotValue = newDataObject.value;
 					// Add this object to the data array
 					dataArray.push(newDataObject);
 				}
@@ -152,7 +154,8 @@
 							"title": "",
                             "gridType": "circles",
                             "integersOnly": "false",
-                            "autoGridCount": false
+                            "autoGridCount": false,
+							"fillAlpha":0.05
 						}],
 						"categoryAxis": {
 							"title": "",
@@ -174,14 +177,18 @@
                             }
 						},                     
 						"graphs": [{
-							//"type": "",
 							"fillAlphas": scope.config.fillAlphas,
                             "lineColor": scope.config.seriesColor,
-							"balloonText": (scope.config.Label + "<br /><b>[[timestampLabel]]</b><br />[[value]] " + scope.config.Units), 
+							"balloonText": (scope.config.Label + "<br />[[timestampLabel]]<br /> [[value]]" + scope.config.Units), 
 							"valueField": "value",
                             "bullet": "round",
                             "bulletAlpha": 0
 						}],
+						"balloon": {
+								"color": "white",
+								"borderColor":"white",
+								"fillColor": "#303030"
+						},
 						"dataProvider": dataArray,
 						"categoryField": "timestampString",
 					});
@@ -203,25 +210,17 @@
 		// Function that returns an array of titles
 		//************************************
 		function createArrayOfChartTitles() {
-            var titleText = "";
+            var titleText = scope.config.Label + "\n" + snapshotValue;
             if (scope.config.Units) {
-                titleText =  ("Trend of" + scope.config.Label + " (" + scope.config.Units + ")");
-            } else {
-                titleText =  ("Trend of" + scope.config.Label);
+                titleText = titleText + " " + scope.config.Units;
             }
 			// Build the titles array
 			var titlesArray = [
 				{
 					"text": titleText,
-					"size": function () {
-                        if (scope.config.fontSize >= 3) {
-                            return (scope.config.fontSize - 3);
-                        } 
-                        else {
-                            return 0;
-                        }
-                    },
-					"bold": true
+					"size": scope.config.fontSize,
+					"bold": false,
+					"color": scope.config.seriesColor
 				}
 			];
 			return titlesArray;
@@ -275,11 +274,9 @@
 				customVisualizationObject.validateNow();
 				console.log("Configuration updated.");
 			}
-		}
-		// Specify which function to call when a data update or configuration change occurs 
-		//return { dataUpdate: myCustomDataUpdateFunction, configChange:myCustomConfigurationChangeFunction };		
+		}	
 	}
 	// Register this custom symbol definition with PI Coresight
 	CS.symbolCatalog.register(myCustomSymbolDefinition);
 	
-})(window.Coresight);
+})(window.PIVisualization);
