@@ -53,7 +53,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		visObjectType: symbolVis,
 		// Specify default configuration for this symbol
 		getDefaultConfig: function () {
-			return {
+            return {
 				//
 				DataShape: 'TimeSeries',
 				//DataQueryMode:  CS.Extensibility.Enums.DataQueryMode.ModeEvents,
@@ -74,13 +74,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 transposeTable: false,
                 // Conditional formatting rules
                 applyConditionalFormatting: false,
-                dataItemThresholdsArray: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                dataItemThresholdsArray2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                testTrueColors: ["green","green","green","green","green","green","green","green","green","green"],
-                testFalseColors: ["red","red","red","red","red","red","red","red","red","red","red","red"],
+                dataItemThresholdsArray:  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                dataItemThresholdsArray2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                testTrueColors:  ["green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green"],
+                testFalseColors: ["red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red"],
                 applyConditionalFormattingTo: "background-color",
                 // Operator used in conditional tests
-                conditionalOperatorsArray: ["lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan"],
+                conditionalOperatorsArray:  ["lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan"],
                 conditionalOperatorsArray2: ["notused","notused","notused","notused","notused","notused","notused","notused","notused","notused","notused"],
                 // Freeze the top row
                 freezeHeadersRow: false,
@@ -88,8 +88,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 textSize: 14,
                 // Use custom column names
                 useCustomDataItemNames: false,
-                customDataItemNamesArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-                originalDataItemNamesArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                customDataItemNamesArray:   ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                originalDataItemNamesArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                 numberOfDataItems: 0,
                 // Specify the query type
                 dataQueryType: "compressed",
@@ -102,7 +102,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 // Descend results or not
                 defaultOrder:"ascending",
                 // Array for remembering column filter settings
-                dataTableFooterFilterStringsArray:["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+                dataTableFooterFilterStringsArray:["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -141,12 +141,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		var dataItemUnitsArray  = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
         var dataTableArray = [];
         var maximumNumberOfRowsInDataSet;
+        // Create a variable to temporarily allow pausing refresh
+        var allowTableRefresh = true;
         //************************************
 		// When a data update occurs...
 		//************************************
 		function myCustomDataUpdateFunction(data) {
 			// If there is indeed new data in the update
-			if (data) {
+			if (data && allowTableRefresh) {
 
                 // Get the number of data items
                 scope.config.numberOfDataItems = data.Data.length;
@@ -213,6 +215,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                             extend: 'colvisGroup',
                             text: 'Show all',
                             show: ':hidden'
+                        },
+                        {
+                            text: '<b>Refreshing</b> <b style="color:green">Enabled</b>',
+                            action: function ( e, dt, node, config ) {
+                                // Toggle the refresh!
+                                allowTableRefresh = !allowTableRefresh;
+                                // Update the text
+                                if (allowTableRefresh) {
+                                    this.text('<b>Refreshing</b> <b style="color:green">Enabled</b>');
+                                } else {
+                                    this.text('<b>Refreshing</b> <b style="color:red">Disabled</b>');
+                                }
+                            }
                         }
                     ],
                     // Table filter settings
@@ -466,7 +481,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                         dataTableHeaderStringsArray.push(scope.config.customDataItemNamesArray[i] + " Timestamp");
                     }
                     // And one header for the CUSTOM data item label
-                    dataTableHeaderStringsArray.push(scope.config.customDataItemNamesArray[i] + " (" + dataItemUnitsArray[i] + ")");
+                    //dataTableHeaderStringsArray.push(scope.config.customDataItemNamesArray[i] + " (" + dataItemUnitsArray[i] + ")");
+                    dataTableHeaderStringsArray.push(scope.config.customDataItemNamesArray[i]);
                 }                    
             }
             // Finally, return whatever headers array was created
@@ -681,6 +697,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		//************************************
 		function myCustomConfigurationChangeFunction(data) {
             if (myDataTableObject) {
+                // Save the current state
+                myDataTableObject.state.save();
+                // Draw the table
                 myDataTableObject.draw();
             }
 		}
