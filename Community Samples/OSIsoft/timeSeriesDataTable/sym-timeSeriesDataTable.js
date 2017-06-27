@@ -25,10 +25,10 @@
 	//'use strict';
 	// Specify the symbol definition	
 	var myCustomSymbolDefinition = {
-		// Specify the unique name for this symbol; this instructs PI Coresight to also
+		// Specify the unique name for this symbol; this instructs PI Vision to also
 		// look for HTML template and config template files called sym-<typeName>-template.html and sym-<typeName>-config.html
 		typeName: 'timeSeriesDataTable',
-		// Specify the user-friendly name of the symbol that will appear in PI Coresight
+		// Specify the user-friendly name of the symbol that will appear in PI Vision
 		displayName: 'Time Series Data Table',
 		// Specify the number of data sources for this symbol; just a single data source or multiple
 		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
@@ -139,7 +139,7 @@
 					var newInnerHTMLString = "";
 					// Check if the value is a string or error; if it isn't numeric, just display the raw string
 					try {
-    					newInnerHTMLString = parseFloat("" + pieceOfData.Value).toFixed(scope.config.numberOfDecimalPlaces);
+    					newInnerHTMLString = parseFloat(("" + pieceOfData.Value).replace(",","")).toFixed(scope.config.numberOfDecimalPlaces);
 					}
 					catch (err) {
 						newInnerHTMLString = pieceOfData.Value;
@@ -229,7 +229,7 @@
 		// Specify which function to call when a data update or configuration change occurs 
 		//return { dataUpdate: myCustomDataUpdateFunction, configChange:myCustomConfigurationChangeFunction };		
 	}
-	// Register this custom symbol definition with PI Coresight
+	// Register this custom symbol definition with PI Vision
 	CS.symbolCatalog.register(myCustomSymbolDefinition);
 	
-})(window.Coresight);
+})(window.PIVisualization);

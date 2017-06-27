@@ -1,5 +1,5 @@
 /***************************************************************************
-   Copyright 2016 OSIsoft, LLC.
+   Copyright 2016-2017 OSIsoft, LLC.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@
 	//'use strict';
 	// Specify the symbol definition	
 	var myCustomSymbolDefinition = {
-		// Specify the unique name for this symbol; this instructs PI Coresight to also
+		// Specify the unique name for this symbol; this instructs PI Vision to also
 		// look for HTML template and config template files called sym-<typeName>-template.html and sym-<typeName>-config.html
 		typeName: 'amcharts-trend',
-		// Specify the user-friendly name of the symbol that will appear in PI Coresight
+		// Specify the user-friendly name of the symbol that will appear in PI Vision
 		displayName: 'amCharts Trend',
 		// Specify the number of data sources for this symbol; just a single data source or multiple
 		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Multiple,
@@ -127,21 +127,21 @@
 					}
 				}
 				// Format the data as a new array that can be easily plotted; first, grab the minimum and maximum
-				autoScaleMinimumValue = parseFloat(data.Data[0].Values[0].Value);
-				autoScaleMaximumValue = parseFloat(data.Data[0].Values[0].Value);
+				autoScaleMinimumValue = parseFloat( ("" + data.Data[0].Values[0].Value).replace(",", "") );
+				autoScaleMaximumValue = parseFloat( ("" + data.Data[0].Values[0].Value).replace(",", "") );
 				for (var i = 0; i < data.Data[0].Values.length; i++) {
                     // Create a new event object
 					var newDataObject = {
 						"timestamp": data.Data[0].Values[i].Time,
 						"timestampString": data.Data[0].Values[i].Time, 
-						"value": parseFloat(data.Data[0].Values[i].Value)
+						"value": parseFloat( ("" + data.Data[0].Values[i].Value).replace(",", "") )
 					};
 					// Update the max and min, which later will be used for auto-scaling the chart
 					if (newDataObject.value > autoScaleMaximumValue) {
-						autoScaleMaximumValue = data.Data[0].Values[i].Value;
+						autoScaleMaximumValue = newDataObject.value;
 					}
 					if (newDataObject.value < autoScaleMinimumValue) {
-						autoScaleMinimumValue = data.Data[0].Values[i].Value;
+						autoScaleMinimumValue = newDataObject.value;
 					}
 					// Add this object to the data array
 					dataArray.push(newDataObject);
@@ -257,7 +257,7 @@
 			keys = Object.keys(dataArray[0]);
 			// Add the data items on the trend
 			result = '';
-			result += "Export from PI Coresight" + lineDelimiter;
+			result += "Export from PI Vision" + lineDelimiter;
 			result += scope.config.Label + " (" + scope.config.Units + ")" + lineDelimiter;
 			// Add the first headers row to the output file
 			result += keys.join(columnDelimiter);
@@ -338,13 +338,13 @@
 				if (scope.config.exportData) {
 					// Reset the button back to unchecked, when complete
 					scope.config.exportData = false;
-					downloadCSV('ExportFromPICoresight.csv', createCSVFileContents());
+					downloadCSV('ExportFromPIVision.csv', createCSVFileContents());
 				}
 				// Check whether you should prepare the paths for export
 				if (scope.config.exportDataItemPaths) {
 					// Reset the button back to unchecked, when complete
 					scope.config.exportDataItemPaths = false;
-					downloadCSV('ExportFromPICoresight_DataItemPaths.csv', dataItemPaths.toString());
+					downloadCSV('ExportFromPIPIVision_DataItemPaths.csv', dataItemPaths.toString());
 				}
                 // Update the scroll bar
                 if (customVisualizationObject.chartScrollbar.enabled != scope.config.showChartScrollBar) {
@@ -359,7 +359,7 @@
 		// Specify which function to call when a data update or configuration change occurs 
 		//return { dataUpdate: myCustomDataUpdateFunction, configChange:myCustomConfigurationChangeFunction };
 	}
-	// Register this custom symbol definition with PI Coresight
+	// Register this custom symbol definition with PI Vision
 	CS.symbolCatalog.register(myCustomSymbolDefinition);
 	
-})(window.Coresight);
+})(window.PIVisualization);

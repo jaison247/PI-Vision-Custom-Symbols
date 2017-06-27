@@ -1,5 +1,5 @@
 /***************************************************************************
-   Copyright 2016 OSIsoft, LLC.
+   Copyright 2016-2017 OSIsoft, LLC.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@
 	//'use strict';
 	// Specify the symbol definition	
 	var myCustomSymbolDefinition = {
-		// Specify the unique name for this symbol; this instructs PI Coresight to also
+		// Specify the unique name for this symbol; this instructs PI Vision to also
 		// look for HTML template and config template files called sym-<typeName>-template.html and sym-<typeName>-config.html
 		typeName: 'plotly-3dsurface',
-		// Specify the user-friendly name of the symbol that will appear in PI Coresight
+		// Specify the user-friendly name of the symbol that will appear in PI Vision
 		displayName: 'AmCharts Trend',
 		// Specify the number of data sources for this symbol; just a single data source or multiple
 		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Multiple,
@@ -112,9 +112,9 @@
 					// Format the data as a new array that can be easily plotted
 					for (var i = 0; i < data.Data[0].Values.length; i++) {
 						// Try to parse the values
-						var newXValue = parseFloat(data.Data[0].Values[i].Value);
-						var newYValue = parseFloat(data.Data[1].Values[i].Value);
-						var newZValue = parseFloat(data.Data[2].Values[i].Value);
+						var newXValue = parseFloat( ("" + data.Data[0].Values[i].Value).replace(",", "") );
+						var newYValue = parseFloat( ("" + data.Data[1].Values[i].Value).replace(",", "") );
+						var newZValue = parseFloat( ("" + data.Data[2].Values[i].Value).replace(",", "") );
 						if (!isNaN(newXValue) && !isNaN(newYValue) && !isNaN(newZValue)) {
 							dataArray[0].push(newXValue);
 							dataArray[1].push(newYValue);
@@ -282,7 +282,7 @@
 		// Specify which function to call when a data update or configuration change occurs 
 		//return { dataUpdate: myCustomDataUpdateFunction, configChange:myCustomConfigurationChangeFunction, resize:myCustomResizeFunction };
 	}
-	// Register this custom symbol definition with PI Coresight
+	// Register this custom symbol definition with PI Vision
 	CS.symbolCatalog.register(myCustomSymbolDefinition);
 	
-})(window.Coresight);
+})(window.PIVisualization);

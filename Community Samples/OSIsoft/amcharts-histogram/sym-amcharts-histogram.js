@@ -1,5 +1,5 @@
 /***************************************************************************
-   Copyright 2016 OSIsoft, LLC.
+   Copyright 2016-2017 OSIsoft, LLC.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@
 	//'use strict';
 	// Specify the symbol definition	
 	var myCustomSymbolDefinition = {
-		// Specify the unique name for this symbol; this instructs PI Coresight to also
+		// Specify the unique name for this symbol; this instructs PI Vision to also
 		// look for HTML template and config template files called sym-<typeName>-template.html and sym-<typeName>-config.html
 		typeName: 'amcharts-histogram',
-		// Specify the user-friendly name of the symbol that will appear in PI Coresight
+		// Specify the user-friendly name of the symbol that will appear in PI Vision
 		displayName: 'amCharts Histogram',
 		// Specify the number of data sources for this symbol; just a single data source or multiple
 		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
@@ -134,23 +134,24 @@
 				// For each piece of data in the data item, assign it to the appropriate bin
 				totalNumberOfEvents = data.Data[0].Values.length;
 				for (var i = 0; i < data.Data[0].Values.length; i++) {
+					var currentValue = ("" + data.Data[0].Values[i].Value).replace(",","");
 					// Check the value is not system digital value
-					if (isNaN(data.Data[0].Values[i].Value)) {
+					if (isNaN(currentValue)) {
 						// Not a number
 						continue;
 					}
 					else
 					{
 						// Determine the correct bin for this event; remember, the first bin is for underflow
-						var binIndex = 1 + Math.floor( (data.Data[0].Values[i].Value - scope.config.minimumValue) / scope.config.binSize );					
+						var binIndex = 1 + Math.floor( (currentValue - scope.config.minimumValue) / scope.config.binSize );					
 					}
 					// Check for underflow (if the value is under the min, add it to the "underflow" bin)
-					if (data.Data[0].Values[i].Value < scope.config.minimumValue) {
+					if (currentValue < scope.config.minimumValue) {
 						// If so, place in the underflow bin, which is the first bin in the array
 						binIndex = 0;
 					}
                     // Check for overflow (if the value is over the max, add it to the "overflow" bin)
-					if (data.Data[0].Values[i].Value > scope.config.maximumValue) {
+					if (currentValue > scope.config.maximumValue) {
 						// If so, place in the overflow bin, which is the last bin in the array
 						binIndex = dataArray.length - 1;
 					}
@@ -398,7 +399,7 @@
 		// Specify which function to call when a data update or configuration change occurs 
 		//return { dataUpdate: myCustomDataUpdateFunction, configChange:myCustomConfigurationChangeFunction };
 	}
-	// Register this custom symbol definition with PI Coresight
+	// Register this custom symbol definition with PI Vision
 	CS.symbolCatalog.register(myCustomSymbolDefinition);
 	
-})(window.Coresight);
+})(window.PIVisualization);
