@@ -1,4 +1,3 @@
-
 /**
 # ***********************************************************************
 # * DISCLAIMER:
@@ -74,35 +73,35 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 transposeTable: false,
                 // Conditional formatting rules
                 applyConditionalFormatting: false,
-                dataItemThresholdsArray:  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                dataItemThresholdsArray2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-                testTrueColors:  ["green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green","green"],
-                testFalseColors: ["red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red","red"],
+                dataItemThresholdsArray:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                dataItemThresholdsArray2: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                testTrueColors:  ["green", "green", "green", "green", "green", "green", "green", "green", "green", "green", "green", "green", "green", "green", "green", "green", "green", "green", "green", "green"],
+                testFalseColors: ["red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red", "red"],
                 applyConditionalFormattingTo: "background-color",
                 // Operator used in conditional tests
-                conditionalOperatorsArray:  ["lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan","lessthan"],
-                conditionalOperatorsArray2: ["notused","notused","notused","notused","notused","notused","notused","notused","notused","notused","notused"],
+                conditionalOperatorsArray:  ["lessthan", "lessthan", "lessthan", "lessthan", "lessthan", "lessthan", "lessthan", "lessthan", "lessthan", "lessthan", "lessthan", "lessthan"],
+                conditionalOperatorsArray2: ["notused", "notused", "notused", "notused", "notused", "notused", "notused", "notused", "notused", "notused", "notused"],
                 // Freeze the top row
                 freezeHeadersRow: false,
                 // Change overall font size
                 textSize: 14,
                 // Use custom column names
                 useCustomDataItemNames: false,
-                customDataItemNamesArray:   ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
-                originalDataItemNamesArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                customDataItemNamesArray:   ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+                originalDataItemNamesArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
                 numberOfDataItems: 0,
                 // Specify the query type
                 dataQueryType: "compressed",
                 interpolationInterval: 10,
-                interpolationUnits:"minutes",
+                interpolationUnits: "minutes",
                 // Specify the text alignment
                 textAlignment: "left",
                 // Background color
                 tableMenuBarColor: "rgb(31,112,68)",
                 // Descend results or not
-                defaultOrder:"ascending",
+                defaultOrder: "ascending",
                 // Array for remembering column filter settings
-                dataTableFooterFilterStringsArray:["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "","", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+                dataTableFooterFilterStringsArray: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -113,7 +112,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 				// Supply a unique name for this cofiguration setting, so it can be reused, if needed
                 mode: 'format'
             }];
-        },
+        }
 		// Specify the name of the function that will be called to initialize the symbol
 		//init: myCustomSymbolInitFunction
 	};
@@ -129,9 +128,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		// Specify which function to call when a data update or configuration change occurs 
 		this.onDataUpdate = myCustomDataUpdateFunction;
 		this.onConfigChange = myCustomConfigurationChangeFunction;
-        this.onResize = myCustomResizeFunction;  
-		
-		// Locate the html div that will contain the symbol, using its id, which is "container" by default
+        this.onResize = myCustomResizeFunction;
+        
+        // Locate the html div that will contain the symbol, using its id, which is "container" by default
 		var symbolContainerElement = elem.find('#container')[0];
         // Use random functions to generate a new unique id for this symbol, to make it unique among all other custom symbols
 		var newUniqueIDString = "myCustomSymbol_" + Math.random().toString(36).substr(2, 16);
@@ -365,16 +364,22 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                         // Check to see if the current data item has a value for this cell
                         if (data.Data[i].Values[rowNumber]) {
 
-                            // If so, write the timestamp; check to see if the timestamp is returned as a string or data object
+                            // If so, write the timestamp
                             timestampString = data.Data[i].Values[rowNumber].Time;
-
-                            // Next, write the value, if it exists
-                            valueString = "NaN";
-                            // Check if the value is a string or error; if it isn't numeric, just display the raw string
-                            valueString = parseFloat("" + data.Data[i].Values[rowNumber].Value).toFixed(scope.config.numberOfDecimalPlaces);
-                            if (valueString == "NaN") {
-                                valueString = data.Data[i].Values[rowNumber].Value;
-                            }
+							
+							// Next, if the data value is a timestamp, leave it as is; otherwise try to parse it
+							var regExForDetectingTimestamps = new RegExp(".*[:].*[:].*");
+							if (regExForDetectingTimestamps.test(data.Data[i].Values[rowNumber].Value)) {
+								valueString = data.Data[i].Values[rowNumber].Value;
+							} else {
+								// Next, write the value, if it exists
+								valueString = "NaN";
+								// Check if the value is a string or error; if it isn't numeric, just display the raw string
+								valueString = parseFloatThatMightContainCommas("" + data.Data[i].Values[rowNumber].Value).toFixed(scope.config.numberOfDecimalPlaces);
+								if (valueString == "NaN") {
+									valueString = data.Data[i].Values[rowNumber].Value;
+								}
+							}
                         }
                         // Add the timestamp and value strings to this row
                         newRowObject.push(timestampString);
@@ -407,13 +412,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     // Check if this interpolated value is between two items
                     if ((nextArrayTimestamp > currentTimestamp) && (currentTimestamp >= previousArrayTimestamp)) {
                         // Check for strings!  If so, use the first string
-                        if (("" + parseFloat(originalDataArray[i].Value)) == "NaN") {
+                        if (("" + parseFloatThatMightContainCommas(originalDataArray[i].Value)) == "NaN") {
                             interpolatedValue = originalDataArray[i].Value;
                         } else {                        
                             // If it is, figure out the percentage difference in timestamps
                             var percentage = (currentTimestamp - previousArrayTimestamp) / (nextArrayTimestamp - previousArrayTimestamp);
                             // Multiply that percentage difference by the value span between the two values, and add it to the first value
-                            interpolatedValue = parseFloat(originalDataArray[i].Value) + (parseFloat(originalDataArray[i+1].Value) - parseFloat(originalDataArray[i].Value)) * percentage;
+                            interpolatedValue = parseFloatThatMightContainCommas(originalDataArray[i].Value) + (parseFloatThatMightContainCommas(originalDataArray[i+1].Value) - parseFloatThatMightContainCommas(originalDataArray[i].Value)) * percentage;
                         }
                         // You're done!
                         break;                        
@@ -421,7 +426,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 }
             }
             // Check if the value is a string or error; if it isn't numeric, just display the raw string
-            var parsedInterpolatedValue = parseFloat("" + interpolatedValue).toFixed(scope.config.numberOfDecimalPlaces);
+            var parsedInterpolatedValue = parseFloatThatMightContainCommas("" + interpolatedValue).toFixed(scope.config.numberOfDecimalPlaces);
             if (("" + parsedInterpolatedValue) == "NaN") {
                 parsedInterpolatedValue = interpolatedValue;
             }
@@ -614,23 +619,23 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             switch (operator) {
                 case "lessthan":
                     // Test the value in this cell!
-                    result = (parseFloat(threshold) < cellValue && performSecondTest(cellValue, scope.config.conditionalOperatorsArray2[dataItemIndex], scope.config.dataItemThresholdsArray2[dataItemIndex]));
+                    result = (parseFloatThatMightContainCommas(threshold) < cellValue && performSecondTest(cellValue, scope.config.conditionalOperatorsArray2[dataItemIndex], scope.config.dataItemThresholdsArray2[dataItemIndex]));
                     break;
                case "lessthanorequalto":
                     // Test the value in this cell!
-                    result = (parseFloat(threshold) <= cellValue && performSecondTest(cellValue, scope.config.conditionalOperatorsArray2[dataItemIndex], scope.config.dataItemThresholdsArray2[dataItemIndex]));
+                    result = (parseFloatThatMightContainCommas(threshold) <= cellValue && performSecondTest(cellValue, scope.config.conditionalOperatorsArray2[dataItemIndex], scope.config.dataItemThresholdsArray2[dataItemIndex]));
                     break;
                case "equalto":
                     // Test the value in this cell!
-                    result = (parseFloat(threshold) == cellValue && performSecondTest(cellValue, scope.config.conditionalOperatorsArray2[dataItemIndex], scope.config.dataItemThresholdsArray2[dataItemIndex]));
+                    result = (parseFloatThatMightContainCommas(threshold) == cellValue && performSecondTest(cellValue, scope.config.conditionalOperatorsArray2[dataItemIndex], scope.config.dataItemThresholdsArray2[dataItemIndex]));
                     break;
                case "greaterthanorequalto":
                     // Test the value in this cell!
-                    result = (parseFloat(threshold) >= cellValue && performSecondTest(cellValue, scope.config.conditionalOperatorsArray2[dataItemIndex], scope.config.dataItemThresholdsArray2[dataItemIndex]));
+                    result = (parseFloatThatMightContainCommas(threshold) >= cellValue && performSecondTest(cellValue, scope.config.conditionalOperatorsArray2[dataItemIndex], scope.config.dataItemThresholdsArray2[dataItemIndex]));
                     break;  
                case "greaterthan":
                     // Test the value in this cell!
-                    result = (parseFloat(threshold) > cellValue && performSecondTest(cellValue, scope.config.conditionalOperatorsArray2[dataItemIndex], scope.config.dataItemThresholdsArray2[dataItemIndex]));
+                    result = (parseFloatThatMightContainCommas(threshold) > cellValue && performSecondTest(cellValue, scope.config.conditionalOperatorsArray2[dataItemIndex], scope.config.dataItemThresholdsArray2[dataItemIndex]));
                     break;   
                case "notused":
                     // Test the value in this cell!
@@ -651,19 +656,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             // Switch depending on the conditional operator
             switch (operator) {
                 case "lessthan":
-                    result = (cellValue < parseFloat(threshold));
+                    result = (cellValue < parseFloatThatMightContainCommas(threshold));
                     break;
                case "lessthanorequalto":
-                    result = (cellValue <= parseFloat(threshold));
+                    result = (cellValue <= parseFloatThatMightContainCommas(threshold));
                     break;
                case "equalto":
-                    result = (cellValue == parseFloat(threshold));
+                    result = (cellValue == parseFloatThatMightContainCommas(threshold));
                     break;
                case "greaterthanorequalto":
-                    result = (cellValue >= parseFloat(threshold));
+                    result = (cellValue >= parseFloatThatMightContainCommas(threshold));
                     break;  
                case "greaterthan":
-                    result = (cellValue > parseFloat(threshold));
+                    result = (cellValue > parseFloatThatMightContainCommas(threshold));
                     break;
                 case "like":
                     result = (cellValue.includes(threshold));                    
@@ -691,6 +696,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 $('td', rowElement).eq(columnIndex).css("background-color", scope.config.backgroundColor);
             }
         }
+		
+		//************************************
+		// Function that parses floats and safely ignores commas
+		// First it converts the passed in value to a string, then removes any commas in that string, then it parses it
+		//************************************
+		function parseFloatThatMightContainCommas(value) {
+            return parseFloat( ("" + value).replace(",", "") );
+		}
+		
         
 		//************************************
 		// Function that is called when custom configuration changes are made

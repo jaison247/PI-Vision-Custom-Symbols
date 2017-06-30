@@ -112,9 +112,9 @@
 					// Format the data as a new array that can be easily plotted
 					for (var i = 0; i < data.Data[0].Values.length; i++) {
 						// Try to parse the values
-						var newXValue = parseFloat(data.Data[0].Values[i].Value);
-						var newYValue = parseFloat(data.Data[1].Values[i].Value);
-						var newZValue = parseFloat(data.Data[2].Values[i].Value);
+						var newXValue = parseFloat( ("" + data.Data[0].Values[i].Value).replace(",", "") );
+						var newYValue = parseFloat( ("" + data.Data[1].Values[i].Value).replace(",", "") );
+						var newZValue = parseFloat( ("" + data.Data[2].Values[i].Value).replace(",", "") );
 						if (!isNaN(newXValue) && !isNaN(newYValue) && !isNaN(newZValue)) {
 							dataArray[0].push(newXValue);
 							dataArray[1].push(newYValue);

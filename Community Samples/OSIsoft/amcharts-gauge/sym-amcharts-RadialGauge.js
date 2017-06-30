@@ -100,7 +100,7 @@
 			// If there is indeed new data in the update
 			if(data) {
 				// Update the current scope with the new data value, time, and label
-				scope.value = data.Value;
+				scope.value = data.Value.replace(",","");
 				scope.time = data.Time;
 				if(data.Label) {
 					scope.label = data.Label;
@@ -173,13 +173,13 @@
 						} ],
 						// Add an arrow indicator to the gauge
 						"arrows": [ {
-							"value": data.Value
+							"value": scope.value
 						} ]
 					} );
 				// If the custom visualization already exists, then simply tell it to update with the new data	
 				} else {
 					// Update the arrow value
-					customVisualizationObject.arrows[ 0 ].setValue( data.Value );
+					customVisualizationObject.arrows[ 0 ].setValue( scope.value );
 				}
 				// At this point, the visualization exists. 
 				// Show or hide the title

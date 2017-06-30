@@ -127,21 +127,21 @@
 					}
 				}
 				// Format the data as a new array that can be easily plotted; first, grab the minimum and maximum
-				autoScaleMinimumValue = parseFloat(data.Data[0].Values[0].Value);
-				autoScaleMaximumValue = parseFloat(data.Data[0].Values[0].Value);
+				autoScaleMinimumValue = parseFloat( ("" + data.Data[0].Values[0].Value).replace(",", "") );
+				autoScaleMaximumValue = parseFloat( ("" + data.Data[0].Values[0].Value).replace(",", "") );
 				for (var i = 0; i < data.Data[0].Values.length; i++) {
                     // Create a new event object
 					var newDataObject = {
 						"timestamp": data.Data[0].Values[i].Time,
 						"timestampString": data.Data[0].Values[i].Time, 
-						"value": parseFloat(data.Data[0].Values[i].Value)
+						"value": parseFloat( ("" + data.Data[0].Values[i].Value).replace(",", "") )
 					};
 					// Update the max and min, which later will be used for auto-scaling the chart
 					if (newDataObject.value > autoScaleMaximumValue) {
-						autoScaleMaximumValue = data.Data[0].Values[i].Value;
+						autoScaleMaximumValue = newDataObject.value;
 					}
 					if (newDataObject.value < autoScaleMinimumValue) {
-						autoScaleMinimumValue = data.Data[0].Values[i].Value;
+						autoScaleMinimumValue = newDataObject.value;
 					}
 					// Add this object to the data array
 					dataArray.push(newDataObject);

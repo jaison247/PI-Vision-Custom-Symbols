@@ -137,26 +137,26 @@
 					dataItemUnits_YAxis = data.Data[1].Units; 
 				}				
 				// Initialize the min and max for both axes
-				xMin_autoscale = data.Data[0].Values[0].Value;
+				xMin_autoscale = data.Data[0].Values[0].Value.replace(",","");
 				xMax_autoscale = xMin_autoscale;
-				yMin_autoscale = data.Data[1].Values[0].Value;
+				yMin_autoscale = data.Data[1].Values[0].Value.replace(",","");
 				yMax_autoscale = yMin_autoscale;
 				// For each piece of data in the X-axis data item...
 				for (var xIndex = 0; xIndex < data.Data[0].Values.length; xIndex++) {
 					// Store the X max and minimum
-					if (parseFloat(data.Data[0].Values[xIndex].Value) > xMax_autoscale) { xMax_autoscale = parseFloat(data.Data[0].Values[xIndex].Value) };
-					if (parseFloat(data.Data[0].Values[xIndex].Value) < xMin_autoscale) { xMin_autoscale = parseFloat(data.Data[0].Values[xIndex].Value) };
+					if (parseFloat(data.Data[0].Values[xIndex].Value.replace(",","")) > xMax_autoscale) { xMax_autoscale = parseFloat(data.Data[0].Values[xIndex].Value.replace(",","")) };
+					if (parseFloat(data.Data[0].Values[xIndex].Value.replace(",","")) < xMin_autoscale) { xMin_autoscale = parseFloat(data.Data[0].Values[xIndex].Value.replace(",","")) };
 					// Loop through the y-axis data and see if there's a y-axis data item timestamp that matches this x-axis data item timestamp
 					for (var yIndex = 0; yIndex < data.Data[1].Values.length; yIndex++) {
 						// Store the Y max and minimum
-						if (parseFloat(data.Data[1].Values[yIndex].Value) > yMax_autoscale) { yMax_autoscale = parseFloat(data.Data[1].Values[yIndex].Value) };
-						if (parseFloat(data.Data[1].Values[yIndex].Value) < yMin_autoscale) { yMin_autoscale = parseFloat(data.Data[1].Values[yIndex].Value) };
+						if (parseFloat(data.Data[1].Values[yIndex].Value.replace(",","")) > yMax_autoscale) { yMax_autoscale = parseFloat(data.Data[1].Values[yIndex].Value.replace(",","")) };
+						if (parseFloat(data.Data[1].Values[yIndex].Value.replace(",","")) < yMin_autoscale) { yMin_autoscale = parseFloat(data.Data[1].Values[yIndex].Value.replace(",","")) };
 						// Test for matching timestamps between the temp xy entry and this current y-axis timestamp
 						if (!scope.config.forceXYTimestampSync || (data.Data[0].Values[xIndex].Time == data.Data[1].Values[yIndex].Time)) {
 							xyDataArray.push({
 								Time: data.Data[0].Values[xIndex].Time, 
-								x: parseFloat(data.Data[0].Values[xIndex].Value), 
-								y: parseFloat(data.Data[1].Values[yIndex].Value),
+								x: parseFloat(data.Data[0].Values[xIndex].Value.replace(",","")), 
+								y: parseFloat(data.Data[1].Values[yIndex].Value.replace(",","")),
 								trendLine1X: null,
 								trendLine1Y: null
 							});
@@ -167,7 +167,7 @@
 				// Add trend lines!
 				if (data.Data[2]) {
 					// Extract the JSON string from the third data item
-					var trendLineJSONString = data.Data[2].Values[0].Value;
+					var trendLineJSONString = data.Data[2].Values[0].Value.replace(",","");
 					var trendLineJSONStringArray = trendLineJSONString.split(";");
 					// Example:
 					// 65,50;68,54;74,53;82,54;84,56

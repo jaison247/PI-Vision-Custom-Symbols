@@ -139,7 +139,7 @@
 					var newInnerHTMLString = "";
 					// Check if the value is a string or error; if it isn't numeric, just display the raw string
 					try {
-    					newInnerHTMLString = parseFloat("" + pieceOfData.Value).toFixed(scope.config.numberOfDecimalPlaces);
+    					newInnerHTMLString = parseFloat(("" + pieceOfData.Value).replace(",","")).toFixed(scope.config.numberOfDecimalPlaces);
 					}
 					catch (err) {
 						newInnerHTMLString = pieceOfData.Value;

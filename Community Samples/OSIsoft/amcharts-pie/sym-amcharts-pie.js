@@ -101,7 +101,7 @@
 					if (dataArray[i]) {
 						// Update the time and date
 						dataArray[i].Time = data.Rows[i].Time;
-						dataArray[i].Value = parseFloat(data.Rows[i].Value);
+						dataArray[i].Value = parseFloat( ("" + data.Rows[i].Value).replace(",", "") );
 						// If the units and label have been updated, update those
 						if (data.Rows[i].Units) {
 							dataArray[i].Units = data.Rows[i].Units;
@@ -115,7 +115,7 @@
 							"Label": data.Rows[i].Label,
 							"Time": data.Rows[i].Time,
 							"Units": data.Rows[i].Units,
-							"Value": parseFloat(data.Rows[i].Value),
+							"Value": parseFloat( ("" + data.Rows[i].Value).replace(",", "") ),
 						};
 						// Write the new object to the data array
 						dataArray[i] = newDataObject;

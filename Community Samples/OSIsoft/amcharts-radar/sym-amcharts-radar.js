@@ -124,7 +124,7 @@
 					var newDataObject = {
 						"timestampString": (new Date(data.Data[0].Values[i].Time)).toISOString(),
                         "timestampLabel":  (new Date(data.Data[0].Values[i].Time)).toLocaleString().replace(",",""),
-						"value": parseFloat(data.Data[0].Values[i].Value),
+						"value": parseFloat( ( "" + data.Data[0].Values[i].Value ).replace(",", "") ),
                         "indexNumber": i
 					};
 					// Store the snapshot value for use in the title!
