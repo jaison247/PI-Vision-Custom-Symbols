@@ -1,0 +1,65 @@
+<ul kendo-panel-bar class="t-side-panel-bgcolor" style="font-size: 14px;">
+	<li class="k-state-active"> 
+		<span class="panel-bar-label-no-wrap">Style</span>
+		<div style="width: 85%; margin: 10px 0 15px 20px;">
+			<pv-color-picker colorkeyword="Fill" ng-model="config.NormalBackgroundColor"></pv-color-picker>
+		</div>
+		<div style="width: 85%; margin: 10px 0 15px 20px;">
+			<pv-color-picker colorkeyword="Text" ng-model="config.NormalColor"></pv-color-picker>
+		</div>
+		<div class="config-option-single-row" style="margin-left:20px; font-size: 14px;">
+			<div class="config-option-ie11-overflow-fix"> 
+				<div class="config-label">Border</div> 
+				<input class="config-option-single-row-input" type="range" min="0" max="100" step="1" ng-model="config.BorderRadius" style="width:100px; height:100%; float: right; margin-right:25px;" title="{{config.BorderRadius}}"> 
+			</div>
+		</div>
+		<div class="config-option-single-row" style="margin-left:20px; font-size: 14px;">
+			<div class="config-option-ie11-overflow-fix"> 
+				<div class="config-label">Thickness</div> 
+				<input class="config-option-single-row-input" type="range" min="0" max="200" step="1" ng-model="config.Thickness" style="width:100px; height:100%; float: right; margin-right:25px;" title="{{config.Thickness}}"> 
+			</div>
+		</div>
+		<div class="config-option-single-row" style="margin-left:20px; font-size: 14px;">
+			<div class="config-option-ie11-overflow-fix"> 
+				<div class="config-label">Hide Label</div> 
+				<input type="checkbox" ng-model="config.HideLabel" style="float: right; margin-right:25px;"> 
+			</div>
+		</div>
+		<div class="config-option-single-row" style="margin-left:20px; font-size: 14px;">
+			<div class="config-option-ie11-overflow-fix"> 
+				<div class="config-label">Hide Value</div> 
+				<input type="checkbox" ng-model="config.HideValue" style="float: right; margin-right:25px;"> 
+			</div>
+		</div>
+	</li>
+	<li class="k-state-active"> 
+		<span class="panel-bar-label-no-wrap">Low</span>
+		<div class="config-option-single-row" style="margin-left:20px; font-size: 14px;">
+			<div class="config-option-ie11-overflow-fix">
+				<div class="config-label">Low Value</div>
+				<input type="number" style="width:100px; height:100%; float: right; margin-right:25px;" ng-model="config.LowValue"> 
+			</div>
+		</div>
+		<div style="width: 85%; margin: 10px 0 15px 20px;">
+			<pv-color-picker colorkeyword="Low Fill" ng-model="config.LowBackgroundColor"></pv-color-picker>
+		</div>
+		<div style="width: 85%; margin: 10px 0 15px 20px;">
+			<pv-color-picker colorkeyword="Low Text" ng-model="config.LowColor"></pv-color-picker>
+		</div>
+	</li>
+	<li class="k-state-active"> 
+		<span class="panel-bar-label-no-wrap">High</span>
+		<div class="config-option-single-row" style="margin-left:20px; font-size: 14px;">
+			<div class="config-option-ie11-overflow-fix">
+				<div class="config-label">High Value</div>
+				<input type="number" style="width:100px; height:100%; float: right; margin-right:25px;" ng-model="config.HighValue"> 
+			</div>
+		</div>
+		<div style="width: 85%; margin: 10px 0 15px 20px;">
+			<pv-color-picker colorkeyword="High Fill" ng-model="config.HighBackgroundColor"></pv-color-picker>
+		</div>
+		<div style="width: 85%; margin: 10px 0 15px 20px;">
+			<pv-color-picker colorkeyword="High Text" ng-model="config.HighColor"></pv-color-picker>
+		</div>
+	</li>
+</ul>

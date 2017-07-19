@@ -1,0 +1,9 @@
+<div align="center" ng-style="{'color': config.Color, 'height': '100%', 'width': '100%'}">
+	<div ng-show ="!config.HideLabel">
+		<h1 style="margin-top:0"> {{Label}} </h1>
+	</div>
+	<div ng-style="{'background-color': config.BackgroundColor, 'border-radius': config.BorderRadius + 'px', 'height': config.Thickness + 'px', 'width': '100%'}"></div>
+	<div ng-show ="!config.HideValue">
+		<h3 style="margin-top:0"> {{Value}} </h3>
+	</div>
+</div>
