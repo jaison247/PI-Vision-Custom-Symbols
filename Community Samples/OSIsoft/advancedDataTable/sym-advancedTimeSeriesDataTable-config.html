@@ -1,5 +1,5 @@
 <!--
-	Copyright 2016-2017 OSIsoft, LLC.
+	Copyright 2016 OSIsoft, LLC.
 	Licensed under the Apache License, Version 2.0 (the "License");
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
@@ -11,13 +11,12 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<!--<div style="width: 85%; margin: 15px 0px 15px 15px; display: block;background-color:transparent;font-size:14px;" class="k-content" role="region" aria-hidden="true">
-    &nbsp;Default Order<br>
-    <select ng-model="config.defaultOrder" ng-model-options="{ getterSetter: true }" class="ng-pristine ng-valid" style="margin-top: 10px;background-color:transparent;padding:5px">
-        <option value="descending">Descending</option>
-        <option value="ascending">Ascending</option>
-    </select>
-</div>-->
+<!-- 
+	Compatibility note: to upgrade from PI Coresight to PI Vision, replace all instances of 
+		cs- 
+	with
+		PV-
+-->
 <div style="width: 85%; margin: 15px 0px 15px 15px; display: block;background-color:transparent;font-size:14px;" class="k-content" role="region" aria-hidden="true">
     &nbsp;Data Query Mode<br>
     <select ng-model="config.dataQueryType" ng-model-options="{ getterSetter: true }" class="ng-pristine ng-valid" style="margin-top: 10px;background-color:transparent;padding:5px">
@@ -95,11 +94,11 @@
             <input type="text" class="" style="width:30px;margin-left:8px;margin-right: 8px;padding:2px;" ng-model="config.dataItemThresholdsArray2[i]" ng-show="config.conditionalOperatorsArray2[i] != 'notused'">
         </label> 
         <div class="config-option-format" ng-show="config.applyConditionalFormatting">
-            <pv-color-picker id="evenRowColor" ng-model="config.testTrueColors[i]" config="config" colorkeyword="Color if true">
-        </pv-color-picker></div>
+            <PV-color-picker id="evenRowColor" ng-model="config.testTrueColors[i]" config="config" colorkeyword="Color if true">
+        </PV-color-picker></div>
         <div class="config-option-format" ng-show="config.applyConditionalFormatting">
-            <pv-color-picker id="evenRowColor" ng-model="config.testFalseColors[i]" config="config" colorkeyword="Color if false">
-        </pv-color-picker></div>
+            <PV-color-picker id="evenRowColor" ng-model="config.testFalseColors[i]" config="config" colorkeyword="Color if false">
+        </PV-color-picker></div>
         <br />
     </div>
 </div>
@@ -109,28 +108,28 @@
 	<span style="color:#fff; margin-left:10px;">Row Colors</span>
 </div>
 <div class="config-option-format">
-	<pv-color-picker id="evenRowColor" ng-model="config.evenRowColor" config="config" colorkeyword="Even Rows">
-</pv-color-picker></div>
+	<PV-color-picker id="evenRowColor" ng-model="config.evenRowColor" config="config" colorkeyword="Even Rows">
+</PV-color-picker></div>
 <div class="config-option-format">
-	<pv-color-picker id="oddRowColor" ng-model="config.oddRowColor" config="config" colorkeyword="Odd Rows">
-</pv-color-picker></div>
+	<PV-color-picker id="oddRowColor" ng-model="config.oddRowColor" config="config" colorkeyword="Odd Rows">
+</PV-color-picker></div>
 <div class="config-option-format">
-	<pv-color-picker id="hoverColor" ng-model="config.hoverColor" config="config" colorkeyword="Mouse-Over">
-</pv-color-picker></div>
+	<PV-color-picker id="hoverColor" ng-model="config.hoverColor" config="config" colorkeyword="Mouse-Over">
+</PV-color-picker></div>
 <br/>
 
 <div class="c-side-pane t-toolbar">
 	<span style="color:#fff; margin-left:10px;">Overall Settings</span>
 </div>
 <div class="config-option-format">
-	<pv-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background">
-</pv-color-picker></div>
+	<PV-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background">
+</PV-color-picker></div>
 <div class="config-option-format">
-	<pv-color-picker id="textColor" ng-model="config.textColor" config="config" colorkeyword="Text">
-</pv-color-picker></div>
+	<PV-color-picker id="textColor" ng-model="config.textColor" config="config" colorkeyword="Text">
+</PV-color-picker></div>
 <div class="config-option-format">
-	<pv-color-picker id="tableMenuBarColor" ng-model="config.tableMenuBarColor" config="config" colorkeyword="Menu Bar">
-</pv-color-picker></div>
+	<PV-color-picker id="tableMenuBarColor" ng-model="config.tableMenuBarColor" config="config" colorkeyword="Menu Bar">
+</PV-color-picker></div>
 <div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;">
     <div class="config-option-ie11-overflow-fix">
         <div class="config-label">Text Size: {{config.textSize}}px</div>
@@ -171,3 +170,21 @@
     </label> 
 </div>
 <br />
+
+<!-- Custom widths not implemented -->
+<!--
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Custom Column Widths</span>
+</div>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.useCustomColumnWidths">Use Custom Column Widths<br />
+</label>
+<div ng-repeat="i in [0,1,2,3,4,5,6,7,8,9,10,11] track by $index">
+    <label class="flex-align-center" style="font-size:14px;margin-top:8px; margin-left: 8px; margin-right: 8px;margin-bottom:10px;" ng-show="config.useCustomColumnWidths && (config.numberOfDataItems > i)">
+        <input type="number" class="" style="width:50px;margin-left:8px;margin-right: 8px;" ng-model="config.customColumnWidthArray[i]">
+        px : {{config.originalDataItemNamesArray[i]}}
+    </label> 
+</div>
+<br />
+-->
