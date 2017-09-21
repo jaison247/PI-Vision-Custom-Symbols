@@ -2,7 +2,7 @@ Follow these simple instructions to install this custom symbol; the overall proc
 
 First, download the custom symbols ZIP file from here:
 
-	https://github.com/osisoft/PI-Coresight-Custom-Symbols
+	https://github.com/osisoft/PI-Vision-Custom-Symbols
 
 On that web page, click the "Clone or download" link, and download the .ZIP file containing custom symbols.  Extract that .ZIP file that you downloaded, and within the extracted folder, navigate to the "Community Samples\OSIsoft\" sub-folder.  In here, look for the specific sub-folder for this particular custom symbol, which in this case is named "advancedDataTable".
 
