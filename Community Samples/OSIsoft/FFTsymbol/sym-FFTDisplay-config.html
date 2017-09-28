@@ -1,29 +1,80 @@
-<div class="c-config-content-vertical">
-    <span style="margin-left:10px">Text</span>
-	<format-color-picker id="textColor" property="textColor" config="config"></format-color-picker>
-	<label style="margin-top:8px">
-        <input type="number" class=""
-               ng-model="config.fontSize">   Text Size<br />
-    </label> 
-    <label style="margin-top:8px">
-        <input type="checkbox" class="c-config-checkbox"
-               ng-model="config.showTitle">Show Title<br />
-    </label>    
-    <br />  
-    <span style="margin-left:10px">Background</span>
-	<format-color-picker id="backgroundColor" property="backgroundColor" config="config"></format-color-picker>
-    <br />
-    <span style="margin-left:10px">Plot Area</span>
-	<format-color-picker id="plotAreaFillColor" property="plotAreaFillColor" config="config"></format-color-picker>
-    <br />
-    <span style="margin-left:10px">Data Series</span>
-	<format-color-picker id="seriesColor" property="seriesColor" config="config"></format-color-picker>
-    <br /> 
-	<br />
-	<br />
-	<br />
-	<br /> 	
-	<br /> 	
-	<br /> 	
-	<br /> 		
+<br />
+<label class="flex-align-center" style="margin-top:8px; margin-left: 13px;font-size:14px;">
+	<input type="number" class="" style="margin-right:8px"
+		   ng-model="config.fontSize">Text Size<br />
+		   <br />
+</label> 
+<div style="width: 85%; margin: 15px 0px 15px 15px; display: block;background-color:transparent;font-size:14px;" class="k-content" role="region" aria-hidden="true">
+    &nbsp;Graph Type<br>
+    <select ng-model="config.graphType" ng-model-options="{ getterSetter: true }" class="ng-pristine ng-valid" style="margin-top: 10px;background-color:transparent;padding:5px">
+        <option value="line">Line</option>
+        <option value="column">Column</option>
+    </select>
 </div>
+<br />  
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showTitle">Show Title<br />
+</label>
+<br />  
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.useCustomTitle">Use Custom Title<br />
+</label>
+<label style="margin-top:8px; margin-left: 20px;font-size:14px;" ng-show="config.useCustomTitle">
+<br /> 
+	<input type="text" class="" style="text-align:center;margin-left:10px;"
+		   ng-model="config.customTitle"> 
+		   <br /> 
+</label>
+<br />  
+
+
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.useCustomXAxisLabel">Use Custom X-Axis Label<br />
+</label>
+<label style="margin-top:8px; margin-left: 20px;font-size:14px;" ng-show="config.useCustomXAxisLabel">
+<br /> 
+	<input type="text" class="" style="text-align:center;margin-left:10px;"
+		   ng-model="config.customXAxisLabel"> 
+		   <br /> 
+</label>
+<br />  
+
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.useCustomYAxisLabel">Use Custom Y-Axis Label<br />
+</label>
+<label style="margin-top:8px; margin-left: 20px;font-size:14px;" ng-show="config.useCustomYAxisLabel">
+<br /> 
+	<input type="text" class="" style="text-align:center;margin-left:10px;"
+		   ng-model="config.customYAxisLabel"> 
+		   <br /> 
+</label>
+<br />  
+<br /> 
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Colors</span>
+</div>
+<br />
+
+<div class="config-option-format" >
+	<pv-color-picker id="textColor" ng-model="config.textColor" config="config" colorkeyword="Text">
+</pv-color-picker></div>
+<br />
+
+<div class="config-option-format" >
+	<pv-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background">
+</pv-color-picker></div>
+<br />
+
+<div class="config-option-format" >
+	<pv-color-picker id="plotAreaFillColor" ng-model="config.plotAreaFillColor" config="config" colorkeyword="Plot Area">
+</pv-color-picker></div>
+<br />
+
+<div class="config-option-format" >
+	<pv-color-picker id="seriesColor" ng-model="config.seriesColor" config="config" colorkeyword="Data Series">
+</pv-color-picker></div>
+<br />

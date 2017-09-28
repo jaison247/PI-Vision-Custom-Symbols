@@ -31,9 +31,10 @@
 		// Specify the user-friendly name of the symbol that will appear in PI Coresight
 		displayName: 'FFT Display',
 		// Specify the number of data sources for this symbol; for a gauge, it'll be just a single data source
-		datasourceBehavior: CS.DatasourceBehaviors.Multiple,
+		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Multiple,
 		// Specify the location of an image file to use as the icon for this symbol
 		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/FFTDisplay.png',
+		visObjectType: symbolVis,
 		// Specify default configuration for this symbol
 		getDefaultConfig: function () {
 			return {
@@ -47,7 +48,14 @@
                 backgroundColor: "white",
                 plotAreaFillColor: "white",
                 fontSize: 14,
-				seriesColor: "red"
+				seriesColor: "red",
+				graphType: "column",
+				useCustomXAxisLabel: false,
+				useCustomYAxisLabel: false,
+				useCustomTitle: false,
+				customXAxisLabel: "Frequency",
+				customYAxisLabel: "Magnitude",
+				customTitle: ""
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -60,13 +68,20 @@
             }];
         },
 		// Specify the name of the function that will be called to initialize the symbol
-		init: myCustomSymbolInitFunction
+		//init: myCustomSymbolInitFunction
 	};
 	
 	//************************************
 	// Function called to initialize the symbol
 	//************************************
-	function myCustomSymbolInitFunction(scope, elem) {
+	//function myCustomSymbolInitFunction(scope, elem) {
+	function symbolVis() { }
+    CS.deriveVisualizationFromBase(symbolVis);
+	symbolVis.prototype.init = function(scope, elem) {
+		// Specify which function to call when a data update or configuration change occurs 
+		this.onDataUpdate = myCustomDataUpdateFunction;
+		this.onConfigChange = myCustomConfigurationChangeFunction;
+				
 		// Locate the html div that will contain the symbol, using its id, which is "container" by default
 		var symbolContainerDiv = elem.find('#container')[0];
         // Use random functions to generate a new unique id for this symbol, to make it unique among all other custom symbols
@@ -77,6 +92,7 @@
 		var customVisualizationObject = false
 		// Create a variable to hold the combined data array
 		var dataArray = [];
+		var dataLabels = [];
 		//************************************
 		// When a data update occurs...
 		//************************************
@@ -87,17 +103,26 @@
 				// If the custom visualization hasn't been made yet... create the custom visualization!
 				// Custom code begins here:
 				// ---------------------------------------------------------------------------------
-				console.log("Now creating custom visualization...");
+				//console.log("Now creating custom visualization...");
 				//console.log(data);
 				// Get the data item name and units
 				if (data.Rows[0].Label) {
 					scope.config.Label = data.Rows[0].Label.split("|")[0];
                 }
 				// Fill the data array
-                for (var i = 1; i < data.Rows.length; i++) {
+                for (var i = 0; i < data.Rows.length; i++) {
+					// Save the labels
+					if (data.Rows[i].Label) {
+						if (i > dataLabels.length) {
+							dataLabels.push("");
+						}
+						// Get the last attribute name
+						dataLabels[i] = data.Rows[i].Label.split("|")[ data.Rows[i].Label.split('|').length - 1 ];
+					}
+					// Add a data object
                     var newObject = {
                         "value": data.Rows[i].Value,
-                        "label": (i + " Hz")
+                        "label": dataLabels[i]
                     };
                     // Add this to the array
                     dataArray.push(newObject);
@@ -130,7 +155,7 @@
                             "labelRotation" : 0, 
                             "labelOffset": 7,
                             "gridAlpha": 0.15,
-                            "title": "Amplitude (G)"
+                            "title": scope.config.customYAxisLabel
                         }],
                         "categoryAxis": {
                             "labelRotation" : 0,
@@ -138,7 +163,7 @@
                             "visible": true,
                             "axisAlpha": 1,
                             "gridAlpha": 0.15,
-                            "title": "Frequency (Hertz)"
+                            "title": scope.config.customXAxisLabel
                         },
                         "chartScrollbar": {
                             "autoGridCount":false, 
@@ -151,8 +176,8 @@
                         },
                         "brightnessStep": 10,
                         "graphs": [{
-                            //"type": "",
-                            "fillAlphas": 0,
+                            "type": scope.config.graphType,
+                            "fillAlphas": 0.9,
                             "lineAlpha": 1,
                             "lineColor": scope.config.seriesColor,
                             "balloonText": "<b>[[label]]: [[value]]", 
@@ -198,24 +223,34 @@
 		//************************************
 		function createArrayOfChartTitles() {
 			// Build the titles array
-			var titlesArray = [
-				{
-					"text": "Fast Fourier Transform",
-					"size": (scope.config.fontSize + 3)
-				},
-				{
-					"text": "for PI AF Element '" + scope.config.Label + "'",
-					"size": function () {
-                        if (scope.config.fontSize >= 3) {
-                            return (scope.config.fontSize - 3);
-                        } 
-                        else {
-                            return 0;
-                        }
-                    },
-					"bold": false
-				}
-			];
+			var titlesArray;
+			if (scope.config.useCustomTitle) {
+				titlesArray = [
+					{
+						"text": scope.config.customTitle,
+						"size": (scope.config.fontSize + 3)
+					}
+				];
+			} else {
+				titlesArray	= [
+					{
+						"text": "Fast Fourier Transform",
+						"size": (scope.config.fontSize + 3)
+					},
+					{
+						"text": "for PI AF Element '" + scope.config.Label + "'",
+						"size": function () {
+							if (scope.config.fontSize >= 3) {
+								return (scope.config.fontSize - 3);
+							} 
+							else {
+								return 0;
+							}
+						},
+						"bold": false
+					}
+				];
+			}
 			return titlesArray;
 		}
             
@@ -248,16 +283,26 @@
 				if (customVisualizationObject.graphs[0].lineColor !== scope.config.seriesColor) {
                     customVisualizationObject.graphs[0].lineColor = scope.config.seriesColor;
                 }
+				if (customVisualizationObject.graphs[0].type != scope.config.graphType) {
+					customVisualizationObject.graphs[0].type  = scope.config.graphType;
+				}
+				if (customVisualizationObject.categoryAxis.title != scope.config.customXAxisLabel && scope.config.useCustomXAxisLabel) {
+					customVisualizationObject.categoryAxis.title = scope.config.customXAxisLabel;
+				}
+				if (customVisualizationObject.valueAxes[0].title != scope.config.customYAxisLabel && scope.config.useCustomYAxisLabel) {
+					customVisualizationObject.valueAxes[0].title = scope.config.customYAxisLabel;
+				}
+				
 				// Commit updates to the chart
 				customVisualizationObject.validateNow();
-				console.log("Styling updated.");
+				//console.log("Styling updated.");
 			}
 		}
 		
 		// Specify which function to call when a data update or configuration change occurs 
-		return { dataUpdate: myCustomDataUpdateFunction, configChange: myCustomConfigurationChangeFunction };
+		//return { dataUpdate: myCustomDataUpdateFunction, configChange: myCustomConfigurationChangeFunction };
 	}
 	// Register this custom symbol definition with PI Coresight
 	CS.symbolCatalog.register(myCustomSymbolDefinition);
 	
-})(window.Coresight);
+})(window.PIVisualization);
