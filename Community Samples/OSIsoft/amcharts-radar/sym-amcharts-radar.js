@@ -29,7 +29,7 @@
 		// Specify the number of data sources for this symbol; just a single data source or multiple
 		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
 		// Specify the location of an image file to use as the icon for this symbol
-		iconUrl: '/Scripts/app/editor/symbols/ext/sym-amcharts-radar.png',
+		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/sym-amcharts-radar.png',
 		visObjectType: symbolVis,
 		// Specify default configuration for this symbol
 		getDefaultConfig: function () {

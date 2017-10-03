@@ -21,7 +21,7 @@
     &nbsp;Data Query Mode<br>
     <select ng-model="config.dataQueryType" ng-model-options="{ getterSetter: true }" class="ng-pristine ng-valid" style="margin-top: 10px;background-color:transparent;padding:5px">
         <option value="compressed">Compressed (Raw Archive) Data</option>
-        <option value="sampled">Sampled (Interpolated) Data</option>
+        <option value="sampled">Sampled (Interpolated) Data (Beta)</option>
     </select>
 </div>
 
@@ -41,13 +41,29 @@
 </div>
 <br ng-show="config.dataQueryType == 'sampled'"/>
 
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Timestamp Display Format</span>
+</div>
+
+<div style="width: 85%; margin: 15px 0px 15px 15px; display: block;background-color:transparent;font-size:14px;" class="k-content" role="region" aria-hidden="true">
+    <select ng-model="config.timestampDisplayFormat" ng-model-options="{ getterSetter: true }" class="ng-pristine ng-valid" style="margin-top: 10px;background-color:transparent;padding:5px">
+        <option value="timeOnly">Time only (sortable)</option>
+        <option value="timeOnlyFormatted">Time only (formatted)</option>
+        <option value="dateSortable">Date only (sortable)</option>
+        <option value="dateFormatted">Date only (formatted)</option>        
+        <option value="dateAndTimeSortable">Date and time (sortable)</option>
+        <option value="localeString">Date and time (formatted)</option>
+    </select>
+</div>
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Table Orientation</span>
+</div>
 
 <label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
 	<input type="checkbox" class="c-config-checkbox"
-		   ng-model="config.transposeTable">Transpose Table<br />
+           ng-model="config.transposeTable">Transpose Table <img style="margin-left:15px" src="Images/warning_icon.png" onclick="alert('Caution: table transposition can be very CPU intensive for long time ranges!  Use this setting with caution.')"><br />
 </label>
-
-<br/>
 <br/>
 <div class="c-side-pane t-toolbar">
 	<span style="color:#fff; margin-left:10px;">Conditional Formatting</span>
@@ -105,7 +121,7 @@
 <br/>
 
 <div class="c-side-pane t-toolbar">
-	<span style="color:#fff; margin-left:10px;">Row Colors</span>
+	<span style="color:#fff; margin-left:10px;">Default Row Colors</span>
 </div>
 <div class="config-option-format">
 	<PV-color-picker id="evenRowColor" ng-model="config.evenRowColor" config="config" colorkeyword="Even Rows">
@@ -125,23 +141,18 @@
 	<PV-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background">
 </PV-color-picker></div>
 <div class="config-option-format">
-	<PV-color-picker id="textColor" ng-model="config.textColor" config="config" colorkeyword="Text">
+	<PV-color-picker id="tableMenuBarColor" ng-model="config.tableMenuBarColor" config="config" colorkeyword="Menu Bar">
 </PV-color-picker></div>
 <div class="config-option-format">
-	<PV-color-picker id="tableMenuBarColor" ng-model="config.tableMenuBarColor" config="config" colorkeyword="Menu Bar">
+	<PV-color-picker id="textColor" ng-model="config.textColor" config="config" colorkeyword="Text">
 </PV-color-picker></div>
 <div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;">
     <div class="config-option-ie11-overflow-fix">
-        <div class="config-label">Text Size: {{config.textSize}}px</div>
-        <input class="config-option-single-row-input ng-pristine ng-untouched ng-valid" type="range" min="6" max="30" step="1" ng-model="config.textSize" ng-model-options="{ getterSetter: true }" style="width:100px; height:100%;">
+        <div class="config-label">Text Size</div>
+        <input class="config-option-single-row-input ng-pristine ng-untouched ng-valid" type="range" min="6" max="30" step="1" ng-model="config.textSize" ng-model-options="{ getterSetter: true }" style="width:100px; height:100%;margin-right:3px;">
+        {{config.textSize}}px
     </div>
 </div>
-<br/>
-<label style="margin-top:8px; margin-left: 20px;font-size:14px;">
-    Value Decimal Places
-	<input type="number" class="" style="text-align:center;margin-left:10px;"
-		   ng-model="config.numberOfDecimalPlaces">
-</label>
 <div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;margin-top:8px;">
     <div class="config-option-ie11-overflow-fix">
         <div class="config-label">Text Alignment</div>
@@ -152,9 +163,13 @@
         </select>
     </div>
 </div>
-
-
-
+<br/>
+<label style="margin-top:8px; margin-left: 20px;font-size:14px;">
+    Value Decimal Places
+	<input type="number" class="" style="text-align:center;margin-left:10px;"
+		   ng-model="config.numberOfDecimalPlaces">
+</label>
+<br/>
 <br/>
 <div class="c-side-pane t-toolbar">
 	<span style="color:#fff; margin-left:10px;">Custom Data Item Names</span>

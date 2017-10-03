@@ -19,19 +19,28 @@
 
 <style>
 	table.dataTable tr:nth-child(even) {
-		background: {{config.evenRowColor}} !important;
+		background-color: {{config.evenRowColor}} !important;
 	}
 	table.dataTable tr:nth-child(odd) {
-		background: {{config.oddRowColor}} !important;
+		background-color: {{config.oddRowColor}} !important;
 	}	
+	table.dataTable tr.even .sorting_1 { 
+		background-color: {{config.evenRowColor}} !important;
+	}
+	table.dataTable tr.odd .sorting_1 { 
+		background-color: {{config.oddRowColor}} !important;
+	} 	
 	table.dataTable tr:hover { 
-		background: {{config.hoverColor}} !important;
+		background-color: {{config.hoverColor}} !important;
 	}
 	table.dataTable th {
-		background: {{config.backgroundColor}} !important;
+		background-color: {{config.backgroundColor}} !important;
         color: {{config.textColor}};
-	}  
-
+	} 
+	table.dataTable tfoot td {
+		background-color: {{config.backgroundColor}} !important;
+        color: {{config.textColor}};
+	}	
     div.dataTables_filter {
         color:white !important;
         float:left !important;
@@ -64,25 +73,26 @@
         padding-left:0px;
         width:100%;
         text-align:left;
-        
     }
-
     a.dt-button {
         white-space: normal !important;
     }
-
     div.DTS {
         background-color:{{config.tableMenuBarColor}};
         padding:4px !important;
     }
     div.DTS tbody td {
-        
     }
     .dataTables_scrollHeadInner {
-        background: {{config.backgroundColor}} !important;
+        background-color: {{config.backgroundColor}} !important;
     }
     .dataTables_scrollFootInner {
-        background: {{config.backgroundColor}} !important;
+        background-color: {{config.backgroundColor}} !important;
     }    
-    
+	a.dt-button.buttons-columnVisibility {
+		color: lightgray;
+	}
+	a.dt-button.buttons-columnVisibility.active {
+		color: black !important;
+	}
 </style>
