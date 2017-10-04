@@ -48,7 +48,10 @@
                 columnWidth: 0.5,
                 columnOpacity: 1,
                 graphType: "column",
-				includeElementName: true
+				includeElementName: true,
+				axisPosition: "left",
+				axesColor: "white",
+				showCategoryAxisLabels: true
                 
             };
 		},
@@ -92,7 +95,7 @@
                 var isAttribute = /af:/.test(item);
                 var label = isAttribute ? item.match(/\w*\|.*$/)[0] : item.match(/\w+$/)[0];
                 if (!scope.config.includeElementName && (label.indexOf("|") !== -1)) {
-					label = label.split("|")[1];
+					label = label.split("|")[label.split("|").length - 1];
 				}
 				return {
 					Label: label
@@ -115,7 +118,7 @@
                     function(item) {
                         var label = item.Label;
 						if (!scope.config.includeElementName && (label.indexOf("|") !== -1)) {
-							label = label.split("|")[1];
+							label = label.split("|")[label.split("|").length - 1];
 						}
 						return {
                             Label: label
@@ -167,20 +170,21 @@
 						"creditsPosition": "top-right",
                         "rotate": scope.config.useBarsInsteadOfColumns,
 						"valueAxes": [{
-							"position": "left",
+							"position": scope.config.axisPosition,
                             "inside": false,
                             "axisAlpha": 1,
-                            "axisColor": "white",
+                            "axisColor": scope.config.axesColor,
                             "fillAlpha": 0.05,
                             "gridAlpha": 1,
                             "gridColor": scope.config.gridColor
 						}],
 						"categoryAxis": {
                             "axisAlpha": 1,
-                            "axisColor": "white",
+                            "axisColor": scope.config.axesColor,
                             "gridAlpha": 1,
                             "gridColor": scope.config.gridColor,
-							"autoWrap": true
+							"autoWrap": true,
+							labelsEnabled: scope.config.showCategoryAxisLabels
 						},
 						"graphs": [{
 							"type": scope.config.graphType,
@@ -226,7 +230,11 @@
                 chart.plotAreaFillColors = scope.config.plotAreaFillColor;
                 chart.rotate = scope.config.useBarsInsteadOfColumns;
                 chart.categoryAxis.gridColor = scope.config.gridColor;
+				chart.categoryAxis.axisColor = scope.config.axesColor;
+				chart.categoryAxis.labelsEnabled = scope.config.showCategoryAxisLabels;
                 chart.valueAxes[0].gridColor = scope.config.gridColor;
+				chart.valueAxes[0].position = scope.config.axisPosition;
+				chart.valueAxes[0].axisColor = scope.config.axesColor;
                 chart.graphs[0].columnWidth = scope.config.columnWidth;
                 chart.graphs[0].fillAlphas = scope.config.columnOpacity;
                 chart.graphs[0].type = scope.config.graphType;

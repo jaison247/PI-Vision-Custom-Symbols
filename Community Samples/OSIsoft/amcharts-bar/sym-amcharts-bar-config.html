@@ -21,13 +21,16 @@
 	<pv-color-picker id="textColor" ng-model="config.textColor" config="config"  colorkeyword="Text">
 </pv-color-picker></div>	
 <div class="config-option-format">
-	<pv-color-picker id="textColor" ng-model="config.gridColor" config="config"  colorkeyword="Grid">
+	<pv-color-picker id="gridColor" ng-model="config.gridColor" config="config"  colorkeyword="Grid">
 </pv-color-picker></div>	
 <div class="config-option-format">
 <pv-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background">
 </pv-color-picker></div>	
 <div class="config-option-format">
 <pv-color-picker id="plotAreaFillColor" ng-model="config.plotAreaFillColor" config="config" colorkeyword="Plot Area">
+</pv-color-picker></div>
+<div class="config-option-format">
+<pv-color-picker id="axesColor" ng-model="config.axesColor" config="config" colorkeyword="Axes">
 </pv-color-picker></div>	
 <div class="config-option-format" ng-show="!config.useUniqueDataItemColors">
 <pv-color-picker id="seriesColor" ng-model="config.seriesColor" config="config" colorkeyword="Series">
@@ -40,12 +43,20 @@
     <div class="config-option-ie11-overflow-fix">
         <div class="config-label">Chart Type</div>
         <select ng-model="config.graphType" ng-model-options="{ getterSetter: true }" class="config-option-single-row-input ng-pristine ng-valid" style="margin-top: 10px;background-color:transparent;padding:4px;">
-            <option value="line">Line</option>
-            <option value="column">Bar</option>
+            <option value="line">Line Chart</option>
+            <option value="column">Bar Chart</option>
         </select>
     </div>
 </div>
-
+<div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;margin-top:8px;">
+    <div class="config-option-ie11-overflow-fix">
+        <div class="config-label">Value Axis Position</div>
+        <select ng-model="config.axisPosition" ng-model-options="{ getterSetter: true }" class="config-option-single-row-input ng-pristine ng-valid" style="margin-top: 10px;background-color:transparent;padding:4px;">
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+        </select>
+    </div>
+</div>
 <label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.useBarsInsteadOfColumns">Rotate 90 Degrees<br />
@@ -57,6 +68,10 @@
 <label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.showLabels">Show Value Labels<br />
+</label> 
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showCategoryAxisLabels">Show X-Axis Labels<br />
 </label> 
 <label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
 	<input type="checkbox" class="c-config-checkbox"
