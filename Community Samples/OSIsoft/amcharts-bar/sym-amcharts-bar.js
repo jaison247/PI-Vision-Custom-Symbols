@@ -1,21 +1,22 @@
-/***************************************************************************
-   Copyright 2016-2017 OSIsoft, LLC.
 
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
-
- Visualizations provided by amCharts: https://www.amcharts.com/
-
- ***************************************************************************/
+/**
+# ***********************************************************************
+# * DISCLAIMER:
+# *
+# * All sample code is provided by OSIsoft for illustrative purposes only.
+# * These examples have not been thoroughly tested under all conditions.
+# * OSIsoft provides no guarantee nor implies any reliability,
+# * serviceability, or function of these programs.
+# * ALL PROGRAMS CONTAINED HEREIN ARE PROVIDED TO YOU "AS IS"
+# * WITHOUT ANY WARRANTIES OF ANY KIND. ALL WARRANTIES INCLUDING
+# * THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY
+# * AND FITNESS FOR A PARTICULAR PURPOSE ARE EXPRESSLY DISCLAIMED.
+# ************************************************************************
+#
+# Updated by dlopez@osisoft.com
+# Visualizations provided by amCharts: https://www.amcharts.com/
+#
+**/
 
 //************************************
 // Begin defining a new symbol
@@ -46,7 +47,8 @@
                 showLabels: false,
                 columnWidth: 0.5,
                 columnOpacity: 1,
-                graphType: "column"
+                graphType: "column",
+				includeElementName: true
                 
             };
 		},
@@ -89,7 +91,12 @@
 			return datasources.map(function(item){
                 var isAttribute = /af:/.test(item);
                 var label = isAttribute ? item.match(/\w*\|.*$/)[0] : item.match(/\w+$/)[0];
-                return {Label: label};
+                if (!scope.config.includeElementName && (label.indexOf("|") !== -1)) {
+					label = label.split("|")[1];
+				}
+				return {
+					Label: label
+				};
 			});	
 		} 
 		
@@ -201,7 +208,13 @@
         //************************************
 		// Function that is called when custom configuration changes are made
 		//************************************
+		var oldLabelSettings;
 		function myCustomConfigurationChangeFunction(data) {
+			if (oldLabelSettings != scope.config.includeElementName) {
+				oldLabelSettings == scope.config.includeElementName;
+				labels = getLabels(scope.symbol.DataSources);
+			}
+			
             if (chart) {
                 // Apply new settings
                 //chart.sortColumns = scope.config.sortItemsByValue;
