@@ -113,8 +113,12 @@
 			if (newdata.Rows[0].Label) {
                 labels = newdata.Rows.map(
                     function(item) {
-                        return {
-                            Label: item.Label
+                        var label = item.Label;
+						if (!scope.config.includeElementName && (label.indexOf("|") !== -1)) {
+							label = label.split("|")[1];
+						}
+						return {
+                            Label: label
                         };
                     }
                 );
@@ -162,7 +166,6 @@
 						"fontFamily": "arial",
 						"creditsPosition": "top-right",
                         "rotate": scope.config.useBarsInsteadOfColumns,
-                        //"sortColumns": scope.config.sortItemsByValue,
 						"valueAxes": [{
 							"position": "left",
                             "inside": false,
