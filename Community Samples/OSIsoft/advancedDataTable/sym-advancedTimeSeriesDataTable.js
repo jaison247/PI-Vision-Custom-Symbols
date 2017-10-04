@@ -52,13 +52,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 				// Specify the default height and width of this symbol
 				Height: 300,
 				Width: 500,
-				Intervals: 1000,
+                Intervals: 1000,
+                // Save the new unique symbol name
+                UniqueSymbolElementName: "",
                 // Specify the value of custom configuration options; see the "configure" section below
                 numberOfDecimalPlaces: 2,
 				// Row colors
                 hoverColor: "lightblue",
 				evenRowColor: "white",
-				oddRowColor: "white",
+				oddRowColor: "lightgray",
 				// Overall styling colors
 				backgroundColor: "white",
                 textColor: "black",
@@ -86,6 +88,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 // Descend results or not
                 defaultOrder: "ascending",
                 useCustomColumnWidths: false, // Not implemented
+                // Allow specifying custom timestamp formats
+                timestampDisplayFormat: "localeString",
                 // Array for remembering column filter settings
                 /*
                 dataItemThresholdsArray:  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -131,18 +135,30 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	function symbolVis() { }
     CS.deriveVisualizationFromBase(symbolVis);
 	symbolVis.prototype.init = function (scope, elem) {
-        var myDataTableObject;
 		// Specify which function to call when a data update or configuration change occurs 
 		this.onDataUpdate = myCustomDataUpdateFunction;
 		this.onConfigChange = myCustomConfigurationChangeFunction;
         this.onResize = myCustomResizeFunction;
 
+        // Global variable for tracking the table object
+        var myDataTableObject;
+        
         // Locate the html div that will contain the symbol, using its id, which is "container" by default
-		var symbolContainerElement = elem.find('#container')[0];
+        var symbolContainerElement = elem.find('#container')[0];
+        
+        // Check if the new unique string is empty!  If it is, assign a unique name
+        if (scope.config.UniqueSymbolElementName == "") {
+            scope.config.UniqueSymbolElementName = "myCustomSymbol_" + Math.random().toString(36).substr(2, 16);
+            //console.log("Generated new unique ID for table symbol: " + scope.config.UniqueSymbolElementName);
+        }
+
         // Use random functions to generate a new unique id for this symbol, to make it unique among all other custom symbols
-		var newUniqueIDString = "myCustomSymbol_" + Math.random().toString(36).substr(2, 16);
-		// Write that new unique ID back to overwrite the old id
-        symbolContainerElement.id = newUniqueIDString;
+		//var newUniqueIDString = "myCustomSymbol_" + Math.random().toString(36).substr(2, 16);
+		
+        // Write that new unique ID back to overwrite the old id
+        //symbolContainerElement.id = newUniqueIDString;
+        symbolContainerElement.id = scope.config.UniqueSymbolElementName;
+        
         // Create global arrays for the labels, units, data, and rows in the dataset
 		var dataItemUnitsArray  = [];
         var dataTableArray = [];
@@ -284,6 +300,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     } 
                 });
 
+                // Every time the a button is clicked, add a handler to save the current state!
+                myDataTableObject.on( 'buttons-action', function ( e, buttonApi, dataTable, node, config ) {
+                    if (myDataTableObject) {
+                        // Save the current state
+                        console.log("Saving state settings...");
+                        myDataTableObject.state.save();
+                    }
+                } );
+                
                 // Add search functions
                 addSearchFunctionsToCellsInFooterRow();
 
@@ -297,7 +322,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         // -------------------------------------------------------------------------------------------------------------------------------------
         // -------------------------------------------------------------------------------------------------------------------------------------
-        
 
         //************************************
 		// Function that acts on a new data update and updates the global data table and row count
@@ -317,6 +341,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                         scope.config.customDataItemNamesArray[i] = scope.config.originalDataItemNamesArray[i];
                     }
                 }
+                // Get the units for this data item
                 if (data.Data[i].Units) {
                     dataItemUnitsArray[i]  = data.Data[i].Units;
                 }
@@ -327,7 +352,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 // Get the error code, if there is one
                 if (data.Data[i].ErrorDescription) {
                     console.log("Error from custom symbol '" + symbolContainerElement.id + "' data item '" + i + "': " + data.Data[i].ErrorDescription);
-                    //scope.Badge.raise("!"); 
+                    // If the error is about the data range, then show an alert!
+                    if (data.Data[i].ErrorDescription.indexOf("Please modify the query to return fewer points or increase the limit") != -1) {
+                        alert("Table symbol error!\n" + data.Data[i].ErrorDescription + ".");
+                    }
                 }
             }
             // Note: if you're using sampled data, then reset the number of rows based on the sample interval
@@ -373,11 +401,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     var newRowObject = [];
                     for (var i = 0; i < scope.config.numberOfDataItems; i++) {
 
-                        // Add the timestamp as a cell to this row
-                        newRowObject.push(interpolatedTimestampsArray[timestampNumber].toLocaleString());
-                        
-                        // Initialize the value for this data item to empty space
+                        // Initialize the time and value cells for this data item to empty space
+                        var timestampString = "";
                         var valueString = "";
+                        
+                        // Format the timestamp as a string that can be properly sorted!
+                        timestampString = applyTimeStampFormatting(interpolatedTimestampsArray[timestampNumber]);
+                        
+                        // Add the timestamp as a cell to this row
+                        newRowObject.push(timestampString);
                         
                         // Add the correct interpolated value at this timestamp for this data item
                         valueString = getInterpolatedValueAtThisTimestamp(interpolatedTimestampsArray[timestampNumber], data.Data[i].Values);
@@ -407,7 +439,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                         if (data.Data[i].Values[rowNumber]) {
 
                             // If so, write the timestamp
-                            timestampString = data.Data[i].Values[rowNumber].Time;
+                            timestampString = applyTimeStampFormatting(new Date(data.Data[i].Values[rowNumber].Time));
 							
 							// Next, if the data value is a timestamp, leave it as is; otherwise try to parse it
 							if (regExForDetectingTimestamps.test(data.Data[i].Values[rowNumber].Value)) {
@@ -433,6 +465,41 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             }
             // You're done adding rows; now the data table is fully populated!
         }
+        
+        // Function that formats a timestamp depending on the user preference
+        function applyTimeStampFormatting(dateObject) {
+            var timestampString = "";
+            switch (scope.config.timestampDisplayFormat) {
+                case "timeOnly":
+                    timestampString = dateObject.toTimeString().split(" ")[0];
+                    break;
+                case "timeOnlyFormatted":
+                    timestampString = dateObject.toLocaleString().split(", ")[1];
+                    break;                    
+                case "localeString":
+                    timestampString = dateObject.toLocaleString();
+                    break;
+                case "dateAndTimeSortable":
+                    timestampString = dateObject.getFullYear() + "/" + formatAs2Digits(dateObject.getMonth() + 1) + "/" + formatAs2Digits(dateObject.getDate()) + " " + dateObject.toTimeString().split(" ")[0];
+                    break;
+                case "dateSortable":
+                    timestampString = dateObject.getFullYear() + "/" + formatAs2Digits(dateObject.getMonth() + 1) + "/" + formatAs2Digits(dateObject.getDate());
+                    break;     
+                case "dateFormatted":
+                    timestampString = dateObject.toLocaleDateString();
+                    break;                     
+            }
+            return timestampString;
+        }
+        // Pads a number witha  zero if it is less than 10
+        function formatAs2Digits(number) {
+            if (number < 10) {
+                return ("0" + number);
+            } else {
+                return ("" + number);
+            }
+        }
+        
         
         // Function that interpolates a value at a particular time, given the timestamp and original array of timestamps and values
         function getInterpolatedValueAtThisTimestamp(currentTimestamp, originalDataArray) {
@@ -745,9 +812,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     result = (cellValue > parseFloat(threshold));
                     break;
                 case "like":
-                    result = (cellValue.includes(threshold));                    
+                    result = (cellValue.includes(threshold));
+                    break;
                 case "notused":
                     result = true;
+                    break;
             }
             // Return the result
             return result;
