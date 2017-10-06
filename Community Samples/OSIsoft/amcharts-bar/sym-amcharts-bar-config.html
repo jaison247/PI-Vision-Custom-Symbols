@@ -1,0 +1,97 @@
+<!--
+	Copyright 2016-2017 OSIsoft, LLC.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+			
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Colors</span>
+</div>
+<div class="config-option-format">
+	<pv-color-picker id="textColor" ng-model="config.textColor" config="config"  colorkeyword="Text">
+</pv-color-picker></div>	
+<div class="config-option-format">
+	<pv-color-picker id="gridColor" ng-model="config.gridColor" config="config"  colorkeyword="Grid">
+</pv-color-picker></div>	
+<div class="config-option-format">
+<pv-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background">
+</pv-color-picker></div>	
+<div class="config-option-format">
+<pv-color-picker id="plotAreaFillColor" ng-model="config.plotAreaFillColor" config="config" colorkeyword="Plot Area">
+</pv-color-picker></div>
+<div class="config-option-format">
+<pv-color-picker id="axesColor" ng-model="config.axesColor" config="config" colorkeyword="Axes">
+</pv-color-picker></div>	
+<div class="config-option-format" ng-show="!config.useUniqueDataItemColors">
+<pv-color-picker id="seriesColor" ng-model="config.seriesColor" config="config" colorkeyword="Series">
+</pv-color-picker></div>	
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Display Options</span>
+</div>
+<div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;margin-top:8px;">
+    <div class="config-option-ie11-overflow-fix">
+        <div class="config-label">Chart Type</div>
+        <select ng-model="config.graphType" ng-model-options="{ getterSetter: true }" class="config-option-single-row-input ng-pristine ng-valid" style="margin-top: 10px;background-color:transparent;padding:4px;">
+            <option value="line">Line Chart</option>
+            <option value="column">Bar Chart</option>
+        </select>
+    </div>
+</div>
+<div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;margin-top:8px;">
+    <div class="config-option-ie11-overflow-fix">
+        <div class="config-label">Value Axis Position</div>
+        <select ng-model="config.axisPosition" ng-model-options="{ getterSetter: true }" class="config-option-single-row-input ng-pristine ng-valid" style="margin-top: 10px;background-color:transparent;padding:4px;">
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+        </select>
+    </div>
+</div>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.useBarsInsteadOfColumns">Rotate 90 Degrees<br />
+</label>  
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.useUniqueDataItemColors">Use Unique Data Item Colors<br />
+</label>  
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showLabels">Show Value Labels<br />
+</label> 
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showCategoryAxisLabels">Show X-Axis Labels<br />
+</label> 
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.includeElementName">Include Element Name<br />
+</label> 
+<br/>
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Series Options</span>
+</div>
+<br/>
+<div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;" ng-show="config.graphType == 'column'">
+    <div class="config-option-ie11-overflow-fix">
+        <div class="config-label">Data Item Width</div>
+        <input class="config-option-single-row-input ng-pristine ng-untouched ng-valid" type="range" min="0" max="1" step="0.1" ng-model="config.columnWidth" ng-model-options="{ getterSetter: true }" style="width:100px; height:100%;margin-right:3px;">
+    </div>
+</div>
+<div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;">
+    <div class="config-option-ie11-overflow-fix">
+        <div class="config-label">Fill Opacity</div>
+        <input class="config-option-single-row-input ng-pristine ng-untouched ng-valid" type="range" min="0" max="1" step="0.1" ng-model="config.columnOpacity" ng-model-options="{ getterSetter: true }" style="width:100px; height:100%;margin-right:3px;">
+    </div>
+</div>
+<br/>
