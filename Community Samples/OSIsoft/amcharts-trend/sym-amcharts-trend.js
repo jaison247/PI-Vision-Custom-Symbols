@@ -25,9 +25,9 @@
 		// look for HTML template and config template files called sym-<typeName>-template.html and sym-<typeName>-config.html
 		typeName: 'amcharts-trend',
 		// Specify the user-friendly name of the symbol that will appear in PI Vision
-		displayName: 'amCharts Trend',
+		displayName: 'amCharts Single-Trace Trend',
 		// Specify the number of data sources for this symbol; just a single data source or multiple
-		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Multiple,
+		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
 		// Specify the location of an image file to use as the icon for this symbol
 		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/amcharts-trend.png',
 		visObjectType: symbolVis,
@@ -39,20 +39,19 @@
 				// Specify the default height and width of this symbol
 				Height: 300,
 				Width: 600,
+				// Allow large queries
+				Intervals: 1000,
 				// Specify the value of custom configuration options
 				minimumYValue: 0,
 				maximumYValue: 100,
 				useCustomYAxisRange: false,
-				showTitle: true,
-                textColor: "black",
-                backgroundColor: "white",
-                plotAreaFillColor: "white",
-                fontSize: 12,
-                seriesColor: "blue",
+				showTitle: false,
+                textColor: "white",
+                backgroundColor: "transparent",
+                plotAreaFillColor: "transparent",
+                seriesColor: "rgb(62, 152, 211)",
                 showChartScrollBar: true,
-				useColumns: false,
-				exportData: false,
-				exportDataItemPaths: false
+				useColumns: false
             };
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -93,6 +92,12 @@
 		var autoScaleMinimumValue, autoScaleMaximumValue;
 		// Create a var to hold the data item paths
 		var dataItemPaths = ["Data Item Paths"];
+		
+        //************************************
+		// Specify a default color pallette
+		//************************************
+        var chartColors = ["rgb(62, 152, 211)", "rgb(224, 138, 0)", "rgb(178, 107, 255)", "rgb(47, 188, 184)", "rgb(219, 70, 70)", "rgb(156, 128, 110)", "rgb(60, 191, 60)", "rgb(197, 86, 13)","rgb(46, 32, 238)","rgb(165, 32, 86)" ];
+        		
 		//************************************
 		// When a data update occurs...
 		//************************************
@@ -108,7 +113,7 @@
 				// If the custom visualization hasn't been made yet... create the custom visualization!
 				// Custom code begins here:
 				// -----------------------------------------------------------------------------------------
-				console.log("Now creating custom visualization...");
+				//console.log("Now creating custom visualization...");
 				// Get the data item name(s) and unit(s)
                 if (data.Data[0].Label) {
                     scope.config.Label = "";
@@ -161,21 +166,35 @@
 						"plotAreaFillColors": scope.config.plotAreaFillColor,
 						"creditsPosition": "bottom-right",
 						"titles": createArrayOfChartTitles(),
-                        "fontSize": scope.config.fontSize,
+                        "fontSize": 11,
+						"pathToImages": "Scripts/app/editor/symbols/ext/images/",
 						"categoryAxis": {
                             "parseDates": true,
-                            "minPeriod": "ss"
+                            "minPeriod": "ss",
+                            "axisAlpha": 1,
+                            "axisColor": "white",
+                            "gridAlpha": 0,
+							"autoWrap": true							
 						},
                         "chartScrollbar": {
                             "graph": "g1",
                             "scrollbarHeight": 80,
                             "autoGridCount": true,
-                            "enabled": scope.config.showChartScrollBar
+                            "enabled": scope.config.showChartScrollBar,
+							"dragIcon": "dragIconRectSmall",
+							"backgroundAlpha": 1,
+							"backgroundColor": scope.config.plotAreaFillColor,
+							"selectedBackgroundAlpha": 0.2
                         },
 						"valueAxes": [
 							{
 								"title": scope.config.Units,
-								"titleBold": false
+								"titleBold": false,
+								"inside": false,
+								"axisAlpha": 1,
+								"axisColor": "white",
+								"fillAlpha": 0.05,
+								"gridAlpha": 0,								
 							}
 						],
 						"graphs": [{
@@ -233,64 +252,11 @@
 			var titlesArray = [
 				{
 					"text": titleText,
-					"size": scope.config.fontSize + 3,
 					"bold": false
 				}
 			];
 			return titlesArray;
 		}		
-
-		//************************************
-		// Functions for exporting data
-		//************************************
-		// Courtesy of http://halistechnology.com/2015/05/28/use-javascript-to-export-your-data-as-csv/
-		function createCSVFileContents() {  
-			var result, ctr, keys, columnDelimiter, lineDelimiter;
-			// Verify that a valid array object was passed in
-			if (dataArray == null || !dataArray.length) {
-				return null;
-			}
-			// Specify delimeters that will be used to create the CSV
-			columnDelimiter = ',';
-			lineDelimiter = '\n';
-			// Take the keys from the input array
-			keys = Object.keys(dataArray[0]);
-			// Add the data items on the trend
-			result = '';
-			result += "Export from PI Vision" + lineDelimiter;
-			result += scope.config.Label + " (" + scope.config.Units + ")" + lineDelimiter;
-			// Add the first headers row to the output file
-			result += keys.join(columnDelimiter);
-			result += lineDelimiter;
-			// Loop through all of the items in the input object and add it to the CSV
-			dataArray.forEach(function(item) {
-				ctr = 0;
-				keys.forEach(function(key) {
-					if (ctr > 0) result += columnDelimiter;
-					result += item[key];
-					ctr++;
-				});
-				result += lineDelimiter;
-			});
-			return result;
-		}	
-		// Actually start the download
-		function downloadCSV(filename, csv) {  
-			var linkElement;
-			// Encode the data in the right file format
-			if (csv == null) return;
-			if (!csv.match(/^data:text\/csv/i)) {
-				csv = 'data:text/csv;charset=utf-8,' + csv;
-			}
-			// Create a link element to allow the file to be downloaded
-			linkElement = document.createElement('a');
-			symbolContainerDiv.appendChild(linkElement);
-			linkElement.setAttribute('href', encodeURI(csv));
-			linkElement.setAttribute('download', filename);
-			// Click the link!  Then delete the element
-			linkElement.click();
-			symbolContainerDiv.removeChild(linkElement);
-		}
 		
 		//************************************
 		// Function that is called when custom configuration changes are made
@@ -330,29 +296,14 @@
                 }
                 if (customVisualizationObject.plotAreaFillColors != scope.config.plotAreaFillColor) {
                     customVisualizationObject.plotAreaFillColors = scope.config.plotAreaFillColor;
+					customVisualizationObject.chartScrollbar.backgroundColor = scope.config.plotAreaFillColor;
                 }
-                if (customVisualizationObject.fontSize != scope.config.fontSize) {
-                    customVisualizationObject.fontSize = scope.config.fontSize;
-                }
-				// Check whether you should prepare data for export
-				if (scope.config.exportData) {
-					// Reset the button back to unchecked, when complete
-					scope.config.exportData = false;
-					downloadCSV('ExportFromPIVision.csv', createCSVFileContents());
-				}
-				// Check whether you should prepare the paths for export
-				if (scope.config.exportDataItemPaths) {
-					// Reset the button back to unchecked, when complete
-					scope.config.exportDataItemPaths = false;
-					downloadCSV('ExportFromPIPIVision_DataItemPaths.csv', dataItemPaths.toString());
-				}
                 // Update the scroll bar
                 if (customVisualizationObject.chartScrollbar.enabled != scope.config.showChartScrollBar) {
                     customVisualizationObject.chartScrollbar.enabled = scope.config.showChartScrollBar;
                 }
 				// Commit updates to the chart
 				customVisualizationObject.validateNow();
-				console.log("Configuration updated.");
 			}
 		}
 

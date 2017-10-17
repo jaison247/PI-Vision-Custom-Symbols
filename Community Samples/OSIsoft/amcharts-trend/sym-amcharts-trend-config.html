@@ -14,70 +14,46 @@
 	limitations under the License.
 -->
 <div class="c-side-pane t-toolbar">
-	<span style="color:#fff; margin-left:10px;">Text</span>
+	<span style="color:#fff; margin-left:10px;">Colors</span>
 </div>
 <div class="config-option-format">
-	<pv-color-picker id="textColor" ng-model="config.textColor" config="config">
-</pv-color-picker></div>	
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+	<pv-color-picker id="textColor" ng-model="config.textColor" config="config" colorkeyword="Text"></pv-color-picker>
+</div>	
+<div class="config-option-format">
+	<pv-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background"></pv-color-picker>
+</div>
+<div class="config-option-format">	
+	<pv-color-picker id="plotAreaFillColor" ng-model="config.plotAreaFillColor" config="config" colorkeyword="Plot Area"></pv-color-picker>
+</div>	
+<div class="config-option-format">
+	<pv-color-picker id="seriesColor" ng-model="config.seriesColor" config="config" colorkeyword="Series"></pv-color-picker>
+</div>
+<br>
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Display Options</span>
+</div>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.showTitle">Show Title<br />
-</label> 
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
-	<input type="number"
-		   ng-model="config.fontSize">   Text Size<br />
-</label> 	 
-<br />  
-<div class="c-side-pane t-toolbar">
-	<span style="color:#fff; margin-left:10px;">Background</span>
-</div>
-<div class="config-option-format">
-<pv-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config">
-</pv-color-picker></div>	
-<br />
-<div class="c-side-pane t-toolbar">
-	<span style="color:#fff; margin-left:10px;">Plot Area</span>
-</div>
-<div class="config-option-format">
-<pv-color-picker id="plotAreaFillColor" ng-model="config.plotAreaFillColor" config="config">
-</pv-color-picker></div>	
-
-<br />    
-<div class="c-side-pane t-toolbar">
-	<span style="color:#fff; margin-left:10px;">Series</span>
-</div>
-<div class="config-option-format">
-<pv-color-picker id="seriesColor" ng-model="config.seriesColor" config="config">
-</pv-color-picker></div>
-
-<br>
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.showChartScrollBar">Show Chart Scroll Bar<br />
 </label>
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.useColumns">Use Columns<br />
 </label>	
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.useCustomYAxisRange">Use Custom Y Axis Range<br />
 </label>  
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
-	<input type="number"
-		   ng-model="config.minimumYValue">   Minimum Value<br />
+<label class="flex-align-center" style="margin-top:8px; margin-left: 14px;font-size:14px;" ng-show="config.useCustomYAxisRange">
+	<input type="number" style="margin-right:8px"
+		   ng-model="config.minimumYValue">Minimum Value<br />
 </label>
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
-	<input type="number"
-		   ng-model="config.maximumYValue">   Maximum Value<br />
+<label class="flex-align-center" style="margin-top:8px; margin-left: 14px;font-size:14px;" ng-show="config.useCustomYAxisRange">
+	<input type="number" style="margin-right:8px"
+		   ng-model="config.maximumYValue">Maximum Value<br />
 </label>
-<br />
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
-	<input type="checkbox" class="c-config-checkbox"
-		   ng-model="config.exportData">Export Data<br />
-</label>	
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
-	<input type="checkbox" class="c-config-checkbox"
-		   ng-model="config.exportDataItemPaths">Export Data Item Paths<br />
-</label>		
 <br />
