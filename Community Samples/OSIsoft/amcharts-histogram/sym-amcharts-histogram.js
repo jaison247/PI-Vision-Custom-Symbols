@@ -284,7 +284,7 @@
 			// Seperate the bin size string by commas
 			if (binSizesString.indexOf(",") != -1) {
 				var binSizeArray = binSizesString.split(",");
-				console.log(binSizeArray);
+				//console.log(binSizeArray);
 				// Add one bin, for underflows
 				histogramBinsArray.push(
 					createNewHistogramBinObject(
@@ -305,7 +305,7 @@
 						parseFloat(binSizeArray[i-1]),
 						parseFloat(binSizeArray[i])
 					);
-					console.log(newHistogramBin);
+					//console.log(newHistogramBin);
 					histogramBinsArray.push(newHistogramBin);
 					binNumberTracker++;
 				}
@@ -320,7 +320,7 @@
 				);
 			}
 			// Now that all the bins have been created, drop the data items into bins
-			console.log(histogramBinsArray);
+			//console.log(histogramBinsArray);
 			
 			// Loop through each received data item
 			for (var i = 0; i < newDataUpdate.Values.length; i++) {
