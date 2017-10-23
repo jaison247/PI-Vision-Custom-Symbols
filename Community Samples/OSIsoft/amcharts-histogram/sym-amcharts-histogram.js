@@ -27,7 +27,7 @@
 		// Specify the user-friendly name of the symbol that will appear in PI Vision
 		displayName: 'amCharts Histogram',
 		// Specify the number of data sources for this symbol; just a single data source or multiple
-		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
+		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Multiple,
 		// Specify the location of an image file to use as the icon for this symbol
 		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/amcharts-histogram.png',
 		visObjectType: symbolVis,
@@ -45,14 +45,14 @@
 				maximumValue: 100,
 				binSize: 10,
 				showTitle: true,
-                textColor: "black",
-                backgroundColor: "white",
-                plotAreaFillColor: "white",
-                fontSize: 14,
+                textColor: "white",
+                backgroundColor: "transparent",
+                plotAreaFillColor: "transparent",
                 useBarsInsteadOfColumns: false,
                 sortBinsByValue: false,
                 useGradientBinColors: true,
-                seriesColor: "red"
+                seriesColor: "red",
+				usePIPointBinSizes: false
             };
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -100,7 +100,7 @@
 		function myCustomDataUpdateFunction(data) {
 			// If there is indeed new data in the update
 			if (data !== null && data.Data) {
-				dataArray = [];
+				
 				// Check for an error
 				if (data.Data[0].ErrorDescription) {
 					console.log(data.Data[0].ErrorDescription);
@@ -116,54 +116,31 @@
 				if (data.Data[0].Units) {
 					scope.config.Units = data.Data[0].Units;
                 }
-                var binNumberTracker = 0;
-                // Add one bin, for underflows
-                dataArray.push(
-                    createNewHistogramBinObject(("<" + scope.config.minimumValue), binNumberTracker));
-                binNumberTracker++;
-                // Create the bins for the histogram! Loop through the bin range from the minimum to the maximum
-                for (var i = scope.config.minimumValue; i < scope.config.maximumValue; i += scope.config.binSize) {
-                    // Create a new object for this bin and add this bin to the histogram array
-                    dataArray.push(
-                        createNewHistogramBinObject((i + "-" +  (i + scope.config.binSize)), binNumberTracker));
-                    binNumberTracker++;
-                }
-                // Add one final bin, for overflows
-                dataArray.push(
-                    createNewHistogramBinObject((">" + scope.config.maximumValue), binNumberTracker));
-				// For each piece of data in the data item, assign it to the appropriate bin
+                
+				// Create the histogram bins
+				// -------------------------------------------------------------------------------
+				
+				// Clear the data array and get the total number of events
+				dataArray = [];
 				totalNumberOfEvents = data.Data[0].Values.length;
-				for (var i = 0; i < data.Data[0].Values.length; i++) {
-					var currentValue = ("" + data.Data[0].Values[i].Value).replace(",","");
-					// Check the value is not system digital value
-					if (isNaN(currentValue)) {
-						// Not a number
-						continue;
-					}
-					else
-					{
-						// Determine the correct bin for this event; remember, the first bin is for underflow
-						var binIndex = 1 + Math.floor( (currentValue - scope.config.minimumValue) / scope.config.binSize );					
-					}
-					// Check for underflow (if the value is under the min, add it to the "underflow" bin)
-					if (currentValue < scope.config.minimumValue) {
-						// If so, place in the underflow bin, which is the first bin in the array
-						binIndex = 0;
-					}
-                    // Check for overflow (if the value is over the max, add it to the "overflow" bin)
-					if (currentValue > scope.config.maximumValue) {
-						// If so, place in the overflow bin, which is the last bin in the array
-						binIndex = dataArray.length - 1;
-					}
-					// Increment the bin count in the appropriate bin
-                    dataArray[binIndex].binCount = (dataArray[binIndex].binCount + 1);
+				
+				// Decide whether or not to pull in bins from a PI Point string
+				if (scope.config.usePIPointBinSizes == false) {
+					dataArray = populateDataArrayUsingManualBinSizes(data.Data[0]);
+				} else {
+					// Get the bin sizes string
+					var binSizesString = data.Data[1].Values[0].Value;
+					dataArray = populateDataArrayUsingPIPointBinSizes(data.Data[0], binSizesString);
 				}
-                // Apply sorting, if desired
+				
+				// Apply sorting, if desired
                 if (scope.config.sortBinsByValue) {
                     dataArray = applySortingByBinValue(scope.config.sortBinsByValue);
                 }
-                // Add colors to the bins
+                
+				// Add colors to the bins
                 applyColorsToBins(scope.config.useGradientBinColors);
+
 				//console.log("Data array: ", dataArray);
 				// Create the custom visualization
 				if (!customVisualizationObject) {
@@ -178,8 +155,9 @@
 						"marginRight": 30,
 						"creditsPosition": "bottom-right",
 						"titles": createArrayOfChartTitles(),
-                        "fontSize": 12,
+                        "fontSize": 11,
                         "rotate": scope.config.useBarsInsteadOfColumns,
+						"pathToImages": "Scripts/app/editor/symbols/ext/images/",
 						"valueAxes": [{
 							"integersOnly": true,
 							"title": "Count"
@@ -230,10 +208,148 @@
 			}
 		}
         
+		//************************************
+		// Populates the data array using manually defined bins
+		//************************************
+		function populateDataArrayUsingManualBinSizes(newDataUpdate) {
+			var histogramBinsArray = [];
+			var binNumberTracker = 0;
+			// In this case, use the manually entered min, max, and bin size)
+			// Add one bin, for underflows
+			histogramBinsArray.push(
+				createNewHistogramBinObject(
+					("<" + scope.config.minimumValue),
+					binNumberTracker
+				)
+			);
+			binNumberTracker++;				
+			// Create the bins for the histogram! Loop through the bin range from the minimum to the maximum
+			for (var i = scope.config.minimumValue; i < scope.config.maximumValue; i += scope.config.binSize) {
+				// Create a new object for this bin and add this bin to the histogram array
+				histogramBinsArray.push(
+					createNewHistogramBinObject(
+						(i + "-" +  (i + scope.config.binSize)), 
+						binNumberTracker
+					)
+				);
+				binNumberTracker++;
+			}
+			// Add one final bin, for overflows
+			histogramBinsArray.push(
+				createNewHistogramBinObject(
+					(">" + scope.config.maximumValue), 
+					binNumberTracker
+				)
+			);
+		
+			// -----------------------------------------------------------
+			// The bins are ready; now add the data to the bins!
+			// For each piece of data in the data item, assign it to the appropriate bin
+			for (var i = 0; i < newDataUpdate.Values.length; i++) {
+				var currentValue = parseFloat(("" + newDataUpdate.Values[i].Value).replace(",",""));
+				// Check the value is not system digital value
+				if (isNaN(currentValue)) {
+					// Not a number
+					continue;
+				}
+				else
+				{
+					// Determine the correct bin for this event; remember, the first bin is for underflow
+					var binIndex = 1 + Math.floor( (currentValue - scope.config.minimumValue) / scope.config.binSize );					
+				}
+				// Check for underflow (if the value is under the min, add it to the "underflow" bin)
+				if (currentValue < scope.config.minimumValue) {
+					// If so, place in the underflow bin, which is the first bin in the array
+					binIndex = 0;
+				}
+				// Check for overflow (if the value is over the max, add it to the "overflow" bin)
+				if (currentValue > scope.config.maximumValue) {
+					// If so, place in the overflow bin, which is the last bin in the array
+					binIndex = histogramBinsArray.length - 1;
+				}
+				// Increment the bin count in the appropriate bin
+				histogramBinsArray[binIndex].binCount = (histogramBinsArray[binIndex].binCount + 1);
+			}
+			return histogramBinsArray;
+		}
+		
+		//************************************
+		// Populates the data array using a PI Point string defined bins
+		//************************************
+		function populateDataArrayUsingPIPointBinSizes(newDataUpdate, binSizesString) {
+			var histogramBinsArray = [];
+			var binNumberTracker = 0;
+			// In this case, the second arg should be a comma-separated-string of bin values
+			// which is the first value in the second date item data update
+			// Seperate the bin size string by commas
+			if (binSizesString.indexOf(",") != -1) {
+				var binSizeArray = binSizesString.split(",");
+				//console.log(binSizeArray);
+				// Add one bin, for underflows
+				histogramBinsArray.push(
+					createNewHistogramBinObject(
+						("<" + binSizeArray[0]), 
+						binNumberTracker, 
+						-9999999999, 
+						parseFloat(binSizeArray[0])
+					)
+				);
+				binNumberTracker++;	
+				
+				// Create the bins for the histogram! Loop through the bin range from the minimum to the maximum
+				for (var i = 1; i < binSizeArray.length; i ++) {
+					// Create a new object for this bin and add this bin to the histogram array
+					var newHistogramBin = createNewHistogramBinObject(
+						(binSizeArray[i-1] + "-" +  binSizeArray[i]), 
+						binNumberTracker,
+						parseFloat(binSizeArray[i-1]),
+						parseFloat(binSizeArray[i])
+					);
+					//console.log(newHistogramBin);
+					histogramBinsArray.push(newHistogramBin);
+					binNumberTracker++;
+				}
+				// Add one final bin, for overflows
+				histogramBinsArray.push(
+					createNewHistogramBinObject(
+						(">" + binSizeArray[binSizeArray.length - 1]), 
+						binNumberTracker, 
+						parseFloat(binSizeArray[binSizeArray.length - 1]), 
+						99999999
+					)
+				);
+			}
+			// Now that all the bins have been created, drop the data items into bins
+			//console.log(histogramBinsArray);
+			
+			// Loop through each received data item
+			for (var i = 0; i < newDataUpdate.Values.length; i++) {
+				var currentValue = parseFloat(("" + newDataUpdate.Values[i].Value).replace(",",""));
+				// Check the value is not system digital value
+				if (isNaN(currentValue) == false) {
+					
+					// Loop through all of the bins, and drop this item in the right bin
+					for (var binIndex = 0; binIndex < histogramBinsArray.length; binIndex++) {
+						// Check this bin;
+						// Check if the current value is less than the bin max
+						if (currentValue < histogramBinsArray[binIndex].binMaximum) {
+							// If this value is less than the bin maximum, then it belongs in this bin!
+							// Increment the count of this bin by 1!
+							histogramBinsArray[binIndex].binCount++;
+							// Having done this, exit the for loop
+							binIndex = histogramBinsArray.length;
+						}
+					}
+					
+				}
+			}
+			return histogramBinsArray;
+		}
+		
         //************************************
 		// Create a new histogram bin object
 		//************************************
-        function createNewHistogramBinObject(binLabel, binNumber) {
+        function createNewHistogramBinObject(binLabel, binNumber, binMinimum, binMaximum) {
             var newBinObject = {
                 // By default, all new bins contain zero elements
                 "binCount": 0,
@@ -242,7 +358,10 @@
                 // Apply the default color
                 "color": scope.config.seriesColor,
                 // Assign this bin a number to assist with sorting
-                "binNumber": binNumber
+                "binNumber": binNumber,
+				// Store this bin's range
+				"binMinimum": binMinimum,
+				"binMaximum": binMaximum
             };
             return newBinObject;
         }
@@ -277,21 +396,21 @@
             var newDataArray = [dataArray.length];
             if (applySortingFlag == false) {
                 // Loop through the entries in the data array, and order them by bin number
-                newDataArray = dataArray.sort(compareBinNumbers);
+                newDataArray = dataArray.sort(compareBinNumbersSortingFunction);
             } else {
                 // Loop through the entries in the data array and sort them by bin count
-                newDataArray = dataArray.sort(compareBinCounts);
+                newDataArray = dataArray.sort(compareBinCountsSortingFunction);
             }
             return newDataArray;
         }
-        function compareBinCounts(binA, binB) {
+        function compareBinCountsSortingFunction(binA, binB) {
             if (binA.binCount < binB.binCount)
                 return 1;
             if (binA.binCount > binB.binCount)
                 return -1;
             return 0;
         }
-        function compareBinNumbers(binA, binB) {
+        function compareBinNumbersSortingFunction(binA, binB) {
             if (binA.binNumber < binB.binNumber)
                 return -1;
             if (binA.binNumber > binB.binNumber)
@@ -306,19 +425,10 @@
 			// Build the titles array
 			var titlesArray = [
 				{
-					"text": "Histogram of " + totalNumberOfEvents + " data events",
-					"size": (scope.config.fontSize + 3)
+					"text": "Histogram of " + totalNumberOfEvents + " data events"
 				},
 				{
 					"text": "for data item '" + scope.config.Label + "'",
-					"size": function () {
-                        if (scope.config.fontSize >= 3) {
-                            return (scope.config.fontSize - 3);
-                        } 
-                        else {
-                            return 0;
-                        }
-                    },
 					"bold": false
 				}
 			];
@@ -383,10 +493,6 @@
                 }
                 if (customVisualizationObject.plotAreaFillColors !== scope.config.plotAreaFillColor) {
                     customVisualizationObject.plotAreaFillColors = scope.config.plotAreaFillColor;
-                }
-                if (customVisualizationObject.fontSize !== scope.config.fontSize) {
-                    customVisualizationObject.fontSize = scope.config.fontSize;
-                    customVisualizationObject.titles = createArrayOfChartTitles();
                 }
                 // Update rotation
                 if (customVisualizationObject.rotate !== scope.config.useBarsInsteadOfColumns) {
