@@ -58,7 +58,8 @@
 				oddRowColor: "none",
 				outsideBorderColor: "#202020",
 				headerBackgroundColor: "#202020",
-				headerTextColor: "white"
+				headerTextColor: "white",
+				orderFromNewestToOldest: false
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -107,8 +108,12 @@
 				if (data.Data[0].Units) {
 					scope.dataItemUnits = " (" + data.Data[0].Units + ")";
 				}
-				// Save the data to the scope!
-				scope.dataItemValues = data.Data[0].Values;
+				// If the inverted order checkbox is checked, reverse the order!
+				if (scope.config.orderFromNewestToOldest) {
+					scope.dataItemValues = data.Data[0].Values.reverse();
+				} else {
+					scope.dataItemValues = data.Data[0].Values;
+				}
 			}
 		}
 
