@@ -46,20 +46,19 @@
 				Width: 400,
 				Intervals: 1000,				
 				// Specify the value of custom configuration options; see the "configure" section below
-				showDataItemNameCheckboxValue: true,
 				showTimestampCheckboxValue: true,
+				showHeaderCheckboxValue: true,
 				showDataItemNameCheckboxStyle: "table-cell",
 				showTimestampCheckboxStyle: "table-cell",				
-				numberOfDecimalPlaces: 2,
 				dataItemColumnColor: "cyan",
-				timestampColumnColor: "lightgray",
+				timestampColumnColor: "white",
 				valueColumnColor: "lightgreen",
 				hoverColor: "darkslategray",
 				evenRowColor: "darkgray",
 				oddRowColor: "none",
-				outsideBorderColor: "none",
-				headerBackgroundColor: "none",
-				headerTextColor: "white",
+				outsideBorderColor: "#202020",
+				headerBackgroundColor: "#202020",
+				headerTextColor: "white"
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -92,8 +91,6 @@
 		var newUniqueIDString = "myCustomSymbol_" + Math.random().toString(36).substr(2, 16);
 		// Write that new unique ID back to overwrite the old id
         symbolContainerElement.id = newUniqueIDString;
-		var dataItemLabel = "";
-		var dataItemUnits;
 		//************************************
 		// When a data update occurs...
 		//************************************
@@ -103,129 +100,24 @@
 				// If the custom visualization hasn't been made yet... create the custom visualization!
 				// Custom code begins here:
 				// --------------------------------------------------------------------------------------------------
-				//console.log("Now creating custom visualization...");
-				// Clear the table
-				$('#' + symbolContainerElement.id).empty();
-
 				// Get the data item name and units
-				if (data.Data[0].Path){
-					dataItemLabel = (data.Data[0].Path.split("|"))[1]; 
+				if (data.Data[0].Label) {
+					scope.dataItemLabel = data.Data[0].Label; 
 				}
 				if (data.Data[0].Units) {
-					dataItemUnits = data.Data[0].Units;
+					scope.dataItemUnits = " (" + data.Data[0].Units + ")";
 				}
-				// For each piece of data...
-				data.Data[0].Values.forEach(function(pieceOfData) {
-					// Create a new row for the table
-					var newRow = symbolContainerElement.insertRow(-1);
-					newRow.className = "myCustomRowClass";	
-					// Add a cell to the row to contain this
-					var dataItemCell = newRow.insertCell(-1);
-					dataItemCell.innerHTML = dataItemLabel;
-					dataItemCell.className = "myCustomCellClass myCustomDataItemCellClass";
-					// Add a cell to the row to contain this
-					var timeStampCell = newRow.insertCell(-1);
-					// Check to see if the timestamp is returned as a string or data object
-					if (typeof(pieceOfData.Time) == "string")
-					{
-						timeStampCell.innerHTML = (pieceOfData.Time);
-					} else {
-						timeStampCell.innerHTML = myFormatTimestampFunction(pieceOfData.Time);
-					}
-					// Apply padding and the specified color for this column
-					timeStampCell.className = "myCustomCellClass myCustomTimestampCellClass";				
-					// Add a cell to the row to contain the value
-					var valueCell = newRow.insertCell(-1);
-					var newInnerHTMLString = "";
-					// Check if the value is a string or error; if it isn't numeric, just display the raw string
-					try {
-    					newInnerHTMLString = parseFloat(("" + pieceOfData.Value).replace(",","")).toFixed(scope.config.numberOfDecimalPlaces);
-					}
-					catch (err) {
-						newInnerHTMLString = pieceOfData.Value;
-					}
-					// If the math above failed, display the raw data value (it's likely a string)
-					if (newInnerHTMLString == "NaN") {
-						newInnerHTMLString = pieceOfData.Value;
-					}
-					valueCell.innerHTML = newInnerHTMLString;
-					// Apply padding and the specified color for this column
-					valueCell.className = "myCustomCellClass myCustomValueCellClass";	
-				});
-				// Add a row of headers
-				var headersRow = symbolContainerElement.insertRow(0);
-				// Add a cell to the row to contain this
-				var dataItemHeaderCell = headersRow.insertCell(-1);
-				dataItemHeaderCell.innerHTML = "<b>Data Item</b>";
-				dataItemHeaderCell.className = "myCustomCellClass myCustomDataItemCellClass myCustomHeaderCellClass";					
-				// Add a cell to the row to contain this
-				var timeStampHeaderCell = headersRow.insertCell(-1);
-				timeStampHeaderCell.innerHTML = "<b>Timestamp</b>";
-				timeStampHeaderCell.className = "myCustomCellClass myCustomTimestampCellClass myCustomHeaderCellClass";		
-				// Add a cell to the row to contain the value
-				var valueHeaderCell = headersRow.insertCell(-1);
-				valueHeaderCell.innerHTML = "<b>Value</b>";
-				if (dataItemUnits) {
-					valueHeaderCell.innerHTML = valueHeaderCell.innerHTML + " (" + dataItemUnits + ")";
-				}
-				valueHeaderCell.style.textAlign = "right";
-				valueHeaderCell.className = "myCustomCellClass myCustomHeaderCellClass";		
+				// Save the data to the scope!
+				scope.dataItemValues = data.Data[0].Values;
 			}
 		}
 
-		//************************************
-		// Converts a date object to a small date string
-		//************************************
-		var myMonthAbbreviationsArray = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-		function myFormatTimestampFunction(rawTime) {
-			// Set a new date object to be the time from this particular piece of data
-			var MyDateObject = new Date(0);
-            MyDateObject.setUTCSeconds(rawTime);
-			// Build a formatted string using the new date object
-			var MyDateString = "";
-			MyDateString = myPrependZeroIfNeededFunction(MyDateObject.getDate()) 
-				+ "-" 
-				+ myMonthAbbreviationsArray[MyDateObject.getMonth()] 
-				+ "-" 
-				+ MyDateObject.getFullYear()
-				+ " " 
-				+ myPrependZeroIfNeededFunction(MyDateObject.getHours()) 
-				+ ":" 
-				+ myPrependZeroIfNeededFunction(MyDateObject.getMinutes()) 
-				+ ":" 
-				+ myPrependZeroIfNeededFunction(MyDateObject.getSeconds());	
-			return MyDateString;
-		}
-		//************************************
-		// Prepends a zero to a number if necessary when building a date string, to ensure 2 digits are always present
-		//************************************
-		function myPrependZeroIfNeededFunction(MyNumber) {
-			// If the number is less than 10...
-			if (MyNumber < 10) {
-				// Add a zero ahead of it, to ensure it'll appear as two characters
-				return ("0" + MyNumber);
-			} else {
-				return (MyNumber);
-			}
-		}
 		//************************************
 		// Function that is called when custom configuration changes are made
 		//************************************
-		function myCustomConfigurationChangeFunction(data) {
-			// Update chart background and border
-			document.getElementById(symbolContainerElement.id).style.border = "3px solid " + scope.config.outsideBorderColor;
-			// Update whether or not to show cells
-			if (scope.config.showTimestampCheckboxValue) {
-				scope.config.showTimestampCheckboxStyle = "table-cell";
-			} else {
-				scope.config.showTimestampCheckboxStyle = "none";
-			}
-			if (scope.config.showDataItemNameCheckboxValue) {
-				scope.config.showDataItemNameCheckboxStyle = "table-cell";
-			} else {
-				scope.config.showDataItemNameCheckboxStyle = "none";
-			}			
+		function myCustomConfigurationChangeFunction(data) {		
 		}
+		
 		// Specify which function to call when a data update or configuration change occurs 
 		//return { dataUpdate: myCustomDataUpdateFunction, configChange:myCustomConfigurationChangeFunction };		
 	}
