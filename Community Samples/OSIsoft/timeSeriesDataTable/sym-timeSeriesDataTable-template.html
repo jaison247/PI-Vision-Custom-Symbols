@@ -3,8 +3,13 @@
 	<table id="container" class="myCustomTableClass">
 		<tbody>
             <tr ng-repeat="dataItemValue in dataItemValues" class="myCustomRowClass">
-				<td class="myCustomCellClass myCustomTimestampCellClass" ng-show="config.showTimestampCheckboxValue">{{dataItemValue.Time}}</td>
-                <td class="myCustomCellClass myCustomValueCellClass">{{dataItemValue.Value}}</td>
+				<td class="myCustomCellClass myCustomTimestampCellClass" ng-show="config.showTimestampCheckboxValue">
+					{{dataItemValue.Time}}
+				</td>
+                <td class="myCustomCellClass myCustomValueCellClass" 
+					style="color: {{ (config.enableKeywordColors && dataItemValue.Value==config.keyword1)  ? config.keyword1Color : config.valueColumnColor }}">
+					{{dataItemValue.Value}}
+				</td>
             </tr>
         </tbody>
 	</table>

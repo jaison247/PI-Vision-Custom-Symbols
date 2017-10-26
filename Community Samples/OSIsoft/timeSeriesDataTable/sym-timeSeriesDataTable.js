@@ -59,7 +59,10 @@
 				outsideBorderColor: "#202020",
 				headerBackgroundColor: "#202020",
 				headerTextColor: "white",
-				orderFromNewestToOldest: false
+				orderFromNewestToOldest: false,
+				enableKeywordColors: false,
+				keyword1: "OFF",
+				keyword1Color: "red"
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol

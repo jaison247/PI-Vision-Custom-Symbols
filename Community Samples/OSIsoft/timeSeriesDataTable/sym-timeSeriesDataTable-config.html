@@ -23,6 +23,14 @@
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.showHeaderCheckboxValue">Show Header<br />
 </label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.orderFromNewestToOldest">Orber from Newest to Oldest <br />
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.enableKeywordColors">Enable Keyword Colors<br />
+</label>
 <br/>
 
 <div class="c-side-pane t-toolbar">
@@ -52,4 +60,17 @@
 <div class="config-option-format">
 	<pv-color-picker ng-model="config.headerBackgroundColor" config="config" colorkeyword="Header Fill">
 </pv-color-picker></div>
+<div class="config-option-format" ng-show="config.enableKeywordColors">
+	<pv-color-picker id="" ng-model="config.keyword1Color" config="config" colorkeyword="Keyword 1">
+</pv-color-picker>
+</div>	
+<br>
+<div class="c-side-pane t-toolbar" ng-show="config.enableKeywordColors">
+	<span style="color:#fff; margin-left:10px;">Keyword</span>
+</div>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 14px;font-size:14px;" ng-show="config.enableKeywordColors">
+	Value
+	<input type="text" style="margin-left:8px;margin-right:8px"
+		   ng-model="config.keyword1">
+</label>
 <br>
