@@ -1,0 +1,43 @@
+<!--
+	Copyright 2016-2017 OSIsoft, LLC.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+			
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Colors</span>
+</div>
+<div class="config-option-format">
+	<pv-color-picker id="textColor" ng-model="config.textColor" config="config" colorkeyword="Text"></pv-color-picker>
+</div>	
+<div class="config-option-format">
+	<pv-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background"></pv-color-picker>
+</div>
+<div class="config-option-format">	
+	<pv-color-picker id="plotAreaFillColor" ng-model="config.plotAreaFillColor" config="config" colorkeyword="Plot Area"></pv-color-picker>
+</div>	
+<div class="config-option-format">
+	<pv-color-picker id="seriesColor" ng-model="config.seriesColor" config="config" colorkeyword="Series"></pv-color-picker>
+</div>
+<br>
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Display Options</span>
+</div>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showTitle">Show Title<br />
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showChartScrollBar">Show Chart Scroll Bar<br />
+</label>
+<br />
