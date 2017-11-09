@@ -43,7 +43,11 @@
 				// Specify the value of custom configuration options below, if any
 				showTitle: true,
 				backgroundColor: "white",
-				seriesColor: "black"
+				seriesColor: "black",
+				textColor: "black",
+				xAxisColor: "red",
+				yAxisColor: "green",
+				zAxisColor: "blue"
             };
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -119,7 +123,13 @@
 							dataArray[0].push(newXValue);
 							dataArray[1].push(newYValue);
 							dataArray[2].push(newZValue);
-							dataArray[3].push("" + data.Data[0].Values[i].Time);
+							// Create the label!
+							dataArray[3].push(
+								"<b>" + trimBeforePipe(dataItemLabels[0]) + "</b>: " + newXValue + "<br>" + 
+								"<b>" + trimBeforePipe(dataItemLabels[1]) + "</b>: " + newYValue + "<br>" + 
+								"<b>" + trimBeforePipe(dataItemLabels[2]) + "</b>: " + newZValue + "<br>" + 
+								data.Data[0].Values[i].Time
+							);
 						}
 					}
 				}
@@ -134,7 +144,7 @@
 							x: dataArray[0],
 							y: dataArray[1],
 							z: dataArray[2],
-							hoverinfo: "x+y+z+text",
+							hoverinfo: "text",
 							text: dataArray[3],
 							marker: {
 								color: scope.config.seriesColor,
@@ -152,7 +162,10 @@
 						title: createChartTitles(),
 						autosize: true,
 						scene: createScene(),
-						paper_bgcolor: scope.config.backgroundColor
+						paper_bgcolor: scope.config.backgroundColor,
+						font: {
+							color: scope.config.textColor
+						}
 					};
 					var config = {
 						showLink: false,
@@ -204,45 +217,49 @@
 			}
 			return titleText;
 		}
+		
+		// Create the 3d environment
 		function createScene() {
+			// Initialize the scene colors
 			var scene = {
 				xaxis:{
-					color: "red",
+					color: scope.config.xAxisColor,
 					titlefont: {
-						color: "red"
+						color: scope.config.xAxisColor
 					}
 				},
 				yaxis:{
-					color: "green",
+					color: scope.config.yAxisColor,
 					titlefont: {
-						color: "green"
+						color: scope.config.yAxisColor
 					}
 				},
 				zaxis:{
-					color: "blue",
+					color: scope.config.zAxisColor,
 					titlefont: {
-						color: "blue"
+						color: scope.config.zAxisColor
 					}
 				}
 			};
-			// Start with the first data item
-			if (dataItemLabels[0].indexOf("|") != -1) {
-				scene.xaxis.title = "X: " + dataItemLabels[0].split("|").slice(-1)[0];
-			} else {
-				scene.xaxis.title = "X: " + dataItemLabels[0];
-			}
-			// Add all subsequent items
-			if (dataItemLabels[1].indexOf("|") != -1) {
-				scene.yaxis.title = "Y: " + dataItemLabels[1].split("|").slice(-1)[0];
-			} else {
-				scene.yaxis.title = "Y: " + dataItemLabels[1];
-			}
-			if (dataItemLabels[2].indexOf("|") != -1) {
-				scene.zaxis.title = "Z: " + dataItemLabels[2].split("|").slice(-1)[0];
-			} else {
-				scene.zaxis.title = "Z: " + dataItemLabels[2];
-			}
+			// Add axis labels
+			scene.xaxis.title = "X: " + trimBeforePipe(dataItemLabels[0]);
+			scene.yaxis.title = "Y: " + trimBeforePipe(dataItemLabels[1]);
+			scene.zaxis.title = "Z: " + trimBeforePipe(dataItemLabels[2]);
+			// Return the finished scene
 			return scene;
+		}
+		
+		// Helper function that gets the attribute name only of an af attribute
+		function trimBeforePipe(inputString) {
+			var result = "";
+			// If it's a PI tag, there won't be a |; thus, return the raw tag!
+			if (inputString.indexOf("|") == -1) {
+				result = inputString;
+			} else {
+				// Trim everything before and including the last | character
+				result = inputString.split("|").slice(-1)[0];
+			}
+			return result;
 		}
 		
 		//************************************
@@ -262,6 +279,7 @@
 				symbolContainerDiv.layout.title = createChartTitles();
 				// Update the colors
 				symbolContainerDiv.layout.paper_bgcolor = scope.config.backgroundColor;
+				symbolContainerDiv.layout.font.color = scope.config.textColor;
 				symbolContainerDiv.data[0].marker = {
 					color: scope.config.seriesColor,
 					size: 12,
