@@ -50,7 +50,8 @@
 				borderColor: "white",
 				// Arrays to hold strings and colors
 				uniqueStringsArray: [],
-				uniqueColorsArray: []
+				uniqueColorsArray: [],
+				useFixedColors: true
             };
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -156,8 +157,11 @@
 				
 				// Format the data as a new array that can be easily plotted; first, grab the minimum and maximum
 				for (var i = 0; i < data.Data[0].Values.length; i++) {
-                    // Look up the color!
-					var uniqueColorForThisString = scope.config.uniqueColorsArray[ scope.config.uniqueStringsArray.indexOf(data.Data[0].Values[i].Value) ];
+                    // Look up the color!  By default, just use a unique color!
+					var uniqueColorForThisString = DEFAULT_CHART_COLORS[ i % DEFAULT_CHART_COLORS.length ];
+					if (scope.config.useFixedColors) {
+						uniqueColorForThisString = scope.config.uniqueColorsArray[ scope.config.uniqueStringsArray.indexOf(data.Data[0].Values[i].Value) ];
+					}
 					
 					// Create a new event object
 					var newDataObject = {

@@ -24,6 +24,10 @@
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.showChartScrollBar">Show Chart Scroll Bar<br />
 </label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.useFixedColors">Use Fixed Colors<br />
+</label>
 <br />
 <div class="c-side-pane t-toolbar">
 	<span style="color:#fff; margin-left:10px;">Chart Colors</span>
@@ -41,10 +45,10 @@
 	<pv-color-picker ng-model="config.borderColor" config="config" colorkeyword="Border"></pv-color-picker>
 </div>	
 <br>
-<div class="c-side-pane t-toolbar">
-	<span style="color:#fff; margin-left:10px;">Data Colors</span>
+<div class="c-side-pane t-toolbar" ng-show="config.useFixedColors">
+	<span style="color:#fff; margin-left:10px;">Fixed Colors</span>
 </div>
-<div ng-repeat="thisString in config.uniqueStringsArray track by $index">
+<div ng-repeat="thisString in config.uniqueStringsArray track by $index" ng-show="config.useFixedColors">
 	<div class="config-option-format">	
 		<pv-color-picker ng-model="config.uniqueColorsArray[$index]" config="config" colorkeyword="{{thisString}}"></pv-color-picker>
 	</div>	
