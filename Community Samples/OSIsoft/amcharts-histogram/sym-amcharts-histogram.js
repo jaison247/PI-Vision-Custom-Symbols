@@ -52,7 +52,11 @@
                 sortBinsByValue: false,
                 useGradientBinColors: true,
                 seriesColor: "red",
-				usePIPointBinSizes: false
+				usePIPointBinSizes: false,
+				
+				addLowAndHighThresholds: false,
+				lowThresholdColor: "purple",
+				highThresholdColor: "red"
             };
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -202,9 +206,49 @@
 						customVisualizationObject.titles = null;
 					}					
 					customVisualizationObject.dataProvider = dataArray;
-					customVisualizationObject.validateData();
-					customVisualizationObject.validateNow();
 				}
+				// Either way, if threshold guides should be added, add them!
+				if (customVisualizationObject) {
+					if (scope.config.addLowAndHighThresholds) {
+						var thresholdGuidesArray = [];
+						// Add a guide after the first category and before the last category
+						// Add low guide
+						thresholdGuidesArray.push({
+							"above": true,
+							"inside": true,
+							"lineAlpha": 1,
+							"category": customVisualizationObject.categoryAxis.data[0].category,
+							"toCategory" : customVisualizationObject.categoryAxis.data[0].category,
+							"lineColor": scope.config.lowThresholdColor,
+							"label": "Low",
+							"labelRotation": 90,
+							"balloonText": "Low Threshold:<br /><b>" + customVisualizationObject.categoryAxis.data[0].category + "</b>",
+							"lineThickness": 2,
+							"dashLength": 1,
+							"position": "right"
+						});
+						// Add high guide
+						thresholdGuidesArray.push({
+							"above": true,
+							"inside": true,
+							"lineAlpha": 1,
+							"category": customVisualizationObject.categoryAxis.data[ (customVisualizationObject.categoryAxis.data.length - 1) ].category,
+							"toCategory" : customVisualizationObject.categoryAxis.data[ (customVisualizationObject.categoryAxis.data.length - 1) ].category,
+							"lineColor": scope.config.highThresholdColor,
+							"label": "High",
+							"labelRotation": 90,
+							"balloonText": "High Threshold:<br /><b>" + customVisualizationObject.categoryAxis.data[ (customVisualizationObject.categoryAxis.data.length - 1) ].category + "</b>",
+							"lineThickness": 2,
+							"dashLength": 1,
+							"position": "left"
+						});
+						// Add these guides to the chart
+						customVisualizationObject.categoryAxis.guides = thresholdGuidesArray;
+					}
+				}
+				// Redraw the chart
+				customVisualizationObject.validateData();
+				customVisualizationObject.validateNow();
 			}
 		}
         

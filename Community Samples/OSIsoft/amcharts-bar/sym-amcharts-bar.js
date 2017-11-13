@@ -51,7 +51,10 @@
 				includeElementName: true,
 				axisPosition: "left",
 				axesColor: "white",
-				showCategoryAxisLabels: true
+				showCategoryAxisLabels: true,
+				alternateEvenAndOddColors: false,
+				evenColor: "yellow",
+				oddColor: "orange"
                 
             };
 		},
@@ -136,11 +139,13 @@
 		// Specify a default color pallette
 		//************************************
         var chartColors = ["rgb(62, 152, 211)", "rgb(224, 138, 0)", "rgb(178, 107, 255)", "rgb(47, 188, 184)", "rgb(219, 70, 70)", "rgb(156, 128, 110)", "rgb(60, 191, 60)", "rgb(197, 86, 13)","rgb(46, 32, 238)","rgb(165, 32, 86)" ];
-        
+        var evenOddColors = [scope.config.evenColor, scope.config.oddColor];
+		
         //************************************
 		// Convert the data update from PI Vision into a format that amCharts accepts
 		//************************************
 		function convertToChartDataFormat(newdata, labels) {
+
 			return newdata.Rows.map(
                 function(item, index) {
                     return {
@@ -148,7 +153,8 @@
                         Time: item.Time,
                         StreamName: labels[index].Label,
                         uniqueColor: chartColors[index],
-                        commonColor: scope.config.seriesColor
+                        commonColor: scope.config.seriesColor,
+						evenOrOddColor: evenOddColors[(index % 2)]
                     }
                 }
             );
@@ -222,6 +228,9 @@
 				labels = getLabels(scope.symbol.DataSources);
 			}
 			
+			// Update the even and odd colors
+			evenOddColors = [scope.config.evenColor, scope.config.oddColor];
+			
             if (chart) {
                 // Apply new settings
                 //chart.sortColumns = scope.config.sortItemsByValue;
@@ -247,6 +256,10 @@
                     chart.graphs[0].fillColorsField = "uniqueColor";
                     chart.graphs[0].lineColorField  = "uniqueColor";
                     chart.graphs[0].labelColorField = "uniqueColor";
+				} else if (scope.config.alternateEvenAndOddColors) {
+					chart.graphs[0].fillColorsField = "evenOrOddColor";
+                    chart.graphs[0].lineColorField  = "evenOrOddColor";
+                    chart.graphs[0].labelColorField = "evenOrOddColor";					
                 } else {
                     chart.graphs[0].fillColorsField = "commonColor";
                     chart.graphs[0].lineColorField  = "commonColor";

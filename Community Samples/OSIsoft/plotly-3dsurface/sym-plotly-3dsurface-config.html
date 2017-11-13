@@ -13,23 +13,33 @@
 	See the License for the specific language governing permissions and
 	limitations under the License.
 -->
-<br>
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Display Options</span>
+</div>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;font-size:14px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.showTitle">Show Title<br />
 </label>
 <br>
 
 <div class="c-side-pane t-toolbar">
-	<span style="color:#fff; margin-left:10px;">Background</span>
+	<span style="color:#fff; margin-left:10px;">Colors</span>
 </div>
 <div class="config-option-format">
-	<pv-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config"></pv-color-picker>
-</div>	
-
-<div class="c-side-pane t-toolbar">
-	<span style="color:#fff; margin-left:10px;">Data Series</span>
-</div>
+	<pv-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background">
+</pv-color-picker></div>	
 <div class="config-option-format">
-	<pv-color-picker id="seriesColor" ng-model="config.seriesColor" config="config"></pv-color-picker>
-</div>
+	<pv-color-picker id="seriesColor" ng-model="config.seriesColor" config="config" colorkeyword="Series">
+</pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker id="textColor" ng-model="config.textColor" config="config" colorkeyword="Text">
+</pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker id="xAxisColor" ng-model="config.xAxisColor" config="config" colorkeyword="X Axis">
+</pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker id="yAxisColor" ng-model="config.yAxisColor" config="config" colorkeyword="Y Axis">
+</pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker id="zAxisColor" ng-model="config.zAxisColor" config="config" colorkeyword="Z Axis">
+</pv-color-picker></div>

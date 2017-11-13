@@ -1,8 +1,30 @@
 <div style="width:100%;height:100%;display:block;overflow-y:auto;overflow-x:hidden">
-	<table id="container" style="width:100%;height:100%;color:white;text-align:left;overflow-y:auto;padding:15px;display:block;border:3px solid {{config.outsideBorderColor}};display:table;">
+	<div class="myCustomCellClass myCustomHeaderCellClass" ng-show="config.showHeaderCheckboxValue">{{dataItemLabel}}{{dataItemUnits}}</div>
+	<table id="container" class="myCustomTableClass">
+		<tbody>
+            <tr ng-repeat="dataItemValue in dataItemValues" class="myCustomRowClass">
+				<td class="myCustomCellClass myCustomTimestampCellClass" ng-show="config.showTimestampCheckboxValue">
+					{{dataItemValue.Time}}
+				</td>
+                <td class="myCustomCellClass myCustomValueCellClass" 
+					style="color: {{ (config.enableKeywordColors && dataItemValue.Value==config.keyword1)  ? config.keyword1Color : config.valueColumnColor }}">
+					{{dataItemValue.Value}}
+				</td>
+            </tr>
+        </tbody>
 	</table>
 <div>
 <style>
+	/* Table styling */
+	.myCustomTableClass {
+		width:100%;
+		height:100%;
+		text-align:left;
+		overflow-y:auto;
+		padding:15px;
+		border:3px solid {{config.outsideBorderColor}};
+		display:table;"
+	}
 	.myCustomRowClass:nth-child(even) {
 		background: {{config.evenRowColor}}
 	}
@@ -18,10 +40,6 @@
 		padding-Top:   5px;
 		padding-Bottom:5px;	
 	}
-	.myCustomDataItemCellClass {
-		color: {{config.dataItemColumnColor}};
-		display: {{config.showDataItemNameCheckboxStyle}};
-	}
 	.myCustomTimestampCellClass {
 		color: {{config.timestampColumnColor}};
 		display: {{config.showTimestampCheckboxStyle}};
@@ -35,4 +53,18 @@
 		background: {{config.headerBackgroundColor}}; 
 		color: {{config.headerTextColor}}; 
 	}	
+	/* Scrollbar styling */
+	::-webkit-scrollbar {
+		width: 12px;
+		background-color:gray;
+		border-radius: 10px;
+	}
+	::-webkit-scrollbar-track {
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+		border-radius: 10px;
+	}
+	::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+	}
 </style>
