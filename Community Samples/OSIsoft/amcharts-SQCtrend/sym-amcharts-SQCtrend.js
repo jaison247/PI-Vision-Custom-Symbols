@@ -23,13 +23,13 @@
 	var myCustomSymbolDefinition = {
 		// Specify the unique name for this symbol; this instructs PI Vision to also
 		// look for HTML template and config template files called sym-<typeName>-template.html and sym-<typeName>-config.html
-		typeName: 'amcharts-trend',
+		typeName: 'amcharts-SQCtrend',
 		// Specify the user-friendly name of the symbol that will appear in PI Vision
-		displayName: 'amCharts Single-Trace Trend',
+		displayName: 'amCharts SQC Trend',
 		// Specify the number of data sources for this symbol; just a single data source or multiple
 		datasourceBehavior: CS.Extensibility.Enums.DatasourceBehaviors.Single,
 		// Specify the location of an image file to use as the icon for this symbol
-		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/amcharts-trend.png',
+		iconUrl: '/Scripts/app/editor/symbols/ext/Icons/amcharts-SQCtrend.png',
 		visObjectType: symbolVis,
 		// Specify default configuration for this symbol
 		getDefaultConfig: function () {
@@ -44,16 +44,27 @@
 				// Specify the value of custom configuration options
 				minimumYValue: 0,
 				maximumYValue: 100,
-				useCustomYAxisRange: false,
+				yAxisRange: 'allSigma',
 				showTitle: false,
                 textColor: "white",
                 backgroundColor: "transparent",
                 plotAreaFillColor: "transparent",
                 seriesColor: "rgb(62, 152, 211)",
                 showChartScrollBar: true,
-				useColumns: false
+				useColumns: false,
+                decimalPlaces: 2,
+                bulletSize: 8,
+				numberOfSigmas: '4',
+				// Colors
+				meanColor: "rgb(224, 138, 0)",
+				sigma1Color: "rgb(178, 107, 255)",
+				sigma2Color: "rgb(47, 188, 184)",
+				sigma3Color: "rgb(219, 70, 70)",
+				sigma4Color: "rgb(156, 128, 110)"
             };
 		},
+        // Allow use in collections! !!!!!!!!!!!!!!!!!!!!!!!!!
+        supportsCollections: true,
 		// By including this, you're specifying that you want to allow configuration options for this symbol
         configOptions: function () {
             return [{
@@ -62,7 +73,7 @@
 				// Supply a unique name for this cofiguration setting, so it can be reused, if needed
                 mode: 'format'
             }];
-        },
+        }
         // Specify the name of the function that will be called to initialize the symbol
 		//init: myCustomSymbolInitFunction
 	};
@@ -73,7 +84,7 @@
 	//function myCustomSymbolInitFunction(scope, elem) {
 	function symbolVis() { }
     CS.deriveVisualizationFromBase(symbolVis);
-	symbolVis.prototype.init = function(scope, elem) {
+	symbolVis.prototype.init = function (scope, elem) {
 		// Specify which function to call when a data update or configuration change occurs 
 		this.onDataUpdate = myCustomDataUpdateFunction;
 		this.onConfigChange = myCustomConfigurationChangeFunction;
@@ -88,12 +99,12 @@
 		var customVisualizationObject = false;
 		// Create a variable to hold the combined data array
 		var dataArray = [];
-		
-        //************************************
-		// Specify a default color pallette
-		//************************************
-        var chartColors = ["rgb(62, 152, 211)", "rgb(224, 138, 0)", "rgb(178, 107, 255)", "rgb(47, 188, 184)", "rgb(219, 70, 70)", "rgb(156, 128, 110)", "rgb(60, 191, 60)", "rgb(197, 86, 13)","rgb(46, 32, 238)","rgb(165, 32, 86)" ];
-        		
+		// Save the mean and std. deviation
+        var mean = 0;
+        var standardDeviation = 0;
+        // Create vars to hold the min and max y-axis values
+		var autoScaleMinimumValue, autoScaleMaximumValue;
+        
 		//************************************
 		// When a data update occurs...
 		//************************************
@@ -117,7 +128,11 @@
                 if (data.Data[0].Units) {
 					scope.config.Units = data.Data[0].Units;
                 }
-				// Format the data as a new array that can be easily plotted
+				// Add values to the data array; also calculate the mean and standard deviation! 
+				// first, grab the minimum and maximum
+				autoScaleMinimumValue = parseFloat(("" + data.Data[0].Values[0].Value).replace(",", ""));
+				autoScaleMaximumValue = parseFloat(("" + data.Data[0].Values[0].Value).replace(",", ""));
+				var arrayOfValidReadings = [];
 				for (var i = 0; i < data.Data[0].Values.length; i++) {
                     // Create a new event object
 					var newDataObject = {
@@ -126,10 +141,34 @@
 					};
 					// Add this object to the data array
 					dataArray.push(newDataObject);
+					// Add the value to the sum and count, if applicable!
+					if (!isNaN(newDataObject.value)) {
+						// Save this value, and add the value to the sum!
+						arrayOfValidReadings.push(newDataObject.value);
+					}
+					// Update the max and min, which later will be used for auto-scaling the chart
+					if (newDataObject.value > autoScaleMaximumValue) {
+						autoScaleMaximumValue = newDataObject.value;
+					}
+					if (newDataObject.value < autoScaleMinimumValue) {
+						autoScaleMinimumValue = newDataObject.value;
+					}
 				}
+				// Compute the mean!
+				mean = average(arrayOfValidReadings);
+                
+				// Compute the standard deviation!
+                //console.log(arrayOfValidReadings);
+				standardDeviation = computeStandardDeviation(arrayOfValidReadings);
+
 				//console.log("Data array: ", dataArray);
 				// Create the custom visualization
 				if (!customVisualizationObject) {
+                    // Get the min, max, and guides
+                    var tempMin = getCorrectChartMin();
+                    var tempMax = getCorrectChartMax();
+                    var tempGuides = makeGuidesArray();
+                    // Create the chart
 					customVisualizationObject = AmCharts.makeChart(symbolContainerDiv.id, {
 						"type": "serial",
 						"backgroundAlpha": 1,
@@ -138,7 +177,7 @@
 						"plotAreaFillAlphas": 1,
 						"autoMargin": true,
 						"autoMarginOffset": 30,
-						"marginRight": 50,
+						"marginRight": 60,
 						"plotAreaFillColors": scope.config.plotAreaFillColor,
 						"creditsPosition": "bottom-right",
 						"titles": createArrayOfChartTitles(),
@@ -169,16 +208,23 @@
 								"inside": false,
 								"axisAlpha": 1,
 								"axisColor": "white",
-								"fillAlpha": 0.05,
-								"gridAlpha": 0,								
+								//"fillAlpha": 0.05,
+								"fillAlpha": 0,
+								"gridAlpha": 0,
+                                // New!!!!!!!!!!!!!!!!!!!!!
+                                "minimum": tempMin,
+                                "maximum": tempMax,
+                                "guides": tempGuides
 							}
 						],
 						"graphs": [{
                             "id": "g1",
 							"type": "line",
                             "lineColor": scope.config.seriesColor,
-							"balloonText": scope.config.Label + "<br /><b>[[timestamp]]</b><br />[[value]] " + scope.config.Units, 
-							"valueField": "value"
+							"balloonText": scope.config.Label + "<br /><b>[[timestamp]]</b><br />[[value]] " + scope.config.Units + "<br/>Mean: " + mean.toFixed(scope.config.decimalPlaces)  + "<br/>Std. Dev.: " + standardDeviation.toFixed(scope.config.decimalPlaces),  
+							"valueField": "value",
+                            "bullet": "square",
+                            "bulletSize": scope.config.bulletSize
 						}],
 						"dataProvider": dataArray,
 						"categoryField": "timestamp",
@@ -198,15 +244,12 @@
 					} else {
 						customVisualizationObject.titles = null;
 					}	
-					// Apply fixed scaling, if turned on
-					if (scope.config.useCustomYAxisRange) {
-						customVisualizationObject.valueAxes[0].minimum = scope.config.minimumYValue;
-						customVisualizationObject.valueAxes[0].maximum = scope.config.maximumYValue;
-					} else {
-						customVisualizationObject.valueAxes[0].minimum = undefined;
-						customVisualizationObject.valueAxes[0].maximum = undefined;
-					}
-					// Refresh the graph
+                    // Update the chart min and max
+                    customVisualizationObject.valueAxes[0].minimum = getCorrectChartMin();
+                    customVisualizationObject.valueAxes[0].maximum = getCorrectChartMax();
+					// Update the guides
+                    customVisualizationObject.valueAxes[0].guides = makeGuidesArray();
+                    // Refresh the graph
 					customVisualizationObject.dataProvider = dataArray;
 					customVisualizationObject.validateData();
 					customVisualizationObject.validateNow();
@@ -215,20 +258,130 @@
 		}
         
 		//************************************
+		// Creates a chart guide!
+		//************************************
+		function createGuide(guideStart, guideEnd, color) {
+			var label =  (guideEnd.toFixed(scope.config.decimalPlaces) + "-\n" + guideStart.toFixed(scope.config.decimalPlaces));
+            if (guideEnd == guideStart) label = guideEnd.toFixed(scope.config.decimalPlaces);
+            return {
+				"fillAlpha": 0.20,
+				"value": guideStart,
+				"toValue": guideEnd,
+				"fillColor": color,
+				"color": color,
+				"label": label,
+				"position": "right",
+                "boldLabel": true
+			};
+		}
+		
+		//************************************
+		// Creates multiple chart guides, depending on the requested settings!
+		//************************************
+		function makeGuidesArray() {
+			var guidesArray = [];
+            var numberOfSigmasInt = parseInt(scope.config.numberOfSigmas, 10);
+			// Add the mean and 1 sigma
+			guidesArray.push(createGuide(mean, mean, scope.config.meanColor));
+			guidesArray.push(createGuide(mean + 0 * standardDeviation, mean + 1 * standardDeviation, scope.config.sigma1Color));
+			guidesArray.push(createGuide(mean - 0 * standardDeviation, mean - 1 * standardDeviation, scope.config.sigma1Color));
+			// If requested, add 2 sigma
+			if (numberOfSigmasInt >= 2) {
+				guidesArray.push(createGuide(mean + 1 * standardDeviation, mean + 2 * standardDeviation, scope.config.sigma2Color));
+				guidesArray.push(createGuide(mean - 1 * standardDeviation, mean - 2 * standardDeviation, scope.config.sigma2Color));
+			}
+			// If requested, add 3 sigma
+			if (numberOfSigmasInt >= 3) {
+				guidesArray.push(createGuide(mean + 2 * standardDeviation, mean + 3 * standardDeviation, scope.config.sigma3Color));
+				guidesArray.push(createGuide(mean - 2 * standardDeviation, mean - 3 * standardDeviation, scope.config.sigma3Color));
+			}
+			// If requested, add 4 sigma
+			if (numberOfSigmasInt >= 4) {
+				guidesArray.push(createGuide(mean + 3 * standardDeviation, mean + 4 * standardDeviation, scope.config.sigma4Color));
+				guidesArray.push(createGuide(mean - 3 * standardDeviation, mean - 4 * standardDeviation, scope.config.sigma4Color));			
+			}
+            //console.log("Guides array: ", guidesArray);
+            return guidesArray;
+		}
+		
+		//************************************
+		// Function that computes the average and standard deviation of a dataset; see
+		// https://derickbailey.com/2014/09/21/calculating-standard-deviation-with-array-map-and-array-reduce-in-javascript/
+		//************************************
+		function computeStandardDeviation(values) {
+			// First, calculate the average
+			var avg = average(values);
+			// Next, create an array of the squared differences between each value and the mean
+			var squareDiffs = values.map(function(value){
+				// Calculate the difference from the mean
+				var diff = value - avg;
+				// Square that difference
+				var sqrDiff = diff * diff;
+				return sqrDiff;
+			});
+			// Calculate the average of the squred differences from the mean
+			var avgSquareDiff = average(squareDiffs);
+			// Take the square root of that average
+			var stdDev = Math.sqrt(avgSquareDiff);
+			return stdDev;
+		}
+        
+		function average(data) {
+			// Add all of the items!
+            var sum = data.reduce(function(sum, value){
+				return sum + value;
+			}, 0);
+			// Divide the sum by the number of items!
+			var avg = sum / data.length;
+			return avg;
+		}
+		
+        //************************************
+		// Function that gets the chart min and max
+		//************************************
+        function getCorrectChartMin() {
+            var result =  undefined;
+            // Apply fixed scaling, if turned on
+            if (scope.config.yAxisRange == 'customRange') {
+                result = scope.config.minimumYValue;
+            } else if (scope.config.yAxisRange == 'fitAllSigma') {
+                result = mean - standardDeviation * parseInt(scope.config.numberOfSigmas, 10);
+            } else {
+                // In this case, fit all values!
+                result = undefined;
+            }
+            return result;
+        }
+        function getCorrectChartMax() {
+            var result =  undefined;
+            // Apply fixed scaling, if turned on
+            if (scope.config.yAxisRange == 'customRange') {
+                result = scope.config.maximumYValue;
+            } else if (scope.config.yAxisRange == 'fitAllSigma') {
+                result = mean + standardDeviation * parseInt(scope.config.numberOfSigmas, 10);
+            } else {
+                // In this case, fit all values!
+                result = undefined;
+            }
+            return result;
+        }
+		
+        
+		//************************************
 		// Function that returns an array of titles
 		//************************************
 		function createArrayOfChartTitles() {
-            var titleText = "";
+            var titleText = "SQC Trend (-" + scope.config.numberOfSigmas + " to +" + scope.config.numberOfSigmas + " Sigma) of ";
             if (scope.config.Units) {
-                titleText =  ("Trend of" + scope.config.Label + " (" + scope.config.Units + ")");
+                titleText += scope.config.Label + " (" + scope.config.Units + ")";
             } else {
-                titleText =  ("Trend of" + scope.config.Label);
+                titleText += scope.config.Label;
             }
 			// Build the titles array
 			var titlesArray = [
 				{
 					"text": titleText,
-					"bold": false
+					"bold": true
 				}
 			];
 			return titlesArray;
@@ -237,7 +390,7 @@
 		//************************************
 		// Function that is called when custom configuration changes are made
 		//************************************
-		function myCustomConfigurationChangeFunction(data) {
+		function myCustomConfigurationChangeFunction() {
 			// If the visualization exists...
 			if(customVisualizationObject) {
 				// Turn on column display (instead of line display, if specified)
@@ -246,14 +399,9 @@
 				} else {
 					customVisualizationObject.graphs[0].type = "line";
 				}
-				// Apply fixed scaling, if turned on
-				if (scope.config.useCustomYAxisRange) {
-					customVisualizationObject.valueAxes[0].minimum = scope.config.minimumYValue;
-					customVisualizationObject.valueAxes[0].maximum = scope.config.maximumYValue;
-				} else {
-					customVisualizationObject.valueAxes[0].minimum = undefined;
-					customVisualizationObject.valueAxes[0].maximum = undefined;
-				}				
+                // Update the chart min and max
+                customVisualizationObject.valueAxes[0].minimum = getCorrectChartMin();
+                customVisualizationObject.valueAxes[0].maximum = getCorrectChartMax();
 				// Update the title
 				if (scope.config.showTitle) {
 					customVisualizationObject.titles = createArrayOfChartTitles();
@@ -278,6 +426,10 @@
                 if (customVisualizationObject.chartScrollbar.enabled != scope.config.showChartScrollBar) {
                     customVisualizationObject.chartScrollbar.enabled = scope.config.showChartScrollBar;
                 }
+                // Update the bullets 
+                customVisualizationObject.graphs[0].bulletSize = scope.config.bulletSize;
+				// Update the guides
+                customVisualizationObject.valueAxes[0].guides = makeGuidesArray();
 				// Commit updates to the chart
 				customVisualizationObject.validateNow();
 			}
