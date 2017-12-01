@@ -25,11 +25,19 @@
 </label>
 <label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
 	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showSearchCheckboxValue">Show Search Filter<br />
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.orderFromNewestToOldest">Orber from Newest to Oldest <br />
 </label>
 <label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.enableKeywordColors">Enable Keyword Colors<br />
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showApplyTimeControls">Show Apply Time Controls<br />
 </label>
 <br/>
 
@@ -60,8 +68,17 @@
 <div class="config-option-format">
 	<pv-color-picker ng-model="config.headerBackgroundColor" config="config" colorkeyword="Header Fill">
 </pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker ng-model="config.searchTextColor" config="config" colorkeyword="Search Text">
+</pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker ng-model="config.searchBackgroundColor" config="config" colorkeyword="Search Fill">
+</pv-color-picker></div>
 <div class="config-option-format" ng-show="config.enableKeywordColors">
 	<pv-color-picker id="" ng-model="config.keyword1Color" config="config" colorkeyword="Keyword 1">
+</pv-color-picker>
+<div class="config-option-format" ng-show="config.showApplyTimeControls">
+	<pv-color-picker id="" ng-model="config.controlColumnColor" config="config" colorkeyword="Time Controls">
 </pv-color-picker>
 </div>	
 <br>

@@ -1,14 +1,26 @@
-<div style="width:100%;height:100%;display:block;overflow-y:auto;overflow-x:hidden">
-	<div class="myCustomCellClass myCustomHeaderCellClass" ng-show="config.showHeaderCheckboxValue">{{dataItemLabel}}{{dataItemUnits}}</div>
+<div style="width:100%;height:100%;display:block;overflow-y:auto;overflow-x:hidden;font-size:14px;">
+	<div class="myCustomCellClass myCustomHeaderCellClass" ng-show="config.showHeaderCheckboxValue">
+		{{dataItemLabel}}{{dataItemUnits}}
+	</div>
+	<div class="myCustomCellClass myCustomSearchCellClass" ng-show="config.showSearchCheckboxValue" style="text-align:right">
+		Value Filter:<input type="text" style="margin-left:8px;text-align:center;margin-right:8px;" ng-model="config.searchFilter"><button style="display:inline;background-color:gray;padding:2px 4px 2px 4px;color:white" type="button" ng-click="config.searchFilter = '';">Clear</button>
+	</div>
 	<table id="container" class="myCustomTableClass">
 		<tbody>
-            <tr ng-repeat="dataItemValue in dataItemValues" class="myCustomRowClass">
+            <tr ng-repeat="dataItemValue in dataItemValues | orderBy:sortType:sortReverse | filter:config.searchFilter"  class="myCustomRowClass">
 				<td class="myCustomCellClass myCustomTimestampCellClass" ng-show="config.showTimestampCheckboxValue">
 					{{dataItemValue.Time}}
 				</td>
                 <td class="myCustomCellClass myCustomValueCellClass" 
 					style="color: {{ (config.enableKeywordColors && dataItemValue.Value==config.keyword1)  ? config.keyword1Color : config.valueColumnColor }}">
 					{{dataItemValue.Value}}
+				</td>
+				<!-- TIme controls -->
+				<td class="myCustomCellClass myCustomControlCellClass" ng-show="config.showApplyTimeControls" ng-click="config.applyTime('startTime', dataItemValue.Time)">
+					Use as Start Time
+				</td>
+				<td class="myCustomCellClass myCustomControlCellClass" ng-show="config.showApplyTimeControls" ng-click="config.applyTime('endTime', dataItemValue.Time)">
+					Use as End Time
 				</td>
             </tr>
         </tbody>
@@ -39,11 +51,18 @@
 		padding-Right: 10px;
 		padding-Top:   5px;
 		padding-Bottom:5px;	
+		vertical-align: middle;
 	}
 	.myCustomTimestampCellClass {
 		color: {{config.timestampColumnColor}};
 		display: {{config.showTimestampCheckboxStyle}};
 	}
+	.myCustomControlCellClass {
+		color: {{config.controlColumnColor}};
+		font-size: 11px;
+		text-align:center;
+		text-decoration: underline;
+	}	
 	.myCustomValueCellClass {
 		color: {{config.valueColumnColor}};
 		text-align:right;
@@ -53,6 +72,11 @@
 		background: {{config.headerBackgroundColor}}; 
 		color: {{config.headerTextColor}}; 
 	}	
+	.myCustomSearchCellClass {
+		border-bottom: 2px solid white;
+		background: {{config.searchBackgroundColor}}; 
+		color: {{config.searchTextColor}}; 
+	}		
 	/* Scrollbar styling */
 	::-webkit-scrollbar {
 		width: 12px;
