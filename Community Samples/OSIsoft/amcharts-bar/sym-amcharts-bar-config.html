@@ -63,30 +63,42 @@
         </select>
     </div>
 </div>
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.useBarsInsteadOfColumns">Rotate 90 Degrees<br />
 </label>  
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.useUniqueDataItemColors">Use Unique Data Item Colors<br />
 </label>  
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.showLabels">Show Value Labels<br />
 </label> 
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.showCategoryAxisLabels">Show X-Axis Labels<br />
 </label> 
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.includeElementName">Include Element Name<br />
 </label> 
-<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;">
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;">
 	<input type="checkbox" class="c-config-checkbox"
 		   ng-model="config.alternateEvenAndOddColors">Alternate Bar Colors<br />
 </label> 
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.useFixedAxisRange">Use fixed Y-axis range<br />
+</label> 
+<label class="flex-align-center" style="margin-top:8px; margin-left: 21px;font-size:14px;" ng-show="config.useFixedAxisRange">
+	<input type="number" class="" style="margin-right:8px;"
+		   ng-model="config.fixedYMin">Y-axis minimum<br />
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 21px;font-size:14px;" ng-show="config.useFixedAxisRange">
+	<input type="number" class="" style="margin-right:8px;"
+		   ng-model="config.fixedYMax">Y-axis maximum<br />
+</label>
 <br/>
 <div class="c-side-pane t-toolbar">
 	<span style="color:#fff; margin-left:10px;">Series Options</span>

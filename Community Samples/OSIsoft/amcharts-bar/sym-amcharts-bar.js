@@ -54,8 +54,10 @@
 				showCategoryAxisLabels: true,
 				alternateEvenAndOddColors: false,
 				evenColor: "yellow",
-				oddColor: "orange"
-                
+				oddColor: "orange",
+				useFixedAxisRange: false,
+				fixedYMin: 0,
+				fixedYMax: 1
             };
 		},
         configOptions: function () {
@@ -265,6 +267,13 @@
                     chart.graphs[0].lineColorField  = "commonColor";
                     chart.graphs[0].labelColorField = "commonColor";
                 }
+				if (scope.config.useFixedAxisRange) {
+					chart.valueAxes[0].minimum = scope.config.fixedYMin;
+					chart.valueAxes[0].maximum = scope.config.fixedYMax;
+				} else {
+					chart.valueAxes[0].minimum = undefined;
+					chart.valueAxes[0].maximum = undefined;
+				}
                 // Draw the chart again
                 chart.validateNow();
             }
