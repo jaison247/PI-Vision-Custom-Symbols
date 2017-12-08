@@ -43,26 +43,32 @@
 				//DataQueryMode:  CS.Extensibility.Enums.DataQueryMode.ModeEvents,
 				// Specify the default height and width of this symbol
 				Height: 300,
-				Width: 400,
+				Width: 500,
 				Intervals: 1000,				
 				// Specify the value of custom configuration options; see the "configure" section below
 				showTimestampCheckboxValue: true,
 				showHeaderCheckboxValue: true,
 				showDataItemNameCheckboxStyle: "table-cell",
 				showTimestampCheckboxStyle: "table-cell",				
-				dataItemColumnColor: "cyan",
-				timestampColumnColor: "white",
-				valueColumnColor: "lightgreen",
-				hoverColor: "darkslategray",
-				evenRowColor: "darkgray",
+				timestampColumnColor: "gray",
+				valueColumnColor: "black",
+				hoverColor: "93cadc",
+				evenRowColor: "#EEEEEE",
 				oddRowColor: "none",
-				outsideBorderColor: "#202020",
-				headerBackgroundColor: "#202020",
+				outsideBorderColor: "#091d3a",
+				headerBackgroundColor: "#091d3a",
 				headerTextColor: "white",
+				searchBackgroundColor: "#2a3e5d",
+				searchTextColor: "white",				
 				orderFromNewestToOldest: false,
 				enableKeywordColors: false,
 				keyword1: "OFF",
-				keyword1Color: "red"
+				keyword1Color: "red",
+				showSearchCheckboxValue: true,
+				searchFilter: "",
+				showApplyTimeControls: true,
+				controlColumnColor: "black"
+				
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -111,6 +117,13 @@
 				if (data.Data[0].Units) {
 					scope.dataItemUnits = " (" + data.Data[0].Units + ")";
 				}
+				console.log(data);
+				if (data.Data[0].StartTime) {
+					scope.StartTime = data.Data[0].StartTime;
+				}
+				if (data.Data[0].EndTime) {
+					scope.EndTime = data.Data[0].EndTime;
+				}			
 				// If the inverted order checkbox is checked, reverse the order!
 				if (scope.config.orderFromNewestToOldest) {
 					scope.dataItemValues = data.Data[0].Values.reverse();
@@ -120,6 +133,35 @@
 			}
 		}
 
+		//************************************
+		// Applies a time range to the display
+		//************************************		
+		scope.config.applyTime = function (parameter, time) {
+			var cleansedTime = time.replace("/", "%2F");
+			//console.log (parameter, time);
+			var newURL = window.location.href;
+			// Trim off all other params
+			if (newURL.indexOf("?") != -1) {
+				newURL = newURL.split("?")[0];
+			}
+			var separator = "&";
+			// Determine the right separator
+			if (newURL.indexOf("?") == -1) {
+				separator = "?";
+			}
+			// Add the parameter!
+			newURL += (separator + parameter + "=" + cleansedTime);
+			// Add the second parameter!
+			if (parameter.toLowerCase() == "starttime") {
+				newURL += ("&EndTime=" + scope.EndTime);
+			} else {
+				newURL += ("&StartTime=" + scope.StartTime);
+			}
+			console.log(newURL);
+			//Navigate
+			window.location.href = newURL;
+		}
+		
 		//************************************
 		// Function that is called when custom configuration changes are made
 		//************************************
