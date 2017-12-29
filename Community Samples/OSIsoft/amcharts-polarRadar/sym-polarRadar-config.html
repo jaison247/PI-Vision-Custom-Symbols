@@ -1,0 +1,129 @@
+<!--
+	Copyright 2016-2017 OSIsoft, LLC.
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+			
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Colors</span>
+</div>
+
+<div class="config-option-format">
+	<pv-color-picker id="textColor" ng-model="config.textColor" config="config"  colorkeyword="Text">
+</pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker id="backgroundColor" ng-model="config.backgroundColor" config="config" colorkeyword="Background">
+</pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker id="axesColor" ng-model="config.axesColor" config="config"  colorkeyword="Axes">
+</pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker id="gridColor" ng-model="config.gridColor" config="config"  colorkeyword="Grid">
+</pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker id="chartColor" ng-model="config.chartColor" config="config"  colorkeyword="Grid Bands">
+</pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker id="fillColor" ng-model="config.fillColor" config="config" colorkeyword="Series Fill">
+</pv-color-picker></div>
+<div class="config-option-format">
+	<pv-color-picker id="nomLimitColor" ng-model="config.nomLimitColor" config="config" colorkeyword="Marker Default">
+</pv-color-picker></div>
+<div class="config-option-format" ng-show="config.colorThresholdExceptions">
+	<pv-color-picker id="lowLimitColor" ng-model="config.lowLimitColor" config="config" colorkeyword="Low Values">
+</pv-color-picker></div>
+<div class="config-option-format" ng-show="config.colorThresholdExceptions">
+	<pv-color-picker id="highLimitColor" ng-model="config.highLimitColor" config="config" colorkeyword="High Values">
+</pv-color-picker></div>	
+<br/>
+
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Series Bullets</span>
+</div>
+<div style="width: 100%; display: block;background-color:transparent;font-size:14px;margin-left:20px;margin-top:8px;margin-bottom:8px;" class="k-content" role="region" aria-hidden="true">
+	Series Bullets<br/>
+	<select ng-model="config.seriesBullets" ng-model-options="{ getterSetter: true }" class="ng-pristine ng-valid" style="margin-top: 8px;background-color:transparent;padding:5px;">
+		<option value="round">Round</option>
+		<option value="square">Square</option>
+		<option value="diamond">Diamond</option>
+		<option value="triangleUp">Triangle Up</option>
+		<option value="triangleDown">Triangle Down</option>
+		<option value="none">None</option>
+	</select>
+</div>  
+<div style="width: 100%; display: block;background-color:transparent;font-size:14px;margin-left:20px;margin-top:8px;margin-bottom:8px;" class="k-content" role="region" aria-hidden="true">
+	Chart Type<br/>
+	<select ng-model="config.chartType" ng-model-options="{ getterSetter: true }" class="ng-pristine ng-valid" style="margin-top: 8px;background-color:transparent;padding:5px;">
+		<option value="circles">Polar (Circle)</option>
+		<option value="polygons">Radar (Polygon)</option>
+	</select>
+</div>   
+<div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;">
+    <div class="config-option-ie11-overflow-fix">
+        <div class="config-label">Fill Opacity: {{config.fillOpacity}}</div>
+        <input class="config-option-single-row-input ng-pristine ng-untouched ng-valid" type="range" min="0" max="1" step="0.1" ng-model="config.fillOpacity" ng-model-options="{ getterSetter: true }" style="width:100px; height:100%;margin-right:3px;">
+    </div>
+</div>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.includeElementName">Include Element in Label<br />
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.useCustomAxisRange">Use Custom Axis Range<br />
+</label>
+<div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;" ng-show="config.useCustomAxisRange">
+    <div class="config-option-ie11-overflow-fix">
+        <div class="config-label">Custom Axis Minimum</div>
+        <input type="text" class="c-text-input" style="margin-right: 10px" size="3" ng-model="config.minVal" ng-model-options="{ getterSetter: true }" pv-decimal-format pv-validator="true">
+    </div>
+</div>
+<div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;" ng-show="config.useCustomAxisRange">
+    <div class="config-option-ie11-overflow-fix">
+        <div class="config-label">Custom Axis Maximum</div>
+        <input type="text" class="c-text-input" style="margin-right: 10px" size="3" ng-model="config.maxVal" ng-model-options="{ getterSetter: true }" pv-decimal-format pv-validator="true">
+    </div>
+</div>
+<br/>
+
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Thresholds</span>
+</div>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.colorThresholdExceptions">Enable Thresholds<br />
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 15px;font-size:14px;"  ng-show="config.colorThresholdExceptions">
+	<input type="checkbox" class="c-config-checkbox"
+		   ng-model="config.showThresholdBands">Show Threshold Bands<br />
+</label>
+<div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;"  ng-show="config.colorThresholdExceptions && config.showThresholdBands">
+	<div class="config-option-ie11-overflow-fix">
+		<div class="config-label">Band Opacity: {{config.thresholdBandOpacity}}</div>
+		<input class="config-option-single-row-input ng-pristine ng-untouched ng-valid" type="range" min="0" max="1" step="0.1" ng-model="config.thresholdBandOpacity" ng-model-options="{ getterSetter: true }" style="width:100px; height:100%;margin-right:3px;">
+	</div>
+</div>
+<div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;" ng-show="config.colorThresholdExceptions">
+    <div class="config-option-ie11-overflow-fix">
+        <div class="config-label">Low Threshold</div>
+        <input type="text" class="c-text-input" style="margin-right: 10px" size="3" ng-model="config.lowLimit" ng-model-options="{ getterSetter: true }" pv-decimal-format pv-validator="true">
+    </div>
+</div>
+<div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;" ng-show="config.colorThresholdExceptions">
+    <div class="config-option-ie11-overflow-fix">
+        <div class="config-label">High Threshold</div>
+        <input type="text" class="c-text-input" style="margin-right: 10px" size="3" ng-model="config.highLimit" ng-model-options="{ getterSetter: true }" pv-decimal-format pv-validator="true">
+    </div>
+</div>
+<br/>
