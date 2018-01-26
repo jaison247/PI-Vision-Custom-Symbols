@@ -112,7 +112,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 conditionalOperatorsArray2: [],
                 customDataItemNamesArray:   [],
                 originalDataItemNamesArray: [],
-                dataTableFooterFilterStringsArray: []
+                dataTableFooterFilterStringsArray: [],
+				// Control visibility
+				showColumnSearch: true,
+				showGlobalSearch: true,
+				showButtons: true,
+				showColumnSearchCSSDisplaySetting: "block",
+				showGlobalSearchCSSDisplaySetting: "block",
+				showButtonsCSSDisplaySetting: "block",
+				// Column visibility
+				columnVisibilitySettingsArray: [],
+				// Scroll position
+				scrollXPosition: 0,
+				scrollYPosition: 0
 			};
 		},
 		// By including this, you're specifying that you want to allow configuration options for this symbol
@@ -184,6 +196,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		function myCustomDataUpdateFunction(data) {
 			// If there is indeed new data in the update
 			if (data && allowTableRefresh) {
+				// Apply scroll position!
+				applyScrollPosition();
                 // Get the number of data items
                 scope.config.numberOfDataItems = data.Data.length;
                 // Update the data table and row count!
@@ -213,17 +227,26 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 addFootersRowToAllowSearchingByColumn(dataTableHeaderStringsArray);
                 // Re-draw the table!
                 renderAdvancedTable(dataTableHeaderStringsArray);
+				// Apply saved column visibility!
+				if (myDataTableObject) {
+					// If there are visibility settings saved...
+					if (scope.config.columnVisibilitySettingsArray.length > 0) {
+						// For each saved column setting
+						for (var columnIndex = 0; columnIndex < scope.config.columnVisibilitySettingsArray.length; columnIndex++) {
+							// Apply it to the corresponding column!
+							myDataTableObject.column(columnIndex).visible(scope.config.columnVisibilitySettingsArray[columnIndex]);
+						}
+					}
+				}
                 // Every time the a button is clicked, add a handler to save the current state!
                 myDataTableObject.on('buttons-action', function (e, buttonApi, dataTable, node, config) {
-                    if (myDataTableObject) {
-                        // Save the current state
-                        console.log("Saving state settings...");
-                        myDataTableObject.state.save();
-                    }
+                    saveColumnVisibility();
                 } );
+                // Save column visibility, just for now!
+                saveColumnVisibility();
                 // Add search functions
                 addSearchFunctionsToCellsInFooterRow();
-                // Re-apply previosuly saved search criteria!
+                // Re-apply previously saved search criteria!
                 executeSearchFunctionsOnEachColumn();
                 // Resize the table
                 myCustomResizeFunction();
@@ -244,7 +267,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 data: dataTableArray,
                 columns: createFormattedHeaderObjectArray(dataTableHeaderStringsArray),
                 // Allow reordering columns and navigating table using the keypad
-                colReorder: true,
+                //colReorder: true, // REMOVED 26 JAN 18
                 keys: true,
                 //bInfo: true,
                 select: true,
@@ -550,7 +573,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         }
         
         //************************************
-        // Pads a number witha  zero if it is less than 10
+        // Pads a number with a zero if it is less than 10
         //************************************
         function formatAs2Digits(number) {
             if (number < 10) {
@@ -561,24 +584,62 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         }
         
         // ----------------------------------------------------------------------------------------------------------
-        // RESIZING FUNCTIONS
+        // RESIZING / VISIBILITY FUNCTIONS
         // ----------------------------------------------------------------------------------------------------------
+        
+        //************************************
+        // Saves column visibility
+        //************************************
+        function saveColumnVisibility() {
+            if (myDataTableObject) {
+                // Save the current state
+                //console.log("Saving state settings...");
+                myDataTableObject.state.save();
+                // Save column visibility! 
+                var visibilitySettings = [];
+                myDataTableObject.columns().every( function () {
+                    // For each column...
+                    var currentColumn = this;
+                    visibilitySettings.push(this.visible());
+                });
+                scope.config.columnVisibilitySettingsArray = visibilitySettings;
+                //console.log("Column visibility: " + scope.config.columnVisibilitySettingsArray);
+            }
+        }
         
         //************************************
 		// Function that is called when a resize occurs; it is assisted by a function that calculates the table height
 		//************************************
         function myCustomResizeFunction() {
             if (myDataTableObject) {
-                $('div.dataTables_scrollBody').height(calculateDesiredTableHeight());
+                $('#' + symbolContainerElement.id + '_wrapper > div.dataTables_scroll > div.dataTables_scrollBody').height(calculateDesiredTableHeight());
                 myDataTableObject.draw();
             }
         }
+		
+		//************************************
+		// Function that saves the scroll position on each scroll!
+		//************************************	
+		$('div.dataTables_scrollBody').scroll(function() {
+			if ($('#' + symbolContainerElement.id + '_wrapper > div.dataTables_scroll > div.dataTables_scrollBody').html().length) {
+				scope.config.scrollXPosition = $('#' + symbolContainerElement.id + '_wrapper > div.dataTables_scroll > div.dataTables_scrollBody').scrollLeft();
+				scope.config.scrollYPosition = $('#' + symbolContainerElement.id + '_wrapper > div.dataTables_scroll > div.dataTables_scrollBody').scrollTop();
+			}
+		});
+
+		//************************************
+		// Function that saves and restores the scroll position!
+		//************************************		
+		function applyScrollPosition() {
+			$('#' + symbolContainerElement.id + '_wrapper > div.dataTables_scroll > div.dataTables_scrollBody').scrollLeft(scope.config.scrollXPosition);
+			$('#' + symbolContainerElement.id + '_wrapper > div.dataTables_scroll > div.dataTables_scrollBody').scrollTop(scope.config.scrollYPosition);
+		}
         
         //************************************
         // Use hard-coded heights of table headers and footers
         //************************************
         function calculateDesiredTableHeight() {
-            return ($('#' + symbolContainerElement.id + "_wrapper").parent().height() - 110);
+            return ($('#' + symbolContainerElement.id + "_wrapper").parent().height() - 146);
         }
         
         // ----------------------------------------------------------------------------------------------------------
@@ -732,7 +793,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             myDataTableObject.columns().every( function () {
                 // For each column...
                 var currentColumn = this;
-                // Get the search fiels
+                // Get the search fields
                 var currentColumnSearchField = $( 'input', this.footer() )[0];
                 //console.log(currentColumnSearchField);
                 // If a search term exists, apply the search!
@@ -756,11 +817,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             if (scope.config.applyConditionalFormatting) {
                 // First check if the table is transposed
                 if (!scope.config.transposeTable) {
+                    // The table in this case is NOT transposed!
                     // Loop through every cell item in the row data array
                     for (var columnIndex = 0; columnIndex < rowDataArray.length; columnIndex++) {
-                        // Only act on the correct columns or rows
+                        // Only act on the odd-numbered rows (AND the rows that are visible!), since those are the ones that contain values, not timestamps
                         if (columnIndex % 2 == 1) {
-                            // Get the current data item number, which is the col index + 1 / 2 - 1
+                            // Now this is only acting on odd columns...
+                            // Get the current data item number, which is the (column index + 1) / 2 - 1
                             var dataItemIndex = (columnIndex+1)/2 - 1; 
                             // Test the cell and apply the colors!
                             performConditionalTest(dataItemIndex, rowDataArray[columnIndex], columnIndex, rowElement, scope.config.applyConditionalFormattingTo, scope.config.conditionalOperatorsArray[dataItemIndex], scope.config.dataItemThresholdsArray[dataItemIndex]);
@@ -783,7 +846,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         }
         
 		//************************************
-		// Takes in a data item index, cell value, a cilumn index, a row, and a css property
+		// Takes in a data item index, cell value, a column index, a row, and a CSS property
         // and performs the test and applies the color
 		//************************************
         function performConditionalTest(dataItemIndex, cellValue, columnIndex, rowElement, property, operator, threshold) {
@@ -860,19 +923,34 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         // Function that applies color depending on whether the passed in argument is true or false
         //************************************
         function applyConditionalResultColor(result, rowElement, columnIndex, property, dataItemIndex) {
+            // Note: at this point, rowElement only contains cells for columns that are set to be visible
+            // However, columnIndex is with respect to the original table, assuming all columns are visible
+            var columnIndex_adjustedForColumnVisibility = columnIndex;
+            // Subtract one from the column index for each column to the left of it that is not visible!
+            // Do this by starting at the leftmost column, and for each column...
+            for (var leftColumnIndex = 0; leftColumnIndex < columnIndex; leftColumnIndex++) {
+                // Check this column visibility!
+                // If this particular column is not visible, subtract one from the adjusted column index
+                if (scope.config.columnVisibilitySettingsArray[leftColumnIndex] == false) {
+                    columnIndex_adjustedForColumnVisibility = columnIndex_adjustedForColumnVisibility - 1;
+                }             
+            }
+            // For this row (this rowElement), find the cell at this column index
+            var targetCell = $('td', rowElement).eq(columnIndex_adjustedForColumnVisibility);
+            // Apply the color
             if (result == true) {
                 // Change the color to the high color
-                $('td', rowElement).eq(columnIndex).css(property, scope.config.testTrueColors[dataItemIndex]);
+                targetCell.css(property, scope.config.testTrueColors[dataItemIndex]);
             } else {
                 // Change the cell color to the low color
-                $('td', rowElement).eq(columnIndex).css(property, scope.config.testFalseColors[dataItemIndex]);
+                targetCell.css(property, scope.config.testFalseColors[dataItemIndex]);
             }
             // If the CSS property wasn't the text color, reset the text color to the standard text color
             if (property != "color") {
-                $('td', rowElement).eq(columnIndex).css("color", scope.config.textColor);
+                targetCell.css("color", scope.config.textColor);
             } else {
                 // Otherwise, reset the rows back to their row colors
-                $('td', rowElement).eq(columnIndex).css("background-color", scope.config.backgroundColor);
+                targetCell.css("background-color", scope.config.backgroundColor);
             }
         }
         
@@ -881,12 +959,37 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         // ----------------------------------------------------------------------------------------------------------
         
 		//************************************
+		// Function that shows or hides the controls
+		//************************************
+		function showOrHideControls() {
+			if (myDataTableObject) {
+				if (scope.config.showButtons) {
+					scope.config.showButtonsCSSDisplaySetting = 'block';
+				} else {
+					scope.config.showButtonsCSSDisplaySetting = 'none';
+				}
+				if (scope.config.showGlobalSearch) {
+					scope.config.showGlobalSearchCSSDisplaySetting = 'block';
+				} else {
+					scope.config.showGlobalSearchCSSDisplaySetting = 'none';
+				}
+				if (scope.config.showColumnSearch) {
+					scope.config.showColumnSearchCSSDisplaySetting = 'block';
+				} else {
+					scope.config.showColumnSearchCSSDisplaySetting = 'none';
+				}
+            }
+		}
+		
+		//************************************
 		// Function that is called when custom configuration changes are made
 		//************************************
 		function myCustomConfigurationChangeFunction() {
             if (myDataTableObject) {
                 // Save the current state
                 myDataTableObject.state.save();
+				// Apply CSS changes!
+				showOrHideControls();
                 // Draw the table
                 myDataTableObject.draw();
             }

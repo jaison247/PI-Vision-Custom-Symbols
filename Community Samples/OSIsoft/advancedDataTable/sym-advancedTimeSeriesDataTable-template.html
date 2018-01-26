@@ -18,35 +18,30 @@
 <table id="container" class="display hover cell-border" style="font-size:{{config.textSize}}px !important;width:100% !important;background-color:{{config.backgroundColor}};color:{{config.textColor}};text-align:{{config.textAlignment}}!important;"></table>
 
 <style>
-	table.dataTable tr:nth-child(even) {
-		background-color: {{config.evenRowColor}} !important;
+	/* ----------------- Table row styling -----------------  */ 
+	
+	#{{config.UniqueSymbolElementName}} tr:nth-child(even), #{{config.UniqueSymbolElementName}} tr.even .sorting_1 {
+		background-color: {{config.evenRowColor}} !important; 
 	}
-	table.dataTable tr:nth-child(odd) {
-		background-color: {{config.oddRowColor}} !important;
+	#{{config.UniqueSymbolElementName}} tr:nth-child(odd), #{{config.UniqueSymbolElementName}} tr.odd .sorting_1 {
+		background-color: {{config.oddRowColor}} !important; 
 	}	
-	table.dataTable tr.even .sorting_1 { 
-		background-color: {{config.evenRowColor}} !important;
-	}
-	table.dataTable tr.odd .sorting_1 { 
-		background-color: {{config.oddRowColor}} !important;
-	} 	
-	table.dataTable tr:hover { 
+	
+	/* ----------------- Hover color -----------------  */
+	
+	#{{config.UniqueSymbolElementName}} tr:hover { 
 		background-color: {{config.hoverColor}} !important;
 	}
-	table.dataTable th {
-		background-color: {{config.backgroundColor}} !important;
-        color: {{config.textColor}};
-	} 
-	table.dataTable tfoot td {
-		background-color: {{config.backgroundColor}} !important;
-        color: {{config.textColor}};
-	}	
-    div.dataTables_filter {
+	
+	/* ----------------- Global Table filter styling and visibility -----------------  */  
+	
+    #{{config.UniqueSymbolElementName}}_filter {
         color:white !important;
         float:left !important;
         padding:0px;
         margin:0px;
         width:100%;
+		display: {{config.showGlobalSearchCSSDisplaySetting}};
     }
     .dataTables_filter input {
         margin: 0px 0px 4px 0px !important;
@@ -55,43 +50,53 @@
         width:100%;
         text-align:center;
     }
-    .dataTables_wrapper {
-        font-size:{{config.textSize}}px !important;
+	
+	/* ----------------- Overall table styling: font and alignment -----------------  */  
+	
+    /* .dataTables_wrapper, table.dataTable { */
+	#{{config.UniqueSymbolElementName}}_wrapper {
+        font-size:{{config.textSize}}px !important; 
     }
-    table.dataTable {
-        font-size:{{config.textSize}}px !important;
+    #{{config.UniqueSymbolElementName}}_wrapper > div.dataTables_scroll > div.dataTables_scrollHead > div > table > thead {
+        font-size:{{config.textSize}}px !important; 
+        text-align:{{config.textAlignment}}!important; 
     }
-    table.dataTable thead {
-        font-size:{{config.textSize}}px !important;
-        text-align:{{config.textAlignment}}!important;
-    }
-    .dt-button-collection {
+	
+	/* ----------------- Button groups and menu bar ----------------- */  
+	
+	.dt-button-collection {
         width:auto !important;
     }
-    div.dt-buttons {
+	
+    #{{config.UniqueSymbolElementName}}_wrapper > div.dt-buttons {
         padding-top:0px;
         padding-left:0px;
         width:100%;
         text-align:left;
+		display: {{config.showButtonsCSSDisplaySetting}}; 
     }
+	
     a.dt-button {
         white-space: normal !important;
     }
-    div.DTS {
+	
+    #{{config.UniqueSymbolElementName}}_wrapper {
         background-color:{{config.tableMenuBarColor}};
         padding:4px !important;
     }
-    div.DTS tbody td {
-    }
-    .dataTables_scrollHeadInner {
-        background-color: {{config.backgroundColor}} !important;
-    }
-    .dataTables_scrollFootInner {
-        background-color: {{config.backgroundColor}} !important;
-    }    
+	
+	/*----------------- Column search field visibility ----------------- */  
+	
+	#{{config.UniqueSymbolElementName}}_wrapper > div.dataTables_scroll > div.dataTables_scrollFoot {
+		display: {{config.showColumnSearchCSSDisplaySetting}}; 
+	}
+	
+	/* ----------------- Column visibility styling ----------------- */    
+	
 	a.dt-button.buttons-columnVisibility {
 		color: lightgray;
 	}
+	
 	a.dt-button.buttons-columnVisibility.active {
 		color: black !important;
 	}

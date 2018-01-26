@@ -25,6 +25,22 @@
     </select>
 </div>
 
+<div class="c-side-pane t-toolbar">
+	<span style="color:#fff; margin-left:10px;">Control Visibility</span>
+</div>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">
+	<input type="checkbox" class="c-config-checkbox"
+           ng-model="config.showButtons">Show Buttons
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">		   
+	<input type="checkbox" class="c-config-checkbox"
+           ng-model="config.showGlobalSearch">Show Global Search
+</label>
+<label class="flex-align-center" style="margin-top:8px; margin-left: 8px;font-size:14px;">		   
+	<input type="checkbox" class="c-config-checkbox"
+           ng-model="config.showColumnSearch">Show Column Search		   
+</label>
+<br/>
 
 <div class="config-option-single-row" style="margin-left:20px;margin-right:20px;font-size:14px;margin-top:8px;" ng-show="config.dataQueryType == 'sampled'">
     <div class="config-option-ie11-overflow-fix">
