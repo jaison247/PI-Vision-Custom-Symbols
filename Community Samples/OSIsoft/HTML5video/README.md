@@ -1,4 +1,4 @@
-This is how it should look like :
+This is how the symbol should look like :
 
 ![pictureofsymbol_html5video](https://user-images.githubusercontent.com/30466884/36255410-cdc9ceac-1246-11e8-9577-2b8392ef1b3f.png)
 
