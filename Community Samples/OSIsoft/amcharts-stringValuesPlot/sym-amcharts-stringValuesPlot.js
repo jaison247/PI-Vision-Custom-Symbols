@@ -35,6 +35,7 @@
 		getDefaultConfig: function () {
 			return {
 				DataShape: "Timeseries",
+				DataQueryMode: CS.Extensibility.Enums.DataQueryMode.ModePlotValues,
 				// Specify the default height and width of this symbol
 				Height: 200,
 				Width: 600,
