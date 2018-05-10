@@ -4,7 +4,7 @@ To adjust the menu symbol:
 
 1. Open sym-mega-menu-template.html in a text editor.
 
-2. Correct the menu item names in the <body> section of the file. Update the URLs for the href="" attributes (ex: href="https://www.osisoft.com/").
+2. Correct the menu item names in the &lt;body&gt; section of the file. Update the URLs for the href="" attributes (ex: href="https://www.osisoft.com/").
 
 3. Open sym-mega-menu-template.html in a web browser to preview the menu.
 
