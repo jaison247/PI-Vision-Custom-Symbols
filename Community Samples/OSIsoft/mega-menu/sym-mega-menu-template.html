@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!--link rel="stylesheet" href="css_mega_menu/reset.css"> -->  <!--CSS reset -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+
+body {
+    margin: 0;
+}
+
+ul {
+	list-style-type: none;
+    background-color: #111;
+	margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: Calibri, Helvetica, sans-serif;
+	opacity: 0.98;
+}
+li {
+    float: left;
+}
+
+
+li a, .dropbtn, .single_dropbtn{
+    
+    font-size: 16px;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+	display: inline-block;
+	
+	
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+    background-color: #0073cf;
+}
+
+li.single_dropdown, li.dropdown {
+    
+    display: inline-block;
+}
+
+
+/* single drop-down list menu item */
+
+.single_dropbtn {
+    background-color: #111;
+    color: white;    
+	font: inherit;
+    font-size: 16px;
+    border: none;
+	margin: 0;
+	min-width: 200px;
+	padding: 14px 0px;
+	cursor: pointer;
+    
+}
+
+.single_dropdown-content {
+    display: none;
+    position:  absolute;	
+    background-color: #262626;
+	min-width: 200px;
+    width: inherit;
+	margin: 0px 0px 0px 0px;
+    z-index: 1;
+	padding-top: 10px;
+	padding-bottom: 15px;
+		
+}
+
+.single_dropdown-content a {
+    color: #818181;
+    padding: 10px 10px 10px 10px;
+	margin :2px 0px 2px 0px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+	font-size: 12px;
+	float: none;
+	
+}
+
+
+.single_dropdown-content a:hover {
+	color: #f1f1f1;
+	background-color: #262626}
+
+.single_dropdown:hover .single_dropdown-content {
+
+    display: block;
+}
+
+.single_dropdown:hover .single_dropbtn {
+    background-color: #0073cf;
+}	
+	
+/* mega-menu item */
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #262626;
+	opacity: 0.99;
+    width: 100%;
+    left: 0;
+    z-index: 1;
+}
+	
+.dropdown .dropbtn {
+    font-size: 16px;    
+    border: none;
+    outline: none;
+    color: white;
+    padding: 14px 16px;
+    background-color: #111;
+    font: inherit;
+    margin: 0;
+}
+
+
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+/* Create equal columns that floats next to each other */
+.column {
+    float: left;
+    width: 24%;
+    padding: 0px;
+    background-color: #262626;
+    height: auto;
+	margin :1px 1px 20px 1px;
+}
+
+.column h3 {      
+    padding: 10px;
+    text-decoration: none;
+    text-align: left;
+	font-size: 16px;
+	color: #c1bfbf;    
+	background-color: #333131;
+	margin-top:10px;
+}
+
+h4 {
+    display: block;
+	margin :15px 1px 5px 1px;
+	text-decoration: none;
+    text-align: left;
+	font-size: 14px;
+	color: #adabab;
+	padding-left:10px;
+   
+}
+
+h5 {      
+    display: block;
+	margin :5px 1px 2px 1px;
+	text-decoration: none;
+    text-align: left;
+	font-size: 13px;
+	color: #adabab;
+	padding-left:10px;
+	
+}
+.column a {
+    float: none;
+    color: #818181;
+    padding: 2px 1px 2px 10px;
+	margin :2px 0px 2px 0px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+	font-size: 12px;
+}
+
+.column a:hover {
+    /*background-color: #0194CA;*/
+	color: #f1f1f1;
+	background-color: #262626
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/* Optional: Style the angle down and home icons  */
+
+
+.fa-angle-down {  
+  padding-left: 20px;   
+  margin-right: 0px;
+}
+
+.fa-home {  
+  padding-right: 10px;   
+  
+}
+
+
+
+
+
+
+</style>
+</head>
+<body>
+
+
+
+<ul>
+	
+  <li>
+  
+  <a href=""><i class="fa fa-home"></i>Home</a></li>
+ 	<li class="single_dropdown">
+		<a href="javascript:void(0)"  class="single_dropbtn">KPI
+		<i class="fa fa-angle-down"></i>
+		</a>
+			<div class="single_dropdown-content">
+			<a href="">Building KPI</a>
+			<a href="">Energy Use Intensity</a>			
+			</div>
+		
+	</li>
+	<li class="single_dropdown">
+		<a href="javascript:void(0)"  class="single_dropbtn">Energy Management
+		<i class="fa fa-angle-down"></i>
+		</a>
+			<div class="single_dropdown-content">
+			<a href="">Energy Management Overview</a>
+			<a href="">Energy Use Intensity</a>			
+			</div>
+		
+	</li>
+	
+ 
+  <li><div class="dropdown">
+    <button class="dropbtn">Fault and Site Management 
+      <i class="fa fa-angle-down"></i>
+    </button>
+    <div class="dropdown-content">
+		
+        <div class="row">
+        <div class="column" style="margin-right:0px ; padding-right:0px">
+          <h3>Asset Displays</h3>
+		  <h4>Variable Air Volume Displays</h4>
+		  <h5>Device View</h5>
+          <a href="">VAVCO</a>
+          <a href="">VAVRH</a>
+          <a href="">VAVCO + CO2</a>
+		  <a href=""style="margin-bottom:12px;">VAVRH + CO2</a>
+		  <h5>VAV Floor Summary</h5>
+          <a href="">Floor 1</a>
+          <a href="2">Floor 2</a>
+          <a href="">Floor 3</a>
+		  <a href="">Floor 4</a>
+		  <a href="">Floor 5</a>
+		  <a href="">Floor 6</a>
+		 </div>
+		 <div class="column" style="margin-left:0px; padding-left:0px">
+		 <h3 style="color:#333131;">Asset Displays</h3>
+		  <h4>AC RTU Displays</h4>		  
+          <a href="">AC 1</a>
+          <a href="">AC 2</a>
+          <a href="">AC 3</a>
+		  <a href="">AC Unit Summary</a>
+		  <h4>IDF Unit Displays</h4>
+          <a href="">IDF Cooling Summary</a>         
+		  <h4>Heating Hot Water</h4>
+          <a href="#">Heating Hot Water Summary</a>
+		  
+        </div>
+        <div class="column">
+          <h3>Analytics</h3>
+          <a href="" style="margin-top:12px;">Simultaneous Heating and Cooling</a>
+          <a href="">Holiday Operations Analysis</a>
+          <a href="">Training Room Sample Analysis</a>
+		  <a href="">Set Point Sample Analysis</a>
+		  <a href="">Cooling Analysis</a>
+		  <a href="" style="margin-bottom:12px;">Temperature Differential Analysis</a>
+        
+          <h3>ViewGlass</h3>
+          <a href="" style="margin-top:12px;">East Side</a>
+          <a href="">West Side</a>
+          <a href="">North Side</a>
+		  <a href="" style="margin-bottom:12px;">South Side</a>
+        </div>
+		<div class="column">
+          <h3>Floor Maps</h3>
+          <a href="" style="margin-top:12px;">Floor 1</a>
+          <a href="">Floor 2</a>
+          <a href="">Floor 3</a>
+		  <a href="">Floor 4</a>
+		  <a href="">Floor 5</a>
+		  <a href="" style="margin-bottom:12px;">Floor 6</a>
+        
+          <h3>Kiosk Dashboard</h3>
+          <a href="" style="margin-top:12px;margin-bottom:12px;">Building Dashboard</a>
+        
+          <h3>Weather</h3>
+          <a href="" style="margin-top:12px; margin-bottom:12px;">Building Weather Station</a>
+        </div>
+      </div>
+    </div>
+  </div> 
+  </li>
+
+<ul>
+
+</body>
+</html>
