@@ -1,4 +1,5 @@
 # PI Vision Extensibility Samples and Tutorials
+Course materials for online course Customizing PI Vision with Extensibility.
 
 ## About
 [PI Vision][1] is a web-client vizualization tool for the [OSIsoft PI System][2]. PI Vision 3.0 and beyond supports extensibility through the creation of a combination of html and javascript files. This repository is set up to help you learn how to extend PI Vision in different ways such as a custom symbol or tool pane.
